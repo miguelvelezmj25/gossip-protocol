@@ -7,7 +7,7 @@ import java.net.DatagramPacket;
 public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueue {
 	
 	public SynchronizedPacketQueue () {
-		
+		super();
 	}
 	
 	/**
