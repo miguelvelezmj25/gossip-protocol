@@ -1,112 +1,94 @@
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public abstract class DatagramSenderReceiver { // TODO does it extend Runnable?
-	/**
-	 * 
-	 * Miguel Velez
-	 * March 9, 2015
-	 * 
-	 * This class TODO
-	 * 
-	 * Class variables:
-	 * 		static int idLengthInBytes
-	 * 			The length in bytes of the ID.
-	 * 
-	 * 		AtomicBoolean done
-	 * 			TODO
-	 * 
-	 * 		DatagramSocket	datagramSocket
-	 * 			TODO
-	 * 		
-	 * 		int packetSize;
-	 * 			TODO
-	 * 
-	 * 		SynchronizedLinkedListQueue queue
-	 * 			TODO
-	 * 		
-	 * Constructors:
-	 * 		public DatagramSenderReceiver(InetSocketAddress inetSocketAddress, SynchronizedLinkedListQueue queue, int packetSize)
-	 * 			TODO
-	 * 	 
-	 * Methods:
-	 *		public int getPacketSize
-	 *			TODO
-	 *
-	 *		public void run
-	 *			TODO
-	 *
-	 *		public void stop
-	 *			TODO
-	 *
-	 *		public boolean isStopped
-	 *			TODO
-	 *			
-	 *		public void startAsThread
-	 *			TODO
-	 *
-	 * 		public abstract void action(DatagramSocket datagramSocket, SynchronizedLinkedListQueue queue)
-	 * 			TODO
-	 *        
-	 * Modification History:
-	 * 		March 9, 2015
-	 * 			Original version
-	 *  
-	 */
+public abstract class DatagramSenderReceiver implements Runnable
+{
 	
 	private AtomicBoolean 				done;
 	private DatagramSocket 				datagramSocket;
 	private int							packetSize;
 	private SynchronizedLinkedListQueue queue;
 	
-	public DatagramSenderReceiver(InetSocketAddress inetSocketAddress, SynchronizedLinkedListQueue queue, int packetSize) 
-	{
-		// TODO
-		// lazySet(boolean newValue)
-		// set(boolean newValue)
-		// getAndSet(boolean newValue)
+	/**
+	 * Binds the datagramSocket to the inetSocketAddress, and instantiates the queue and packet size
+	 * instance variables. Also sets the atomic boolean variable to false.
+	 * @param inetSocketAddress
+	 * @param queue
+	 * @param packetSize
+	 * @throws SocketException
+	 */
+	public DatagramSenderReceiver(InetSocketAddress inetSocketAddress, SynchronizedLinkedListQueue queue, int packetSize) throws SocketException 
+	{	
 		this.done.set(false);
-		
-		// TODO
-		// DatagramSocket(int port, InetAddress laddr)
-		// connect(InetAddress address, int port)
-		//this.datagramSocket = new DatagramSocket();
-		
-	
 		this.packetSize = packetSize;
 		this.queue = queue;
-		
+		datagramSocket = new DatagramSocket(inetSocketAddress);
 	}
 	
+	/**
+	 * Basic getter.
+	 * @return
+	 * 		packet size
+	 */
 	public int getPacketSize()
 	{
 		return this.packetSize;
 	}
 	
+	/**
+	 * While the atomic boolean is not set to done, the method runs and performs the given action, sleeping
+	 * 100 miliseconds after every action.
+	 */
 	public void run()
 	{
-		// TODO
+		while(!this.isStopped())
+		{
+			this.action(this.datagramSocket, this.queue);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				System.err.println("Thread sleep method was interrupted.");
+				e.printStackTrace();
+			}
+		}
 	}
 	
+	/**
+	 * Sets the atomic boolean to true, and closes the datagram socket.
+	 */
 	public void stop()
 	{
-		// TODO
-		// lazySet(boolean newValue)
-		// set(boolean newValue)
-		// getAndSet(boolean newValue)
-		this.done.set(false);
+		this.done.set(true);
+		this.datagramSocket.close();
 	}
-		
+	
+	/**
+	 * Determines if the run method has been stopped.
+	 * @return
+	 * 		The get method on the atomic boolean.
+	 */
 	public boolean isStopped()
 	{
 		return this.done.get();
 	}
 	
-	public void startAsThread() 
+	/**
+	 * Starts a new thread and returns a reference to the thread.
+	 * @return
+	 * 		A reference to the newly started thread. 
+	 */
+	public Thread startAsThread() 
 	{
-		// TODO return reference of thread
+		Thread thread;
+		
+		thread = new Thread(this);
+		thread.start();
+		
+		return thread;
 	}
 	
 	public abstract void action(DatagramSocket datagramSocket, SynchronizedLinkedListQueue queue);
