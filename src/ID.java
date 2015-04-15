@@ -190,6 +190,16 @@ public class ID {
 		return this.toString().hashCode();
 	}
 	
+	/**
+	 * Determines if the current ID is the zero ID.
+	 * @return
+	 * 		Boolean. True if this object is 0, false otherwise.
+	 */
+	public boolean isZero()
+	{
+		return this.equals(ID.getZeroID());
+	}
+	
 	@Override
 	/**
 	 * Converts each byte to hex, and returns the string consisting of consecutive hex characters.
