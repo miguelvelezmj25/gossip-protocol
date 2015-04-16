@@ -24,7 +24,7 @@ public class TimeToLive {
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
 			timeToLive = timeToLive | (byteArray[i] << 
-					((TimeToLive.getLengthInBytes() - i) * 8));
+					((TimeToLive.getLengthInBytes() - 1 - i) * 8));
 		}
 		
 		this.timeToLive = timeToLive;
@@ -66,7 +66,7 @@ public class TimeToLive {
 		byte[] result = new byte[4];
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
-			result[i] = (byte) (this.timeToLive >> ((TimeToLive.getLengthInBytes() - i) * 8));
+			result[i] = (byte) (this.timeToLive >> ((TimeToLive.getLengthInBytes() - 1 - i) * 8));
 		}
 		
 		return result;
