@@ -21,10 +21,12 @@ public abstract class Command implements Cloneable, Comparable {
 	 */
 	public abstract void execute();
 	
+	/**
+	 * Perform a shallow clone
+	 */
 	@Override
-	public Object clone() {
-		// TODO
-		return null;
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 	
 	public int compareTo(Command other) {
@@ -37,10 +39,31 @@ public abstract class Command implements Cloneable, Comparable {
 		return false;
 	}
 	
+	/**
+	 * Check if the command objects are the same
+	 */
 	@Override
 	public boolean equals(Object other) {
-		// TODO
-		return false;
+		boolean result =  true;
+		
+		// Cast and create a command object 
+		Command object = (Command) other;
+		
+		// Check if the instance variables match
+		if(this.commandName.equals(object.getCommandName())) {
+			result = false;
+		}
+		
+		if(this.description.equals(object.getDescription())) {
+			result = false;
+		}
+		
+		if(this.parameters.equals(object.getParameters())) {
+			result = false;
+		}
+		
+		// Return result
+		return result;
 	}
 	
 	/** 
@@ -72,14 +95,17 @@ public abstract class Command implements Cloneable, Comparable {
 		return null;
 	}
 	
+	/**
+	 * Return the hash code of the object
+	 */
 	@Override
 	public int hashCode() {
-		// TODO
-		return 0;
+		String variables = this.commandName + this.description + this.parameters;
+		return variables.hashCode();
 	}
 	
 	/**
-	 * Reutrn if there are paremeters
+	 * Return if there are parameters
 	 * @return
 	 */
 	public boolean hasParameters() {
