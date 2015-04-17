@@ -1,4 +1,6 @@
-
+/**
+ * Use port 12345
+ */
 public class PortNumber {
 
 	private int portNumber;
