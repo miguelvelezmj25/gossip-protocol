@@ -7,13 +7,15 @@ public abstract class Command implements Cloneable, Comparable {
 	private String parameters;
 	
 	public Command() {
-		// TODO
+		this.commandName = "none";
+		this.description = "a none command"; // TODO
+		this.parameters = ""; // TODO
 	}
 	
 	public Command(String commandName, String description) {
 		this.commandName = commandName;
 		this.description = description;
-		// TODO
+		this.parameters = ""; // TODO
 	}
 	
 	/**
@@ -34,9 +36,13 @@ public abstract class Command implements Cloneable, Comparable {
 		return 0;
 	}
 	
+	/**
+	 * Compares the command name
+	 * @param text
+	 * @return
+	 */
 	public boolean equals(String text) {
-		// TODO
-		return false;
+		return this.commandName.equals(text);
 	}
 	
 	/**
@@ -144,8 +150,11 @@ public abstract class Command implements Cloneable, Comparable {
 		this.parameters = parameters;
 	}
 	
+	/**
+	 * Print the variables from the command
+	 */
 	public String toString() {
-		// TODO
-		return "";
+		return "Command name: " + this.commandName + " description: " + this.description
+				+ " parameters: " + this.parameters;
 	}
 }
