@@ -207,7 +207,7 @@ public class UIController
 		 */
 		public CommandError()
 		{
-			super();
+			super("error", "An error command");
 		}
 		
 		/**
@@ -246,7 +246,7 @@ public class UIController
 		 */
 		public CommandHelp()
 		{
-			super();
+			super("help", "A help command");
 		}
 		
 		/**
