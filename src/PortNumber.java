@@ -21,7 +21,7 @@ public class PortNumber {
 	 * Return a string of the port number
 	 */
 	public String toString() {
-		return ("" + this.portNumber);
+		return ("Port number: " + this.portNumber);
 	}
 	
 }
