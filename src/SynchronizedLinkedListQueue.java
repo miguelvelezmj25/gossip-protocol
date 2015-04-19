@@ -65,7 +65,7 @@ public class SynchronizedLinkedListQueue
 	 * @return
 	 * 		True if the internal vector is empty, false if not.
 	 */
-	public boolean isEmpty()
+	public synchronized boolean isEmpty()
 	{
 		return this.internalVector.isEmpty();
 	}
