@@ -219,19 +219,19 @@ public class UIController
 			setDoneFlag(true);
 		}
 
-		/**
-		 * Always goes first, unless there is another error or a help command
-		 */
-		public int compareTo(Object o) 
-		{
-			int result;
-			result = 1;
-			if(((Command)o).getCommandName().equals("Error") || ((Command)o).getCommandName().equals("Help"))
-			{
-				result = 0;
-			}
-			return result;
-		}
+//		/**
+//		 * Always goes first, unless there is another error or a help command
+//		 */
+//		public int compareTo(Object o) 
+//		{
+//			int result;
+//			result = 1;
+//			if(((Command)o).getCommandName().equals("Error") || ((Command)o).getCommandName().equals("Help"))
+//			{
+//				result = 0;
+//			}
+//			return result;
+//		}
 
 	}
 	
@@ -260,17 +260,17 @@ public class UIController
 		/**
 		 * Always goes first, unless there is an error or another request for help
 		 */
-		@Override
-		public int compareTo(Object o) 
-		{
-			int result;
-			result = 1;
-			if(((Command)o).getCommandName().equals("Error") || ((Command)o).getCommandName().equals("Help"))
-			{
-				result = 0;
-			}
-			return result;
-		}
+//		@Override
+//		public int compareTo(Object o) 
+//		{
+//			int result;
+//			result = 1;
+//			if(((Command)o).getCommandName().equals("Error") || ((Command)o).getCommandName().equals("Help"))
+//			{
+//				result = 0;
+//			}
+//			return result;
+//		}
 
 	}
 
@@ -296,13 +296,13 @@ public class UIController
 			setDoneFlag(true);
 		}
 
-		/**
-		 * Order doesn't matter
-		 */
-		public int compareTo(Object o) 
-		{
-			return 0;
-		}
+//		/**
+//		 * Order doesn't matter
+//		 */
+//		public int compareTo(Object o) 
+//		{
+//			return 0;
+//		}
 
 	}
 }

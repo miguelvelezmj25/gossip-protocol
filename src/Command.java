@@ -1,14 +1,14 @@
-
-@SuppressWarnings("rawtypes")
-public abstract class Command implements Cloneable, Comparable {
+// TODO ask jarvis if comparable type is command
+public abstract class Command implements Cloneable, Comparable<Command> {
 
 	private String commandName;
-	private String description;
-	private String parameters;
+	private String description; // TODO what is a description
+	private String parameters; // TODO what is this?
 	
 	public Command() {
+		// TODO what should the default be?
 		this.commandName = "none";
-		this.description = "a none command"; // TODO
+		this.description = "A none command"; // TODO is this right?
 		this.parameters = ""; // TODO
 	}
 	
@@ -25,14 +25,17 @@ public abstract class Command implements Cloneable, Comparable {
 	
 	/**
 	 * Perform a shallow clone
+	 * 
+	 * TODO should it throw this exception
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
 	
+	@Override
 	public int compareTo(Command other) {
-		// TODO
+		// TODO how to compare commands?
 		return 0;
 	}
 	
@@ -50,6 +53,7 @@ public abstract class Command implements Cloneable, Comparable {
 	 */
 	@Override
 	public boolean equals(Object other) {
+		// TODO is this right
 		boolean result =  true;
 		
 		// Cast and create a command object 
@@ -106,7 +110,9 @@ public abstract class Command implements Cloneable, Comparable {
 	 */
 	@Override
 	public int hashCode() {
+		// TODO
 		String variables = this.commandName + this.description + this.parameters;
+		
 		return variables.hashCode();
 	}
 	
@@ -115,7 +121,7 @@ public abstract class Command implements Cloneable, Comparable {
 	 * @return
 	 */
 	public boolean hasParameters() {
-		return this.parameters.isEmpty();
+		return !this.parameters.isEmpty();
 	}
 	
 	/**
@@ -157,4 +163,5 @@ public abstract class Command implements Cloneable, Comparable {
 		return "Command name: " + this.commandName + " description: " + this.description
 				+ " parameters: " + this.parameters;
 	}
+
 }
