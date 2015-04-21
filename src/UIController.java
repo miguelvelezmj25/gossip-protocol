@@ -3,40 +3,40 @@ import java.util.*;
 
 /**
  * @author jens3048
- *	
+ *
  */
 public class UIController
 {
 	/**
-	 * 
+	 *
 	 */
 	private CommandProcessor commandProcessor;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private boolean done;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private IncomingPacketQueue incomingPacketQueue;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private OutgoingPacketQueue outgoingPacketQueue;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private DatagramReceiver receiveFromPeer;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private DatagramSender sendToPeer;
-	
+
 	/**
 	 * @param incomingPortNumber
 	 * @param outgoingPortNumber
@@ -45,9 +45,9 @@ public class UIController
 	public UIController(PortNumber portNumber, int packetSize)
 	{
 		InetSocketAddress socketAddress;
-		
+
 		socketAddress = new InetSocketAddress(portNumber.get());
-		
+
 		incomingPacketQueue = new IncomingPacketQueue();
 		outgoingPacketQueue = new OutgoingPacketQueue();
 		try
@@ -65,26 +65,26 @@ public class UIController
 		catch(SocketException e)
 		{
 			System.out.println("Caught socket exception " + e.getMessage());
-		}			
-		
+		}
+
 		done = false;
-		
+
 		commandProcessor = new CommandProcessor(new CommandError(), new CommandNone());
-		
-		
+
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void start()
 	{
 		UIControllerCommand command;
 		Scanner	scanner;
 		String	commandType;
-		
+
 		scanner = new Scanner(System.in);
-		
+
 		while(!done)
 		{
 			System.out.println("Type in a type of command to send or done");
@@ -97,7 +97,7 @@ public class UIController
 			if(commandType.toLowerCase().equals("error"))
 			{
 				command = new CommandError();
-			}	
+			}
 			if(commandType.toLowerCase().equals("none"))
 			{
 				command = new CommandNone();
@@ -106,29 +106,29 @@ public class UIController
 			{
 				command = new CommandHelp();
 			}
-			
+
 			if(command != null)
 			{
 				command.sendToPeer();
 			}
 		}
 	}
-	
+
 	/**
 	 * @author jens3048
 	 *
 	 */
 	public abstract class UIControllerCommand extends Command
 	{
-		
+
 		/**
-		 * 
+		 *
 		 */
 		public UIControllerCommand()
 		{
 			super();
 		}
-		
+
 		/**
 		 * @param commandName
 		 * @param description
@@ -137,7 +137,7 @@ public class UIController
 		{
 			super(commandName, description);
 		}
-		
+
 		/**
 		 * @return
 		 */
@@ -145,7 +145,7 @@ public class UIController
 		{
 			return commandProcessor;
 		}
-		
+
 		/**
 		 * @return
 		 */
@@ -153,7 +153,7 @@ public class UIController
 		{
 			return done;
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see Command#print(java.lang.String)
 		 */
@@ -161,7 +161,7 @@ public class UIController
 		{
 			super.print(message);
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see Command#println()
 		 */
@@ -169,7 +169,7 @@ public class UIController
 		{
 			super.println();
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see Command#println(java.lang.String)
 		 */
@@ -177,7 +177,7 @@ public class UIController
 		{
 			super.println(data);
 		}
-		
+
 		/**
 		 * @param flag
 		 */
@@ -185,17 +185,21 @@ public class UIController
 		{
 			done = flag;
 		}
-		
+
 		/**
-		 * 
+		 *
 		 */
 		public void sendToPeer()
 		{
-			sendToPeer.run();
+			int size = this.commandName.getBytes().length();
+			DatagramPacket dp = new DatagramPacket(this.commandName.getBytes(),size);
+			outgoingPacketQueue.enQueue(dp);
+			sendToPeer.action();
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * @author jens3048
 	 * A command depicting an error
@@ -209,7 +213,7 @@ public class UIController
 		{
 			super("error", "An error command");
 		}
-		
+
 		/**
 		 * Informs the user that there is an error somewhere.
 		 */
@@ -222,7 +226,7 @@ public class UIController
 //		/**
 //		 * Always goes first, unless there is another error or a help command
 //		 */
-//		public int compareTo(Object o) 
+//		public int compareTo(Object o)
 //		{
 //			int result;
 //			result = 1;
@@ -234,7 +238,7 @@ public class UIController
 //		}
 
 	}
-	
+
 	/**
 	 * @author jens3048
 	 * A command requesting help.
@@ -248,20 +252,20 @@ public class UIController
 		{
 			super("help", "A help command");
 		}
-		
+
 		/**
 		 * TODO come up with a help message
 		 */
 		public void execute()
 		{
-			
+
 		}
 
 		/**
 		 * Always goes first, unless there is an error or another request for help
 		 */
 //		@Override
-//		public int compareTo(Object o) 
+//		public int compareTo(Object o)
 //		{
 //			int result;
 //			result = 1;
@@ -287,7 +291,7 @@ public class UIController
 		{
 			super();
 		}
-		
+
 		/**
 		 * Does nothing
 		 */
@@ -299,7 +303,7 @@ public class UIController
 //		/**
 //		 * Order doesn't matter
 //		 */
-//		public int compareTo(Object o) 
+//		public int compareTo(Object o)
 //		{
 //			return 0;
 //		}
