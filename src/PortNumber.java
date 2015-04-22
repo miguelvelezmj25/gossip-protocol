@@ -20,6 +20,7 @@ public class PortNumber {
 	/**
 	 * Return a string of the port number
 	 */
+	@Override
 	public String toString() {
 		return ("Port number: " + this.portNumber);
 	}
