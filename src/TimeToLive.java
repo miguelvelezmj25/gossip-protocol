@@ -38,7 +38,7 @@ public class TimeToLive {
 		// Check if the byte array is long enough
 		if(byteArray.length < 36) {
 			throw new IllegalArgumentException("The byte array you provided is too short"
-					+ "and does not have a time to live.");
+					+ " and does not have a time to live.");
 		}
 		
 		int timeToLive  = 0;
