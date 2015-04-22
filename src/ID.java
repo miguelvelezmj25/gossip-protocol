@@ -1,12 +1,13 @@
+import java.net.DatagramPacket;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.LinkedList;
+//import java.util.Arrays;
+//import java.util.LinkedList;
 
 
 public class ID {
-      
+	// TODO
 	private static int idLengthInBytes = 16;
-	private static LinkedList<ID> idQueue = new LinkedList<ID>();
+	private static  LinkedListQueue idQueue = new LinkedListQueue();
 	private static int maxQueueLength = 50;
 	private static int queueLength  = 0;
 	private static SecureRandom secureRandom = new SecureRandom();
@@ -14,9 +15,10 @@ public class ID {
 	
 	private byte[] id;
 	
+	// TODO
 	private ID()
 	{
-		this.id = new byte[ID.getIDLength()];
+		this.id = new byte[ID.getLengthInBytes()];
 		ID.secureRandom.nextBytes(this.id);
 	}
 	
@@ -31,7 +33,16 @@ public class ID {
 		{
 			throw new IllegalArgumentException("Byte array has to be exactly "+ID.idLengthInBytes+ " bytes long. Shame.");
 		}
+		
 		this.id = byteArray.clone();
+	}
+	
+	public ID(DatagramPacket packet, int startingByte) {
+		// TODO
+	}
+	
+	public ID(String hexString) {
+		// TODO
 	}
 	
 	/**
@@ -41,12 +52,15 @@ public class ID {
 	 */
 	public synchronized static ID idFactory()
 	{
+		// TODO
 		ID returnID;
+		
 		if(ID.queueLength==0)
 		{
 			returnID = new ID();
 		}else{
-			returnID = (ID)ID.getQueue().remove();
+			returnID = (ID) ID.getQueue().deQueue();
+			
 			ID.queueLength = ID.queueLength - 1;
 		}
 		
@@ -61,6 +75,7 @@ public class ID {
 	private static ID createZeroID()
 	{
 		byte[] zeroByteArray = new byte[idLengthInBytes];
+		
 		for(int i = 0; i< idLengthInBytes;i++)
 		{
 			zeroByteArray[i] = 0;
@@ -74,31 +89,51 @@ public class ID {
 	 */
 	public static synchronized void generateID()
 	{
+		// TODO fill the queue?
 		while(ID.queueLength<ID.maxQueueLength)
 		{
-			idQueue.add(new ID());
+			
+			idQueue.enQueue(new ID());
+			
 			ID.queueLength++;
 		}//Add new IDs to the queue until we are at maximum.
 	}
 	
+	public String getAsHex() {
+		String hex = "0x";
+		String tmp = "";
+		
+		for(byte singleByte : this.id) {
+			tmp = Integer.toHexString(singleByte);
+			
+			if(tmp.length() < 2) {
+				tmp = "0" + tmp;
+			}
+			
+			hex = hex + tmp;
+		}
+		
+		return hex;
+	}
+	
 	/**
-	 * Basic getter.
+	 * Return the length in bytes
 	 * @return
-	 * 		The length of the byte array contained in the ID objects.
 	 */
-	public static synchronized int getIDLength() {
-		return idLengthInBytes;
+	public synchronized static int getLengthInBytes() {
+		return ID.idLengthInBytes;
 	}
-
+	
 	/**
-	 * Changes the variable that regulates the length of ID byte arrays.
-	 * @param idLengthInBytes
+	 * Basic getter for the queue containing IDs.
+	 * @return
+	 * 		A SynchronizedLinkedListQueue containing a list of IDs.
 	 */
-	public static synchronized void setIDLength(int idLengthInBytes) 
+	public static synchronized LinkedListQueue getQueue() 
 	{
-		ID.idLengthInBytes = idLengthInBytes;
+		return ID.idQueue;
 	}
-
+	
 	/**
 	 * Basic getter.
 	 * @return
@@ -106,35 +141,16 @@ public class ID {
 	 */
 	public static synchronized int getMaxQueueLength() 
 	{
-		return maxQueueLength;
+		return ID.maxQueueLength;
 	}
 	
-	/**
-	 * Basic setter.
-	 * @param maxQueueLength
-	 */
-	public static synchronized void setMaxQueueLength(int maxQueueLength) 
-	{
-		ID.maxQueueLength = maxQueueLength;
-	}
-
-	/**
-	 * Basic getter for the queue containing IDs.
-	 * @return
-	 * 		A SynchronizedLinkedListQueue containing a list of IDs.
-	 */
-	public static synchronized LinkedList getQueue() 
-	{
-		return idQueue;
-	}
-
 	/**
 	 * Basic getter.
 	 * @return
 	 * 		The current queue length. 
 	 */
-	public static int getQueueLength() {
-		return queueLength;
+	public synchronized static int getQueueLength() {
+		return ID.queueLength;
 	}
 	
 	/**
@@ -148,6 +164,33 @@ public class ID {
 	}
 	
 	/**
+	 * Set the length in bytes
+	 * @param lengthInBytes
+	 */
+	public static synchronized void setLengthInBytes(int lengthInBytes) {
+		if(lengthInBytes < 1) {
+			throw new IllegalArgumentException("The length in bytes that you provided (" + lengthInBytes 
+					+") is less than 1.");
+		}
+		
+		ID.idLengthInBytes = lengthInBytes;
+	}
+	
+	/**
+	 * Set the max queue length.
+	 * @param maxQueueLength
+	 */
+	public static synchronized void setMaxQueueLength(int maxQueueLength) 
+	{
+		if(maxQueueLength < 0) {
+			throw new IllegalArgumentException("The max length queue that you provided (" + maxQueueLength 
+					+") is less than 0.");
+		}
+		
+		ID.maxQueueLength = maxQueueLength;
+	}
+	
+	/**
 	 * Returns the internal byte representation of this ID.
 	 * @return
 	 * 		The byte array ID. 
@@ -157,37 +200,45 @@ public class ID {
 		return this.id.clone();
 	}
 	
-
 	@Override
 	/**
 	 * Checks to see if two ID objects have the same internal bytes. 
 	 */
 	public boolean equals(Object other)
 	{
-		byte[] otherBytes;
-		byte[] thisBytes;
-		
-		thisBytes = this.id;
-		
-		try
-		{
-			otherBytes = ((ID)other).getBytes();
-		}catch(Exception e)
-		{
-			throw new IllegalArgumentException("Compared object is not of class ID");
+		// TODO
+		if(other == null) {
+			throw new IllegalArgumentException("The object that you provided is null");
 		}
 		
-		return Arrays.equals(otherBytes,thisBytes);
+		boolean result = true;
+		
+		ID object = (ID) other;
+		
+		// Check if lengths are different
+		if(this.id.length != object.getBytes().length) {
+			result = false;
+		}
+		else {
+			// Check if there are bytes that are not the same
+			for(int i = 0; i < this.id.length; i++) {
+				if(this.id[i] != object.getBytes()[i]) {
+					result = false;
+				}
+			}			
+		}
+		
+		return result;
 		
 	}
 	
-	@Override
 	/**
 	 * Returns the hashCode of the toString method.
 	 */
+	@Override
 	public int hashCode()
 	{
-		return this.toString().hashCode();
+		return this.id.toString().hashCode();
 	}
 	
 	/**
@@ -199,22 +250,24 @@ public class ID {
 	{
 		return this.equals(ID.getZeroID());
 	}
-	
-	@Override
+
 	/**
 	 * Converts each byte to hex, and returns the string consisting of consecutive hex characters.
 	 */
+	@Override
 	public String toString()
 	{ 
-		String toReturn;
-		
-		toReturn = "";
-		for(byte b: this.getBytes())
-		{
-			toReturn = toReturn + Integer.toHexString(b);
-		}
-		
-		return toReturn;
+		return this.getAsHex();
+	}
+
+	public boolean isRequestID() {
+		// TODO
+		return false;
+	}
+	
+	public boolean isResourceID() {
+		// TODO
+		return false;
 	}
 	
 }
