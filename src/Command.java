@@ -40,6 +40,9 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 */
 	@Override
 	public int compareTo(Command other) {
+		if(other == null) {
+			throw new IllegalArgumentException("The command that you provided is null");
+		}
 		// Order the commands in alphabetical order
 		return this.commandName.compareToIgnoreCase(other.commandName);
 	}
@@ -50,6 +53,10 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * @return
 	 */
 	public boolean equals(String text) {
+		if(text == null) {
+			throw new IllegalArgumentException("The text that you provided is null");
+		}
+		
 		// TODO correct?
 		return this.commandName.equals(text);
 	}
@@ -59,6 +66,10 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 */
 	@Override
 	public boolean equals(Object other) {
+		if(other == null) {
+			throw new IllegalArgumentException("The object that you provided is null");
+		}
+		
 		// TODO is this right
 		boolean result =  true;
 		
@@ -112,6 +123,14 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * @return
 	 */
 	public String[] getParameters(String delimiters) {
+		if(delimiters == null) {
+			throw new IllegalArgumentException("The delimiters that you provided are null");
+		}
+		
+		if(delimiters.isEmpty()) {
+			throw new IllegalArgumentException("You did not provided any delimiters");
+		}
+		
 		// Split the string based on the delimiters
 		return this.parameters.split(delimiters);
 	}
@@ -121,7 +140,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 */
 	@Override
 	public int hashCode() {
-		// TODO
+		// TODO correct?
 		String variables = this.commandName + this.description + this.parameters;
 		
 		return variables.hashCode();
@@ -164,6 +183,10 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * @param parameters
 	 */
 	public void setParameters(String parameters) {
+		if(parameters == null) {
+			throw new IllegalArgumentException("The parameters that you provided are null");
+		}
+		
 		this.parameters = parameters;
 	}
 	
