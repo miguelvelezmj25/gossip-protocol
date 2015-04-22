@@ -1,26 +1,27 @@
 // TODO ask jarvis if comparable type is command
-public abstract class Command implements Cloneable, Comparable<Command> {
+public abstract class Command implements Cloneable, Comparable<Command>, ActionInterface {
 
 	private String commandName;
-	private String description; // TODO what is a description
-	private String parameters; // TODO what is this?
+	private String description;
+	private String parameters; 
 	
 	public Command() {
 		// TODO what should the default be?
 		this.commandName = "none";
-		this.description = "A none command"; // TODO is this right?
-		this.parameters = ""; // TODO
+		this.description = "A none command"; 
+		this.parameters = "";
 	}
 	
 	public Command(String commandName, String description) {
 		this.commandName = commandName;
 		this.description = description;
-		this.parameters = ""; // TODO
+		this.parameters = "";
 	}
 	
 	/**
 	 * Execute the command
 	 */
+	@Override
 	public abstract void execute();
 	
 	/**
@@ -33,10 +34,14 @@ public abstract class Command implements Cloneable, Comparable<Command> {
 		return super.clone();
 	}
 	
+	/**
+	 * Compares the command names of the commands. Usually used when the command is help
+	 * so that all available commands are printed in order
+	 */
 	@Override
 	public int compareTo(Command other) {
-		// TODO how to compare commands?
-		return 0;
+		// Order the commands in alphabetical order
+		return this.commandName.compareToIgnoreCase(other.commandName);
 	}
 	
 	/**
@@ -45,6 +50,7 @@ public abstract class Command implements Cloneable, Comparable<Command> {
 	 * @return
 	 */
 	public boolean equals(String text) {
+		// TODO correct?
 		return this.commandName.equals(text);
 	}
 	
@@ -59,16 +65,16 @@ public abstract class Command implements Cloneable, Comparable<Command> {
 		// Cast and create a command object 
 		Command object = (Command) other;
 		
-		// Check if the instance variables match
-		if(this.commandName.equals(object.getCommandName())) {
+		// Check if the instance variables do not match
+		if(!this.commandName.equals(object.getCommandName())) {
 			result = false;
 		}
 		
-		if(this.description.equals(object.getDescription())) {
+		if(!this.description.equals(object.getDescription())) {
 			result = false;
 		}
 		
-		if(this.parameters.equals(object.getParameters())) {
+		if(!this.parameters.equals(object.getParameters())) {
 			result = false;
 		}
 		
@@ -100,9 +106,14 @@ public abstract class Command implements Cloneable, Comparable<Command> {
 		return this.parameters;
 	}
 	
+	/**
+	 * Return an array of string with the parameters of the command
+	 * @param delimiters
+	 * @return
+	 */
 	public String[] getParameters(String delimiters) {
-		// TODO
-		return null;
+		// Split the string based on the delimiters
+		return this.parameters.split(delimiters);
 	}
 	
 	/**
