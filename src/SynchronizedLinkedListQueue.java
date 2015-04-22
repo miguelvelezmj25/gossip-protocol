@@ -1,24 +1,21 @@
-import java.util.*;
 
-
-public class SynchronizedLinkedListQueue
+public class SynchronizedLinkedListQueue extends LinkedListQueue
 {
-	private LinkedList internalVector;
-	
 	/**
 	 * Instantiates the internal vector.
 	 */
 	public SynchronizedLinkedListQueue()
 	{
-		this.internalVector = new LinkedList();
+		super();
 	}
 	
 	/**
 	 * Reinstantiates the internal vector.
 	 */
+	@Override
 	public synchronized void removeAll()
 	{
-		this.internalVector = new LinkedList();
+		super.removeAll();
 	}
 	
 	/**
@@ -26,9 +23,10 @@ public class SynchronizedLinkedListQueue
 	 * @return
 	 * 		The first element of the queue.
 	 */
+	@Override
 	public synchronized Object peek()
 	{
-		return this.internalVector.peek();
+		return super.peek();
 	}
 	
 	/**
@@ -36,18 +34,20 @@ public class SynchronizedLinkedListQueue
 	 * @return
 	 * 		The first element of the queue.
 	 */
+	@Override
 	public synchronized Object deQueue()
 	{
-		return this.internalVector.peek();
+		return super.deQueue();
 	}
 	
 	/**
 	 * Addds the object to the end of the queue.
 	 * @param data
 	 */
+	@Override
 	public synchronized void enQueue(Object data)
 	{
-		this.internalVector.add(data);
+		super.enQueue(data);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class SynchronizedLinkedListQueue
 	 */
 	public synchronized void enQueue(SynchronizedLinkedListQueue queue)
 	{
-		this.internalVector.addAll(queue.internalVector);
+		super.enQueue(queue);
 	}
 	
 	/**
@@ -65,25 +65,26 @@ public class SynchronizedLinkedListQueue
 	 * @return
 	 * 		True if the internal vector is empty, false if not.
 	 */
+	@Override
 	public synchronized boolean isEmpty()
 	{
-		return this.internalVector.isEmpty();
+		return super.isEmpty();
 	}
 	
-	@Override
-	/**
-	 * Constructs a string representation of the entire queue by using
-	 * the two string methods on the objects in the queue.
-	 */
-	public String toString()
-	{
-		String toReturn;
-		toReturn = "";
-		for(Object o : this.internalVector)
-		{
-			toReturn = toReturn + " "+ o;
-		}
-		
-		return toReturn;
-	}
+//	@Override
+//	/**
+//	 * Constructs a string representation of the entire queue by using
+//	 * the two string methods on the objects in the queue.
+//	 */
+//	public String toString()
+//	{
+//		String toReturn;
+//		toReturn = "";
+//		for(Object o : this.internalVector)
+//		{
+//			toReturn = toReturn + " "+ o;
+//		}
+//		
+//		return toReturn;
+//	}
 }
