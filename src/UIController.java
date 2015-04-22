@@ -191,10 +191,10 @@ public class UIController
 		 */
 		public void sendToPeer()
 		{
-			int size = this.commandName.getBytes().length();
-			DatagramPacket dp = new DatagramPacket(this.commandName.getBytes(),size);
-			outgoingPacketQueue.enQueue(dp);
-			sendToPeer.action();
+//			int size = this.commandName.getBytes().length();
+//			DatagramPacket dp = new DatagramPacket(this.commandName.getBytes(),size);
+//			outgoingPacketQueue.enQueue(dp);
+//			sendToPeer.action();
 
 		}
 
