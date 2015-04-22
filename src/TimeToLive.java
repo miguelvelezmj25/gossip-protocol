@@ -11,6 +11,11 @@ public class TimeToLive {
 	 * @param timeToLive
 	 */
 	public TimeToLive(int timeToLive) {
+		if(timeToLive < 1) {
+			throw new IllegalArgumentException("The time to live that you provided (" + timeToLive 
+					+") is less than 1.");
+		}
+		
 		this.timeToLive = timeToLive;
 	}
 	
@@ -20,6 +25,22 @@ public class TimeToLive {
 	 * @param byteArray
 	 */
 	public TimeToLive(byte[] byteArray) {
+		// Check if null
+		if(byteArray == null) {
+			throw new IllegalArgumentException("The byte array you provided is null");
+		}
+		
+		// Check length
+		if(byteArray.length < 1) {
+			throw new IllegalArgumentException("The byte array you provided is empty");
+		}
+		
+		// Check if the byte array is long enough
+		if(byteArray.length < 36) {
+			throw new IllegalArgumentException("The byte array you provided is too short"
+					+ "and does not have a time to live.");
+		}
+		
 		int timeToLive  = 0;
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
@@ -53,6 +74,11 @@ public class TimeToLive {
 	 * @param timeToLive
 	 */
 	public void set(int timeToLive) {
+		if(timeToLive < 1) {
+			throw new IllegalArgumentException("The time to live that you provided (" + timeToLive 
+					+") is less than 1.");
+		}
+		
 		this.timeToLive = timeToLive;
 	}
 	
