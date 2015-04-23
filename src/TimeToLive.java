@@ -87,7 +87,7 @@ public class TimeToLive {
 	 * 
 	 * @return
 	 */
-	public byte[] toByteArray() {
+	public byte[] getBytes() {
 		
 		byte[] result = new byte[4];
 		
