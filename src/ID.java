@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 
 
 public class ID {
-	// TODO finish this class
 	private static int idLengthInBytes = 16;
 	private static  LinkedListQueue idQueue = new LinkedListQueue();
 	private static int maxQueueLength = 50;
@@ -15,7 +14,6 @@ public class ID {
 	
 	private byte[] id;
 	
-	// TODO when do we use it and what does it do? Do we use clone?
 	private ID()
 	{
 		this.id = new byte[ID.getLengthInBytes()];
@@ -43,15 +41,17 @@ public class ID {
 	}
 	
 	public ID(DatagramPacket packet, int startingByte) {
-		// TODO implement
+		// TODO error check 
+		this.id = new byte[ID.idLengthInBytes];
+		System.arraycopy(packet, 0, this.id, startingByte, ID.idLengthInBytes);
 	}
 	
-	public ID(String hexString) {
-		if(hexString == null) {
-			throw new IllegalArgumentException("The hex string you provided is null");
-		}
-		// TODO implement
-	}
+//	public ID(String hexString) {
+//		if(hexString == null) {
+//			throw new IllegalArgumentException("The hex string you provided is null");
+//		}
+//		
+//	}
 	
 	/**
 	 * Checks if the queue length is equal to 0. If so, returns an ID from the queue. If not, constructs a new ID.
@@ -60,9 +60,9 @@ public class ID {
 	 */
 	public synchronized static ID idFactory()
 	{
-		// TODO How is this used and hwo to implement
+		// TODO How is this used
 		ID returnID;
-		
+
 		if(ID.queueLength==0)
 		{
 			returnID = new ID();
