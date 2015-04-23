@@ -1,4 +1,4 @@
-// TODO ask jarvis if comparable type is command
+
 public abstract class Command implements Cloneable, Comparable<Command>, ActionInterface {
 
 	private String commandName;
@@ -43,6 +43,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 		if(other == null) {
 			throw new IllegalArgumentException("The command that you provided is null");
 		}
+		
 		// Order the commands in alphabetical order
 		return this.commandName.compareToIgnoreCase(other.commandName);
 	}
@@ -53,10 +54,6 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * @return
 	 */
 	public boolean equals(String text) {
-		if(text == null) {
-			throw new IllegalArgumentException("The text that you provided is null");
-		}
-		
 		// TODO correct?
 		return this.commandName.equals(text);
 	}
@@ -65,32 +62,34 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * Check if the command objects are the same
 	 */
 	@Override
-	public boolean equals(Object other) {
-		if(other == null) {
-			throw new IllegalArgumentException("The object that you provided is null");
+	public boolean equals(Object other) {		
+		// TODO is this right
+		if(this == other) {
+			return true;
 		}
 		
-		// TODO is this right
-		boolean result =  true;
-		
+		if(other == null || (this.getClass() != other.getClass())) {
+			return false;
+		}
+
 		// Cast and create a command object 
 		Command object = (Command) other;
 		
 		// Check if the instance variables do not match
 		if(!this.commandName.equals(object.getCommandName())) {
-			result = false;
+			return false;
 		}
 		
 		if(!this.description.equals(object.getDescription())) {
-			result = false;
+			return false;
 		}
 		
 		if(!this.parameters.equals(object.getParameters())) {
-			result = false;
-		}
+			return false;
+		}	
 		
-		// Return result
-		return result;
+		return true;
+	
 	}
 	
 	/** 
@@ -140,7 +139,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 */
 	@Override
 	public int hashCode() {
-		// TODO correct?
+		// TODO correct? or this.toString.hashCode?
 		String variables = this.commandName + this.description + this.parameters;
 		
 		return variables.hashCode();

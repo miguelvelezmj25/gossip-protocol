@@ -8,6 +8,7 @@ public class InvalidPacketFormatException extends RuntimeException {
 		super(errorMessage);
 		
 		// TODO ask jarvis about sending more info to the message
+		
 //		StringBuilder error = new StringBuilder("\nThis is what the packet looks like:");
 //		
 //		error.append("\n");
