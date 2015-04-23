@@ -3,7 +3,7 @@
  */
 public class TimeToLive {
 
-	private int timeToLive;
+	private int timeToLive; // TODO order of bytes to int
 	
 	/**
 	 * Constructor that sets the time to live.
