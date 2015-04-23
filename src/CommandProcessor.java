@@ -1,4 +1,6 @@
 import java.util.*;
+
+// TODO getCommand is missing
 public class CommandProcessor
 {
 	/*
@@ -6,25 +8,26 @@ public class CommandProcessor
 		CISC 370
 		April 18, 2015
 	*/
-	private static 	Map<String,Command>commandRegistry;
-	private Command noSuchCommand;
+	private static 	Map<String,Command>commandRegistry; // TODO static?
+	private Command noSuchCommand; 
 	private Command nothingEnteredCommand;
 
 	public CommandProcessor(Command noSuchCommand, Command nothingEnteredCommand)
 	{
 		this.noSuchCommand = noSuchCommand;
 		this.nothingEnteredCommand = nothingEnteredCommand;
+		// TODO commandRegistry???
 	}//CommandProcessor
 
 	//getAllCommands method returns all the commands in the commandRegistry
-	public Command[] getAllCommands()
+	public Command[] getAllCommands() // TODO test
 	{
 		//returns all the commands in the form of a Command[]
 		return commandRegistry.values().toArray(new Command[0]);
 	}//getAllCommands
 
 	//registers a new command in the commandRegistry
-	public void register(Command command)
+	public void register(Command command) // TODO test
 	{
 		String commandText;
 		commandText = convertToKey(command.getCommandName());
@@ -37,7 +40,7 @@ public class CommandProcessor
 	}//register
 
 	//runs the command associated with the parameter
-	public void runCommand(String commandText)
+	public void runCommand(String commandText) // TODO what is this?
 	{
 		Command command;
 
