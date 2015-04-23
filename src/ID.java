@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 
 
 public class ID {
-	// TODO
+	// TODO finish this class
 	private static int idLengthInBytes = 16;
 	private static  LinkedListQueue idQueue = new LinkedListQueue();
 	private static int maxQueueLength = 50;
@@ -15,7 +15,7 @@ public class ID {
 	
 	private byte[] id;
 	
-	// TODO
+	// TODO when do we use it and what does it do? Do we use clone?
 	private ID()
 	{
 		this.id = new byte[ID.getLengthInBytes()];
@@ -29,20 +29,28 @@ public class ID {
 	
 	public ID (byte[] byteArray)
 	{
-		if(byteArray.length < idLengthInBytes)
+		if(byteArray == null) {
+			throw new IllegalArgumentException("The byte array that you provided is null");
+		}
+		
+		if(byteArray.length != idLengthInBytes)
 		{
-			throw new IllegalArgumentException("Byte array has to be exactly "+ID.idLengthInBytes+ " bytes long. Shame.");
+			throw new IllegalArgumentException("Byte array has to be exactly "+ID.idLengthInBytes+ " bytes long. You"
+					+ "privoded (" + byteArray.length + ")");
 		}
 		
 		this.id = byteArray.clone();
 	}
 	
 	public ID(DatagramPacket packet, int startingByte) {
-		// TODO
+		// TODO implement
 	}
 	
 	public ID(String hexString) {
-		// TODO
+		if(hexString == null) {
+			throw new IllegalArgumentException("The hex string you provided is null");
+		}
+		// TODO implement
 	}
 	
 	/**
@@ -52,7 +60,7 @@ public class ID {
 	 */
 	public synchronized static ID idFactory()
 	{
-		// TODO
+		// TODO How is this used and hwo to implement
 		ID returnID;
 		
 		if(ID.queueLength==0)
@@ -92,8 +100,7 @@ public class ID {
 		// TODO fill the queue?
 		while(ID.queueLength<ID.maxQueueLength)
 		{
-			
-			idQueue.enQueue(new ID());
+			ID.idQueue.enQueue(new ID());
 			
 			ID.queueLength++;
 		}//Add new IDs to the queue until we are at maximum.
@@ -200,36 +207,36 @@ public class ID {
 		return this.id.clone();
 	}
 	
-	@Override
 	/**
 	 * Checks to see if two ID objects have the same internal bytes. 
 	 */
+	@Override
 	public boolean equals(Object other)
 	{
-		// TODO
-		if(other == null) {
-			throw new IllegalArgumentException("The object that you provided is null");
+		// TODO is this how it should be implemented
+		if(this == other) {
+			return true;
 		}
 		
-		boolean result = true;
-		
+		if(other == null || (this.getClass() != other.getClass())) {
+			return false;
+		}
+
+		// Cast and create an ID object 
 		ID object = (ID) other;
 		
 		// Check if lengths are different
 		if(this.id.length != object.getBytes().length) {
-			result = false;
+			return false;
 		}
-		else {
-			// Check if there are bytes that are not the same
-			for(int i = 0; i < this.id.length; i++) {
-				if(this.id[i] != object.getBytes()[i]) {
-					result = false;
-				}
+		
+		for(int i = 0; i < this.id.length; i++) {
+			if(this.id[i] != object.getBytes()[i]) {
+				return false;
 			}			
-		}
+		}	
 		
-		return result;
-		
+		return true;
 	}
 	
 	/**
@@ -238,6 +245,7 @@ public class ID {
 	@Override
 	public int hashCode()
 	{
+		// TODO is this right
 		return this.id.toString().hashCode();
 	}
 	

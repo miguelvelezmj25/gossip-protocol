@@ -192,6 +192,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	/**
 	 * Print the variables from the command
 	 */
+	@Override
 	public String toString() {
 		return "Command name: " + this.commandName + " description: " + this.description
 				+ " parameters: " + this.parameters;
