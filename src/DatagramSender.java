@@ -14,7 +14,7 @@ public class DatagramSender extends DatagramSenderReceiver {
 	 */
 	public DatagramSender(InetSocketAddress inetSocketAddress, OutgoingPacketQueue queue, int packetSize) throws SocketException 
 	{
-		// TODO
+		// TODO ??
 		super(inetSocketAddress, queue, packetSize);
 	}
 
@@ -37,13 +37,11 @@ public class DatagramSender extends DatagramSenderReceiver {
 			} 
 			catch (IOException e) 
 			{
-				// TODO Auto-generated catch block
 				System.err.println("Shit man, IOException in the datagramSocket receive method. No idea what would cause this."); 
 				e.printStackTrace();
 			} 
 			catch (InterruptedException e) 
 			{
-				// TODO Auto-generated catch block
 				System.err.println("Shit man, your sleep method got interrupted.");
 				e.printStackTrace();
 			}
