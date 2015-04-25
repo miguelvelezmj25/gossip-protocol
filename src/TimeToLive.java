@@ -3,7 +3,7 @@
  */
 public class TimeToLive {
 
-	private int timeToLive; // TODO order of bytes to int
+	private int timeToLive;
 	
 	/**
 	 * Constructor that sets the time to live.
@@ -36,16 +36,15 @@ public class TimeToLive {
 		}
 		
 		// Check if the byte array is long enough
-		if(byteArray.length < 36) {
+		if(byteArray.length < TimeToLive.getLengthInBytes()) {
 			throw new IllegalArgumentException("The byte array you provided is too short"
 					+ " and does not have a time to live.");
 		}
-		
+
 		int timeToLive  = 0;
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
-			timeToLive = timeToLive | (byteArray[i] << 
-					((TimeToLive.getLengthInBytes() - 1 - i) * 8));
+			timeToLive = timeToLive | ((byteArray[i] & 0xFF) << (i * 8));
 		}
 		
 		this.timeToLive = timeToLive;
@@ -92,7 +91,7 @@ public class TimeToLive {
 		byte[] result = new byte[4];
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
-			result[i] = (byte) (this.timeToLive >> ((TimeToLive.getLengthInBytes() - 1 - i) * 8));
+			result[i] = (byte) (this.timeToLive >> (i * 8));
 		}
 		
 		return result;
