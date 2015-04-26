@@ -83,7 +83,7 @@ public class UIController
 		Scanner	scanner;
 		String	commandType;
 
-		scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in); // TODO warning that the "scanner" is never closed
 
 		while(!done)
 		{
