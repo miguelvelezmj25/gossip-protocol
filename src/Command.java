@@ -26,8 +26,6 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	
 	/**
 	 * Perform a shallow clone
-	 * 
-	 * TODO should it throw this exception
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
@@ -54,8 +52,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * @return
 	 */
 	public boolean equals(String text) {
-		// TODO correct?
-		return this.commandName.equals(text);
+		return this.commandName.equalsIgnoreCase(text);
 	}
 	
 	/**
