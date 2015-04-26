@@ -83,7 +83,7 @@ public class UIController
 		Scanner	scanner;
 		String	commandType;
 
-		scanner = new Scanner(System.in); // TODO warning that the "scanner" is never closed
+		scanner = new Scanner(System.in);
 
 		while(!done)
 		{
@@ -112,6 +112,7 @@ public class UIController
 				command.sendToPeer();
 			}
 		}
+		scanner.close();
 	}
 
 	/**
