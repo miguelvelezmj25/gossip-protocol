@@ -38,9 +38,26 @@ public class ID {
 	}
 	
 	public ID(DatagramPacket packet, int startingByte) {
-		// TODO error check 
+		// Check if packet is null
+		if(packet == null) {
+			throw new IllegalArgumentException("The packet that you sent is null");
+		}
+		
+		// Check the starting byte
+		if(startingByte < 0) {
+			throw new IllegalArgumentException("The starting byte that you provided "
+					+ "(" + startingByte + ") is less than 0");
+		}
+		
+		if(startingByte > packet.getData().length) {
+			throw new IllegalArgumentException("The starting byte that you provided "
+					+ "(" + startingByte + ") is greater than the length of the packet that"
+							+ "you sent");
+		}
+		
 		this.id = new byte[ID.idLengthInBytes];
-		System.arraycopy(packet, 0, this.id, startingByte, ID.idLengthInBytes);
+		
+		System.arraycopy(packet, startingByte, this.id, 0, ID.idLengthInBytes);
 	}
 	
 //	public ID(String hexString) {
@@ -90,17 +107,17 @@ public class ID {
 	}
 	
 	/**
-	 * Fills the queue to the amount specified by the maxQueueLength static parameter.
+	 * Generates an ID if the queue has enough space for a new one.
 	 */
 	public static synchronized void generateID()
 	{
 		// TODO fill the queue?
-		while(ID.queueLength<ID.maxQueueLength)
+		if(ID.queueLength<ID.maxQueueLength)
 		{
 			ID.idQueue.enQueue(new ID());
 			
 			ID.queueLength++;
-		}//Add new IDs to the queue until we are at maximum.
+		} 
 	}
 	
 	public String getAsHex() {
