@@ -28,8 +28,14 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * Perform a shallow clone
 	 */
 	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	public Object clone() {
+		// Try cloning
+		try {
+			return super.clone();		
+		}
+		catch(CloneNotSupportedException cnse) {
+			throw new RuntimeException("The command could not be cloned");
+		}
 	}
 	
 	/**
