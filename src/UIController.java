@@ -107,14 +107,15 @@ public class UIController
 			if(commandType.toLowerCase().equals("help"))
 			{
 				command = new CommandHelp();
-				command.execute();
+				
 				
 			}
-			
+			/*
+			 * Command will run. If it is meant for a peer, its run method should handle the sending.
+			 */
 			if(command != null)
 			{
-				command.println(command.toString());
-				command.sendToPeer();
+				command.run();
 			}
 		}
 		scanner.close();
@@ -236,25 +237,11 @@ public class UIController
 		/**
 		 * Informs the user that there is an error somewhere.
 		 */
-		public void execute()
+		public void run()
 		{
 			println("You are seeing this message because an errenous message was received. Fix that.");
 			setDoneFlag(true);
 		}
-
-//		/**
-//		 * Always goes first, unless there is another error or a help command
-//		 */
-//		public int compareTo(Object o)
-//		{
-//			int result;
-//			result = 1;
-//			if(((Command)o).getCommandName().equals("Error") || ((Command)o).getCommandName().equals("Help"))
-//			{
-//				result = 0;
-//			}
-//			return result;
-//		}
 
 	}
 
@@ -275,25 +262,14 @@ public class UIController
 		/**
 		 * TODO come up with a help message
 		 */
-		public void execute()
+		public void run()
 		{
-
+			this.println("Here is a list of currently accepted commands:");
+			this.println("Error");
+			this.println("Help");
+			this.println("None");
 		}
 
-		/**
-		 * Always goes first, unless there is an error or another request for help
-		 */
-//		@Override
-//		public int compareTo(Object o)
-//		{
-//			int result;
-//			result = 1;
-//			if(((Command)o).getCommandName().equals("Error") || ((Command)o).getCommandName().equals("Help"))
-//			{
-//				result = 0;
-//			}
-//			return result;
-//		}
 
 	}
 
@@ -314,18 +290,10 @@ public class UIController
 		/**
 		 * Does nothing
 		 */
-		public void execute()
+		public void run()
 		{
 			setDoneFlag(true);
 		}
-
-//		/**
-//		 * Order doesn't matter
-//		 */
-//		public int compareTo(Object o)
-//		{
-//			return 0;
-//		}
 
 	}
 }
