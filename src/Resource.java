@@ -21,7 +21,7 @@ public class Resource
 	 */
 	public Resource (ID id, String data)
 	{
-		this(id,data,',');
+		this(id,data,data.charAt(0));
 	}
 	
 	/**
@@ -32,21 +32,15 @@ public class Resource
 	 */
 	public Resource(ID id, String data, char delimiter)
 	{
-		String[] dataArray;
-		
+		int loc;
+		int loc2;
 		this.resourceID = id;
+		loc = data.indexOf(delimiter,1);
+		loc2 = data.indexOf(delimiter, loc + 1);
+		mimeType = data.substring(1, loc);
+		location = new File(data.substring(loc + 1, loc2));
+		description = data.substring(loc2 + 1);
 		
-		dataArray = data.split("" + delimiter);
-		if(dataArray.length == 3)
-		{
-			description = dataArray[0];
-			location = new File(dataArray[1]);
-			mimeType = dataArray[2];
-		}
-		else
-		{
-			throw new IllegalArgumentException("Your array is an incorrect length");
-		}
 	}
 	
 	/**
