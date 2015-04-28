@@ -282,14 +282,14 @@ public class ID {
 		return this.getAsHex();
 	}
 
-	public boolean isRequestID() {
-		// TODO
-		return false;
-	}
-	
-	public boolean isResourceID() {
-		// TODO
-		return false;
-	}
+//	public boolean isRequestID() {
+//		// TODO
+//		return false;
+//	}
+//	
+//	public boolean isResourceID() {
+//		// TODO
+//		return false;
+//	}
 	
 }
