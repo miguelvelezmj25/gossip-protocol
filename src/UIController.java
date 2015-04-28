@@ -218,7 +218,7 @@ public class UIController
 		/**
 		 * Informs the user that there is an error somewhere.
 		 */
-		public void execute()
+		public void run()
 		{
 			println("You are seeing this message because an errenous message was received. Fix that.");
 			setDoneFlag(true);
@@ -257,7 +257,7 @@ public class UIController
 		/**
 		 * TODO come up with a help message
 		 */
-		public void execute()
+		public void run()
 		{
 
 		}
@@ -296,7 +296,7 @@ public class UIController
 		/**
 		 * Does nothing
 		 */
-		public void execute()
+		public void run()
 		{
 			setDoneFlag(true);
 		}

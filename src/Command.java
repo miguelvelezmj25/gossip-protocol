@@ -1,5 +1,5 @@
 
-public abstract class Command implements Cloneable, Comparable<Command>, ActionInterface {
+public abstract class Command implements Cloneable, Comparable<Command>, Runnable {
 
 	private String commandName;
 	private String description;
@@ -22,7 +22,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, ActionI
 	 * Execute the command
 	 */
 	@Override
-	public abstract void execute();
+	public abstract void run();
 	
 	/**
 	 * Perform a shallow clone
