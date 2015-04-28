@@ -24,30 +24,27 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 	 */
 	public void action(DatagramSocket datagramSocket, SynchronizedPacketQueue queue)
 	{
+//		System.out.println("\nDatagramReceiver Action");
 		DatagramPacket p;
 		
 		p = new DatagramPacket(new byte[super.getPacketSize()], super.getPacketSize());
-		while(!super.isStopped())
+		
+		try 
 		{
-			try 
-			{
-				datagramSocket.receive(p);
-				queue.enQueue(new DatagramPacket(p.getData(), super.getPacketSize()));
-				Thread.sleep(100);
-			} 
-			catch (IOException e) 
-			{
-				System.err.println("Shit man, IOException in the datagramSocket receive method. No idea what would cause this."); 
-				e.printStackTrace();
-			} 
-			catch (InterruptedException e) 
-			{
-				System.err.println("Shit man, your sleep method got interrupted.");
-				e.printStackTrace();
-			}
+			System.out.println("\nDatagramReceiver Listening");
+			datagramSocket.receive(p);
+			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
 			
-		}
-
+			
+			System.out.println("\nDatagramReceiver Enqueue");
+			queue.enQueue(new DatagramPacket(p.getData(), super.getPacketSize()));
+		} 
+		catch (IOException e) 
+		{
+//			System.err.println("Shit man, IOException in the datagramSocket receive method. No idea what would cause this."); 
+			e.printStackTrace();
+		} 
+				
 	}
 
 }

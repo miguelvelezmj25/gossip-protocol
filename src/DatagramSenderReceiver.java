@@ -44,11 +44,15 @@ public abstract class DatagramSenderReceiver implements Runnable
 	 */
 	public void run()
 	{
+//		System.out.println("DatagramSenderReceiver Running");
 		while(!this.isStopped())
 		{
+//			System.out.println("DatagramSenderReceiver Performing action");
 			this.action(this.datagramSocket, this.queue);
+			
 			try {
-				Thread.sleep(100);
+//				System.out.println("DatagramSenderReceiver Sleeping");
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				System.err.println("Thread sleep method was interrupted.");
 				e.printStackTrace();

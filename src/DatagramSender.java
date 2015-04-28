@@ -15,6 +15,7 @@ public class DatagramSender extends DatagramSenderReceiver {
 	public DatagramSender(DatagramSocket datagramSocket, OutgoingPacketQueue queue, int packetSize) throws SocketException 
 	{
 		// TODO ??
+		
 		super(datagramSocket, queue, packetSize);
 	}
 
@@ -25,28 +26,24 @@ public class DatagramSender extends DatagramSenderReceiver {
 	 */
 	public void action(DatagramSocket datagramSocket, SynchronizedPacketQueue queue)
 	{
-		while(!super.isStopped())
+//		System.out.println("\nDatagramSender Action");
+		try 
 		{
-			try 
+			if(!queue.isEmpty())
 			{
-				if(!queue.isEmpty())
-				{
-					datagramSocket.send((DatagramPacket)queue.deQueue());
-				}
-				Thread.sleep(100);
-			} 
-			catch (IOException e) 
-			{
-				System.err.println("Shit man, IOException in the datagramSocket receive method. No idea what would cause this."); 
-				e.printStackTrace();
-			} 
-			catch (InterruptedException e) 
-			{
-				System.err.println("Shit man, your sleep method got interrupted.");
-				e.printStackTrace();
+				System.out.println("DatagramSender Sending packet: " + new String(queue.peek().getData()));
+				datagramSocket.send(queue.deQueue());
 			}
+//			else {
+//				System.out.println("DatagramSender queue is empty");
+//			}
 			
-		}
+		} 
+		catch (IOException e) 
+		{
+//			System.err.println("Shit man, IOException in the datagramSocket receive method. No idea what would cause this."); 
+			e.printStackTrace();
+		} 
 
 	}
 
