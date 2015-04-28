@@ -22,7 +22,7 @@ public abstract class DatagramSenderReceiver implements Runnable
 	 */
 	public DatagramSenderReceiver(InetSocketAddress inetSocketAddress, SynchronizedLinkedListQueue queue, int packetSize) throws SocketException 
 	{	
-		this.done.set(false);
+		this.done = new AtomicBoolean(); //atomicBoolean constructor defaults to false
 		this.packetSize = packetSize;
 		this.queue = queue;
 		datagramSocket = new DatagramSocket(inetSocketAddress);
