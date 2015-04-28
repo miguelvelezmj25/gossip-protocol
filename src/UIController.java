@@ -36,23 +36,25 @@ public class UIController
 	 *
 	 */
 	private DatagramSender sendToPeer;
+	private int packetSize;
 
 	/**
 	 * @param incomingPortNumber
 	 * @param outgoingPortNumber
 	 * @param packetSize
 	 */
-	public UIController(PortNumber portNumber, int packetSize)
+	public UIController(PortNumber portNumberForReceiving, PortNumber portNumberForSending, int packetSize)
 	{
-		InetSocketAddress socketAddress;
-
-		socketAddress = new InetSocketAddress(portNumber.get());
-
+		InetSocketAddress socketAddressForReceiving;
+		InetSocketAddress socketAddressForSending;
+		socketAddressForReceiving = new InetSocketAddress(portNumberForReceiving.get());
+		socketAddressForSending = new InetSocketAddress(portNumberForSending.get());
+		this.packetSize = packetSize;
 		incomingPacketQueue = new IncomingPacketQueue();
 		outgoingPacketQueue = new OutgoingPacketQueue();
 		try
 		{
-			receiveFromPeer = new DatagramReceiver(socketAddress, incomingPacketQueue, packetSize);
+			receiveFromPeer = new DatagramReceiver(socketAddressForReceiving, incomingPacketQueue, packetSize);
 		}
 		catch(SocketException e)
 		{
@@ -60,7 +62,7 @@ public class UIController
 		}
 		try
 		{
-			sendToPeer = new DatagramSender(socketAddress, outgoingPacketQueue, packetSize);
+			sendToPeer = new DatagramSender(socketAddressForSending, outgoingPacketQueue, packetSize);
 		}
 		catch(SocketException e)
 		{
@@ -105,10 +107,13 @@ public class UIController
 			if(commandType.toLowerCase().equals("help"))
 			{
 				command = new CommandHelp();
+				command.execute();
+				
 			}
-
+			
 			if(command != null)
 			{
+				command.println(command.toString());
 				command.sendToPeer();
 			}
 		}
@@ -186,19 +191,32 @@ public class UIController
 		{
 			done = flag;
 		}
-
 		/**
 		 *
 		 */
 		public void sendToPeer()
 		{
-//			int size = this.commandName.getBytes().length();
-//			DatagramPacket dp = new DatagramPacket(this.commandName.getBytes(),size);
-//			outgoingPacketQueue.enQueue(dp);
-//			sendToPeer.action();
+			ID id1;
+			ID id2;
+			byte[] bArr1;
+			byte[] bArr2;
+			UDPMessage udpMessage;
+			TimeToLive ttl;
+			
+			ttl = new TimeToLive(70);
+			bArr1 = new byte[16];
+			bArr2 = new byte[16];
+			
+			id1 = new ID(bArr1);
+			id2 = new ID(bArr2);
+			
+			udpMessage = new UDPMessage(id1, id2, ttl, this.toString());
+			DatagramPacket dp = udpMessage.getDatagramPacket();
+			outgoingPacketQueue.enQueue(dp);
+			sendToPeer.run();
 
 		}
-
+		
 	}
 
 	/**
@@ -218,7 +236,7 @@ public class UIController
 		/**
 		 * Informs the user that there is an error somewhere.
 		 */
-		public void run()
+		public void execute()
 		{
 			println("You are seeing this message because an errenous message was received. Fix that.");
 			setDoneFlag(true);
@@ -257,7 +275,7 @@ public class UIController
 		/**
 		 * TODO come up with a help message
 		 */
-		public void run()
+		public void execute()
 		{
 
 		}
@@ -296,7 +314,7 @@ public class UIController
 		/**
 		 * Does nothing
 		 */
-		public void run()
+		public void execute()
 		{
 			setDoneFlag(true);
 		}
