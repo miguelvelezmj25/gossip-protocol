@@ -12,10 +12,10 @@ public class DatagramSender extends DatagramSenderReceiver {
 	 * @param packetSize
 	 * @throws SocketException 
 	 */
-	public DatagramSender(InetSocketAddress inetSocketAddress, OutgoingPacketQueue queue, int packetSize) throws SocketException 
+	public DatagramSender(DatagramSocket datagramSocket, OutgoingPacketQueue queue, int packetSize) throws SocketException 
 	{
 		// TODO ??
-		super(inetSocketAddress, queue, packetSize);
+		super(datagramSocket, queue, packetSize);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class DatagramSender extends DatagramSenderReceiver {
 	 * Checks to see if the passed queue is empty. If not, removes and sends the first packet
 	 * in the queue. Then sleeps for 100 milliseconds.
 	 */
-	public void action(DatagramSocket datagramSocket, SynchronizedLinkedListQueue queue)
+	public void action(DatagramSocket datagramSocket, SynchronizedPacketQueue queue)
 	{
 		while(!super.isStopped())
 		{

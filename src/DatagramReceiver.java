@@ -10,10 +10,10 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 	 * @throws SocketException 
 	 *  
 	 */
-	public DatagramReceiver(InetSocketAddress inetSocketAddress, IncomingPacketQueue queue, int packetSize) throws SocketException 
+	public DatagramReceiver(DatagramSocket datagramSocket, IncomingPacketQueue queue, int packetSize) throws SocketException 
 	{
 		// TODO ??
-		super(inetSocketAddress, queue, packetSize);
+		super(datagramSocket, queue, packetSize);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 	 * method will immediately create a new datagram packet which will be placed in the passed queue. 
 	 * Once thats done, the thread sleeps for one hundred milliseconds. 
 	 */
-	public void action(DatagramSocket datagramSocket, SynchronizedLinkedListQueue queue)
+	public void action(DatagramSocket datagramSocket, SynchronizedPacketQueue queue)
 	{
 		DatagramPacket p;
 		

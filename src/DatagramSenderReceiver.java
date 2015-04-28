@@ -10,7 +10,7 @@ public abstract class DatagramSenderReceiver implements Runnable
 	private AtomicBoolean 				done;
 	private DatagramSocket 				datagramSocket;
 	private int							packetSize;
-	private SynchronizedLinkedListQueue queue;
+	private SynchronizedPacketQueue 	queue;
 	
 	/**
 	 * Binds the datagramSocket to the inetSocketAddress, and instantiates the queue and packet size
@@ -20,12 +20,12 @@ public abstract class DatagramSenderReceiver implements Runnable
 	 * @param packetSize
 	 * @throws SocketException
 	 */
-	public DatagramSenderReceiver(InetSocketAddress inetSocketAddress, SynchronizedLinkedListQueue queue, int packetSize) throws SocketException 
+	public DatagramSenderReceiver(DatagramSocket datagramSocket, SynchronizedPacketQueue queue, int packetSize) throws SocketException 
 	{	
 		this.done = new AtomicBoolean(); //atomicBoolean constructor defaults to false
 		this.packetSize = packetSize;
 		this.queue = queue;
-		datagramSocket = new DatagramSocket(inetSocketAddress);
+		this.datagramSocket = datagramSocket;
 	}
 	
 	/**
@@ -90,6 +90,6 @@ public abstract class DatagramSenderReceiver implements Runnable
 		return thread;
 	}
 	
-	public abstract void action(DatagramSocket datagramSocket, SynchronizedLinkedListQueue queue);
+	public abstract void action(DatagramSocket datagramSocket, SynchronizedPacketQueue queue);
 	
 }
