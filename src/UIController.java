@@ -102,31 +102,23 @@ public class UIController
 			command = null;
 			
 			if(userCommand.length() < 1) {
+				// TODO is this right? Or do we use the command processor?
 				command = new CommandNone();				
 			}
-			else if(userCommand.toLowerCase().equals("done"))
-			{
-				done = true;
+			else {
+				command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
 			}
-			else if(userCommand.toLowerCase().equals("help"))
-			{
-				command = new CommandHelp();				
-			}
-			else if(userCommand.toLowerCase().equals("quit")) 
-			{
-				command = new CommandQuit();
-			}
-			else 
-			{
+			
+			if(command == null) {
+				// TODO is this right? Or do we use the command processor?
 				command = new CommandError();
 			}
+			
 			/*
 			 * Command will run. If it is meant for a peer, its run method should handle the sending.
 			 */
-			if(command != null)
-			{
-				command.run();
-			}
+			command.run();	
+		
 		}
 		scanner.close();
 	}
@@ -295,21 +287,21 @@ public class UIController
 		 */
 		public void run()
 		{
+			// Get all the commands
+			Command[] allCommands = this.getCommandProcessor().getAllCommands();
+
 			this.println("Here is a list of currently accepted commands:");
 			
-			Command[] allCommands = this.getCommandProcessor().getAllCommands();
+			// Sort the commands
 			Arrays.sort(allCommands);
 			
-			
+			// Print all the commands
 			for(int i = 0; i < allCommands.length; i++) {
 				this.println(allCommands[i].toString());
 			}
 			
-//			this.println(this.getCommandProcessor().getAllCommands().length + "");
+			// Print a new line
 			this.println();
-//			this.println("Error");
-//			this.println("Help");
-//			this.println("None");
 		}
 
 

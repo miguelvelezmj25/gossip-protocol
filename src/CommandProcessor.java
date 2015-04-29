@@ -17,6 +17,8 @@ public class CommandProcessor
 		this.noSuchCommand = noSuchCommand;
 		this.nothingEnteredCommand = nothingEnteredCommand;
 		this.commandRegistry = new HashMap<String, Command>();
+		
+		// TODO ask Jarvis what do we do with the noSuch and nothingEntered commands
 	}//CommandProcessor
 
 	//getAllCommands method returns all the commands in the commandRegistry
