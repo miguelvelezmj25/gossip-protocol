@@ -1,55 +1,163 @@
 import java.net.DatagramPacket;
 import java.security.SecureRandom;
 
-public class ID {
-	private static int idLengthInBytes = 16;
-	private static  LinkedListQueue idQueue = new LinkedListQueue();
-	private static int maxQueueLength = 50;
-	private static int queueLength  = 0;
-	private static SecureRandom secureRandom = new SecureRandom();
-	private static ID zeroID = ID.createZeroID();
+public class ID 
+{
+	/**
+	 * 
+	 * Miguel Velez
+	 * April 14, 2015
+	 * 
+	 * This class creates an ID to use in the packets
+	 * 
+	 * Class variables:
+	 * 		private static int idLengthInBytes;
+	 * 			the length of the id.
+	 * 
+	 * 		private static LinkedListQueue idQueue
+	 * 			the queue of ids
+	 * 
+	 *		private static int maxQueueLength
+	 *			the max queue length
+	 *
+	 *		private static int queueLength
+	 *			the current queue length
+	 *
+	 * 		private static SecureRandom secureRandom
+	 * 			get secure random bytes
+	 * 
+	 * 		private static ID zeroID
+	 * 	 		the id of zeros
+	 * 
+	 * 		private byte[] id;
+	 * 			the actual id
+	 *  	
+	 * Constructors:
+	 *		private ID()
+	 *			populate the id with new bytes
+	 * 
+	 * 		public ID (byte[] byteArray)
+	 * 			constructs a new ID by using the input byte array as the ID.
+	 * 
+	 * 		public ID(DatagramPacket packet, int startingByte)
+	 * 			constructs an id from a packet
+	 * 
+	 * Methods:
+	 * 
+	 * 		public synchronized static ID idFactory()
+	 * 			checks if the queue length is equal to 0. If so, returns an ID from 
+	 * 			the queue. If not, constructs a new ID.
+	 * 
+	 * 		private static ID createZeroID()
+	 * 			creates a ID consisting entirely of zeros. 
+	 * 
+	 * 		public static synchronized void generateID()
+	 * 			generates an ID if the queue has enough space for a new one.
+	 * 
+	 * 		public String getAsHex() 
+	 * 			get the id as a hex string
+	 * 
+	 * 		public synchronized static int getLengthInBytes()
+	 * 			return the length in bytes
+	 * 
+	 * 		public static synchronized LinkedListQueue getQueue() 
+	 * 			basic getter for the queue containing IDs.
+	 * 
+	 * 		public static synchronized int getMaxQueueLength() 
+	 * 			return the maximum length of the queue
+	 * 
+	 * 		public synchronized static int getQueueLength() 
+	 * 			return the queue length
+	 * 
+	 * 		public static ID getZeroID()
+	 * 			return the zero ID
+	 * 
+	 * 		public static synchronized void setLengthInBytes(int lengthInBytes) 
+	 * 			set the length in bytes
+	 * 
+	 * 		public static synchronized void setMaxQueueLength(int maxQueueLength) 
+	 * 			set the max length of the queue
+	 * 
+	 * 		public byte[] getBytes()
+	 * 			returns the internal byte representation of this ID.
+	 * 
+	 * 		public boolean equals(Object other)
+	 * 			checks to see if two ID objects have the same internal bytes. 
+	 * 
+	 * 		public int hashCode()
+	 * 			returns the hashCode of the toString method.
+	 * 
+	 * 		public boolean isZero()
+	 * 			determines if the current ID is the zero ID.
+	 * 		
+	 * 		public String toString()
+	 * 			converts each byte to hex, and returns the string consisting of 
+	 * 			consecutive hex characters.
+	 *      
+	 * Modification History:
+	 * 		April 14, 2015
+	 * 			Original version
+	 * 
+	 * 		April 28, 2015
+	 * 			Added some comments.
+	 *  
+	 */
+
+	private static int 				idLengthInBytes = 16;
+	private static LinkedListQueue 	idQueue = new LinkedListQueue();
+	private static int 				maxQueueLength = 50;
+	private static int 				queueLength  = 0;
+	private static SecureRandom 	secureRandom = new SecureRandom();
+	private static ID 				zeroID = ID.createZeroID();
 	
 	private byte[] id;
 	
 	private ID()
 	{
+		// Populate the id with new bytes		
 		this.id = new byte[ID.getLengthInBytes()];
+		
 		ID.secureRandom.nextBytes(this.id);
 	}
 	
-	/**
-	 * Constructs a new ID by using the input byte array as the ID.
-	 * @param byteArray
-	 */
-	
 	public ID (byte[] byteArray)
 	{
-		if(byteArray == null) {
+		// Constructs a new ID by using the input byte array as the ID.
+		// Check if null
+		if(byteArray == null) 
+		{
 			throw new IllegalArgumentException("The byte array that you provided is null");
 		}
 		
-		if(byteArray.length != idLengthInBytes)
+		// Check if the length is not the same as the length in bytes
+		if(byteArray.length != ID.idLengthInBytes)
 		{
-			throw new IllegalArgumentException("Byte array has to be exactly "+ID.idLengthInBytes+ " bytes long. You"
+			throw new IllegalArgumentException("Byte array has to be exactly " + ID.idLengthInBytes+ " bytes long. You"
 					+ "privoded (" + byteArray.length + ")");
 		}
 		
+		// Clone the id that we got
 		this.id = byteArray.clone();
 	}
 	
-	public ID(DatagramPacket packet, int startingByte) {
+	public ID(DatagramPacket packet, int startingByte) 
+	{
+		// Constructs an id from a packet
 		// Check if packet is null
-		if(packet == null) {
+		if(packet == null) 
+		{
 			throw new IllegalArgumentException("The packet that you sent is null");
 		}
 		
 		// Check the starting byte
-		if(startingByte < 0) {
+		if(startingByte < 0) 
+		{
 			throw new IllegalArgumentException("The starting byte that you provided "
 					+ "(" + startingByte + ") is less than 0");
 		}
 		
-		if(startingByte > packet.getData().length) {
+		if(startingByte > packet.getData().length) 
+		{
 			throw new IllegalArgumentException("The starting byte that you provided "
 					+ "(" + startingByte + ") is greater than the length of the packet that"
 							+ "you sent");
@@ -57,30 +165,24 @@ public class ID {
 		
 		this.id = new byte[ID.idLengthInBytes];
 		
-		System.arraycopy(packet, startingByte, this.id, 0, ID.idLengthInBytes);
+		// Copy the data from the packet starting at the specified byte to the id
+		System.arraycopy(packet.getData(), startingByte, this.id, 0, ID.idLengthInBytes);
 	}
-	
-//	public ID(String hexString) {
-//		if(hexString == null) {
-//			throw new IllegalArgumentException("The hex string you provided is null");
-//		}
-//		
-//	}
-	
-	/**
-	 * Checks if the queue length is equal to 0. If so, returns an ID from the queue. If not, constructs a new ID.
-	 * @return 
-	 * 		A return ID.
-	 */
+		
 	public synchronized static ID idFactory()
 	{
+		// Checks if the queue length is equal to 0. If so, returns an ID from the queue. If not, constructs a new ID.
 		// TODO How is this used
 		ID returnID;
 
+		// If there are not any ids available, get a new one
 		if(ID.queueLength==0)
 		{
 			returnID = new ID();
-		}else{
+		} 
+		else
+		{
+			// Otherwise get one from the queue
 			returnID = (ID) ID.getQueue().deQueue();
 			
 			ID.queueLength = ID.queueLength - 1;
@@ -89,15 +191,12 @@ public class ID {
 		return returnID;
 	}
 	
-	/**
-	 * Creates a ID consisting entirely of zeros. 
-	 * @return
-	 * 		An id consisting entirely of zeros. 
-	 */
 	private static ID createZeroID()
 	{
+		// Creates a ID consisting entirely of zeros. 
 		byte[] zeroByteArray = new byte[idLengthInBytes];
 		
+		// Just to make sue
 		for(int i = 0; i< idLengthInBytes;i++)
 		{
 			zeroByteArray[i] = 0;
@@ -106,89 +205,77 @@ public class ID {
 		return new ID(zeroByteArray);
 	}
 	
-	/**
-	 * Generates an ID if the queue has enough space for a new one.
-	 */
+	
 	public static synchronized void generateID()
 	{
-		// TODO fill the queue?
+		// Generates an ID if the queue has enough space for a new one.
 		if(ID.queueLength<ID.maxQueueLength)
 		{
+			// Enqueue the new id
 			ID.idQueue.enQueue(new ID());
 			
+			// Increase the length of the queue
 			ID.queueLength++;
 		} 
 	}
 	
 	public String getAsHex() {
+		// Get the id as a hex string
 		String hex = "0x";
 		String tmp = "";
 		
-		for(byte singleByte : this.id) {
+		// For each byte
+		for(byte singleByte : this.id) 
+		{
+			// Get the hex string representation
 			tmp = Integer.toHexString(singleByte);
 			
-			if(tmp.length() < 2) {
+			// Add a zero in front of it if the string is only 1 character
+			if(tmp.length() < 2) 
+			{
 				tmp = "0" + tmp;
 			}
 			
+			// Append the string
 			hex = hex + tmp;
 		}
 		
 		return hex;
 	}
 	
-	/**
-	 * Return the length in bytes
-	 * @return
-	 */
-	public synchronized static int getLengthInBytes() {
+	public synchronized static int getLengthInBytes() 
+	{
+		// Return the length in bytes
 		return ID.idLengthInBytes;
 	}
 	
-	/**
-	 * Basic getter for the queue containing IDs.
-	 * @return
-	 * 		A SynchronizedLinkedListQueue containing a list of IDs.
-	 */
 	public static synchronized LinkedListQueue getQueue() 
 	{
+		// Basic getter for the queue containing IDs.
 		return ID.idQueue;
 	}
 	
-	/**
-	 * Basic getter.
-	 * @return
-	 * 		Returns the max queue length as determined by the maxQueueLength static variable.
-	 */
 	public static synchronized int getMaxQueueLength() 
 	{
+		// Return the maximum length of the queue
 		return ID.maxQueueLength;
 	}
 	
-	/**
-	 * Basic getter.
-	 * @return
-	 * 		The current queue length. 
-	 */
-	public synchronized static int getQueueLength() {
+	public synchronized static int getQueueLength() 
+	{
+		// Return the queue length
 		return ID.queueLength;
 	}
-	
-	/**
-	 * Basic getter.
-	 * @return
-	 * 		The zero id. 
-	 */
+
 	public static ID getZeroID()
 	{
+		// Return the zero ID
 		return ID.zeroID;
 	}
 	
-	/**
-	 * Set the length in bytes
-	 * @param lengthInBytes
-	 */
-	public static synchronized void setLengthInBytes(int lengthInBytes) {
+	public static synchronized void setLengthInBytes(int lengthInBytes) 
+	{
+		// Set the length in bytes
 		if(lengthInBytes < 1) {
 			throw new IllegalArgumentException("The length in bytes that you provided (" + lengthInBytes 
 					+") is less than 1.");
@@ -197,12 +284,9 @@ public class ID {
 		ID.idLengthInBytes = lengthInBytes;
 	}
 	
-	/**
-	 * Set the max queue length.
-	 * @param maxQueueLength
-	 */
 	public static synchronized void setMaxQueueLength(int maxQueueLength) 
 	{
+		// Set the max length of the queue
 		if(maxQueueLength < 0) {
 			throw new IllegalArgumentException("The max length queue that you provided (" + maxQueueLength 
 					+") is less than 0.");
@@ -211,22 +295,16 @@ public class ID {
 		ID.maxQueueLength = maxQueueLength;
 	}
 	
-	/**
-	 * Returns the internal byte representation of this ID.
-	 * @return
-	 * 		The byte array ID. 
-	 */
 	public byte[] getBytes()
 	{
+		// Returns the internal byte representation of this ID.
 		return this.id.clone();
 	}
 	
-	/**
-	 * Checks to see if two ID objects have the same internal bytes. 
-	 */
 	@Override
 	public boolean equals(Object other)
 	{
+		// Checks to see if two ID objects have the same internal bytes. 
 		// TODO is this how it should be implemented
 		if(this == other) {
 			return true;
@@ -253,33 +331,23 @@ public class ID {
 		return true;
 	}
 	
-	/**
-	 * Returns the hashCode of the toString method.
-	 */
 	@Override
 	public int hashCode()
 	{
-		// TODO is this right
+		// Returns the hashCode of the toString method.
 		return this.id.toString().hashCode();
 	}
 	
-	/**
-	 * Determines if the current ID is the zero ID.
-	 * @return
-	 * 		Boolean. True if this object is 0, false otherwise.
-	 */
 	public boolean isZero()
 	{
+		// Determines if the current ID is the zero ID.
 		return this.equals(ID.getZeroID());
 	}
 
-	/**
-	 * Converts each byte to hex, and returns the string consisting of consecutive hex characters.
-	 */
-	@Override
 	public String toString()
 	{ 
-		return this.getAsHex();
+		// Converts each byte to hex, and returns the string consisting of consecutive hex characters.
+		return "This id: " + this.getAsHex();
 	}
 
 //	public boolean isRequestID() {
