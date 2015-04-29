@@ -24,18 +24,20 @@ public class FindRequestFromPeer extends RequestFromPeer
 		
 		if(matches.length > 0)
 		{
-			id1 = new ID(new byte[16]);
 			id2 = udpMessage.getID1();
 			response = "";
 			for(int i = 0; i < matches.length; i = i + 1)
 			{
-				response = response + "," + matches[i].getDescription() + "," + matches[i].getMimeType();
+				id1 = matches[i].getID();
+				response = "," + matches[i].getMimeType() + "," + matches[i].getSizeInBytes() + "," + matches[i].getDescription();
+				ttl = new TimeToLive(70);
+				udpMessage = new UDPMessage(id1, id2, ttl, response);
+				//TODO: actually send the response
 			}
 			
-			ttl = new TimeToLive(70);
-			udpMessage = new UDPMessage(id1, id2, ttl, response);
 			
-			//TODO: actually send the response
+			
+			
 		}
 	}
 }
