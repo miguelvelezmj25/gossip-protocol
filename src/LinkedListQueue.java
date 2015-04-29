@@ -1,5 +1,6 @@
 
-public class LinkedListQueue {
+public class LinkedListQueue 
+{
 	/**
 	 * 
 	 * Miguel Velez
@@ -216,7 +217,8 @@ public class LinkedListQueue {
 	}
 	
 
-	private class Node {
+	private class Node 
+	{
 		/**
 		 * 
 		 * Miguel Velez
