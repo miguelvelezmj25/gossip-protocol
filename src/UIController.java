@@ -45,16 +45,18 @@ public class UIController
 	 */
 	public UIController(PortNumber portNumberForReceiving, PortNumber portNumberForSending, int packetSize)
 	{
-		InetSocketAddress socketAddressForReceiving;
-		InetSocketAddress socketAddressForSending;
-		socketAddressForReceiving = new InetSocketAddress(portNumberForReceiving.get());
-		socketAddressForSending = new InetSocketAddress(portNumberForSending.get());
+		DatagramSocket dsForReceiving;
+		DatagramSocket dsForSending;
+		
+		
+		
 		this.packetSize = packetSize;
 		incomingPacketQueue = new IncomingPacketQueue();
 		outgoingPacketQueue = new OutgoingPacketQueue();
 		try
 		{
-			receiveFromPeer = new DatagramReceiver(socketAddressForReceiving, incomingPacketQueue, packetSize);
+			dsForReceiving = new DatagramSocket(portNumberForReceiving.get());
+			receiveFromPeer = new DatagramReceiver(dsForReceiving, incomingPacketQueue, packetSize);
 		}
 		catch(SocketException e)
 		{
@@ -62,7 +64,8 @@ public class UIController
 		}
 		try
 		{
-			sendToPeer = new DatagramSender(socketAddressForSending, outgoingPacketQueue, packetSize);
+			dsForSending = new DatagramSocket(portNumberForSending.get());
+			sendToPeer = new DatagramSender(dsForSending, outgoingPacketQueue, packetSize);
 		}
 		catch(SocketException e)
 		{
