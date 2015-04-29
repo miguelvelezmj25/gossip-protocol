@@ -4,9 +4,36 @@
  * 
  * TODO this whole class is going to change.
  */
-public class PortNumberForSending extends PortNumber {
+public class PortNumberForSending extends PortNumber 
+{
 
-	public PortNumberForSending(int portNumber) {
+	/** 
+	 *	Miguel Velez
+	 * 	April 16, 2015
+	 * 
+	 * 	The port number used for sending. // TODO
+	 * 
+	 *  Class variables:
+	 * 
+	 *  Constructors:
+	 * 	
+	 * 		public PortNumberForSending(int portNumber) 
+	 * 			construct a port for sending
+	 * 			
+	 *  Methods:
+	 *  
+	 * 	Modification History:
+	 * 		April 16, 2015
+	 * 			Original version
+	 * 
+	 * 	 	April 28, 2015
+	 * 			Added some comments.
+	 * 
+	 */
+	
+	public PortNumberForSending(int portNumber) 
+	{
+		// Construc a port for sending
 		super(portNumber);
 	}
 

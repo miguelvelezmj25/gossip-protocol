@@ -1,12 +1,33 @@
-/**
- * Use port 12345. Might not need this class since we are using the same port
- * for sending and receiving.
- * 
- * TODO this whole class is going to change.
- */
-public class PortNumberForReceiving extends PortNumber {
+
+public class PortNumberForReceiving extends PortNumber 
+{
+	/** 
+	 *	Miguel Velez
+	 * 	April 16, 2015
+	 * 
+	 * 	The port number used for receiving. // TODO
+	 * 
+	 * Class variables:
+	 * 
+	 * Constructors:
+	 * 	
+	 * 		public PortNumberForReceiving(int portNumber) 
+	 * 			construct a port for receiving
+	 * 			
+	 * Methods:
+	 *  
+	 * 	Modification History:
+	 * 		April 16, 2015
+	 * 			Original version
+	 * 
+	 * 	 	April 28, 2015
+	 * 			Added some comments.
+	 * 
+	 */
 	
-	public PortNumberForReceiving(int portNumber) {
+	public PortNumberForReceiving(int portNumber) 
+	{	
+		// Construct a port for receiving
 		super(portNumber);
 	}
 
