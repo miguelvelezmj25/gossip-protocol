@@ -42,14 +42,14 @@ public class LinkedListQueue
 	 * 			appends the passed queue to the end of this linked list.
 	 *    
 	 * Modification History:
-	 * 		September 12, 2015
+	 * 		February 12, 2015
 	 * 			Original version
 	 * 
-	 * 		September 13, 2015
+	 * 		February 13, 2015
 	 * 			Using QueueUnderflowException. Got answers about questions relating the use
 	 * 			of if statements in some of the methods. Tested all methods.
 	 * 
-	 * 		September 1, 2015
+	 * 		March 1, 2015
 	 * 			Added some comments.
 	 *  
 	 */
