@@ -6,7 +6,7 @@ public abstract class Request
 	 * Miguel Velez
 	 * April 28, 2015
 	 * 
-	 * This singleton class manages the requests.
+	 * This abstract class represents a request.
 	 * 
 	 * Class variables:
 	 * 
