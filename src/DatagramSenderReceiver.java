@@ -65,6 +65,10 @@ public abstract class DatagramSenderReceiver implements Runnable
 	 */
 	public void stop()
 	{
+		// TODO ask jarvis what we need to do here since we are using the same datagram
+		// socket for sending and receiving. So if we stop one thread, that thread
+		// closes the socket, which creates an exception on the other thread when it
+		// tries to close it.
 		this.done.set(true);
 		this.datagramSocket.close();
 	}

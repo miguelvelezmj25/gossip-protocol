@@ -73,6 +73,8 @@ public class UIController
 		{
 			System.out.println("Caught socket exception " + e.getMessage());
 		}
+		
+		
 
 		done = false;
 
@@ -93,6 +95,8 @@ public class UIController
 		UIControllerCommand command;
 		Scanner	scanner;
 		String	userCommand;
+
+		receiveFromPeer.startAsThread();
 
 		scanner = new Scanner(System.in);
 
@@ -277,6 +281,7 @@ public class UIController
 			this.print("Quiting the application");
 			setDoneFlag(true);
 			sendToPeer.stop();
+			receiveFromPeer.stop();
 		}
 
 	}
