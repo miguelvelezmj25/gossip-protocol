@@ -351,12 +351,12 @@ public class ID
 	}
 
 //	public boolean isRequestID() {
-//		// TODO
+//		// TODO might need this later
 //		return false;
 //	}
 //	
 //	public boolean isResourceID() {
-//		// TODO
+//		// TODO later
 //		return false;
 //	}
 	
