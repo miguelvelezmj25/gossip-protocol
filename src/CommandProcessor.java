@@ -1,12 +1,12 @@
 import java.util.*;
 
-// TODO Test
 public class CommandProcessor
 {
 	/*
 		Courtney Karppi
 		CISC 370
 		April 18, 2015
+
 	*/
 	private Map<String,Command>commandRegistry;
 	private Command noSuchCommand;
@@ -17,8 +17,7 @@ public class CommandProcessor
 		this.noSuchCommand = noSuchCommand;
 		this.nothingEnteredCommand = nothingEnteredCommand;
 		this.commandRegistry = new HashMap<String, Command>();
-		
-		// TODO ask Jarvis what do we do with the noSuch and nothingEntered commands
+
 	}//CommandProcessor
 
 	//getAllCommands method returns all the commands in the commandRegistry
@@ -44,7 +43,21 @@ public class CommandProcessor
 	//runs the command associated with the parameter
 	public Command getCommand(String commandText)
 	{
-		return commandRegistry.get(convertToKey(commandText));
+		Command command;
+		if(commandText.length() == 0)
+		{
+			command = this.noSuchCommand;
+		}
+		else
+		{
+			command = commandRegistry.get(convertToKey(commandText));
+		}
+		if (command == null)
+		{
+			command = this.nothingEnteredCommand;
+		}
+		return command;
+
 	}//getCommand
 
 	//Removes the white space from the data and converts it to lower case
@@ -54,3 +67,4 @@ public class CommandProcessor
 	}//convertToKey
 
 }//class
+
