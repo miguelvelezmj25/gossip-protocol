@@ -93,4 +93,8 @@ public class ResourceManager
 		return result;
 	}
 	
+	public synchronized Resource getResourceFromID(ID ident)
+	{
+		return resourceDirectory.get(ident);
+	}
 }
