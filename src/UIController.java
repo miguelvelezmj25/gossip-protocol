@@ -76,10 +76,11 @@ public class UIController
 
 		done = false;
 
-		commandProcessor = new CommandProcessor(new CommandError(), new CommandNone());
+		commandProcessor = new CommandProcessor(new CommandNone(), new CommandError());
 		// TODO add all the commands
 		this.commandProcessor.register(new CommandHelp());
 		this.commandProcessor.register(new CommandQuit());
+		this.commandProcessor.register(new CommandSend());
 
 
 	}
@@ -101,18 +102,7 @@ public class UIController
 			userCommand = scanner.nextLine();
 			command = null;
 			
-			if(userCommand.length() < 1) {
-				// TODO is this right? Or do we use the command processor?
-				command = new CommandNone();				
-			}
-			else {
-				command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
-			}
-			
-			if(command == null) {
-				// TODO is this right? Or do we use the command processor?
-				command = new CommandError();
-			}
+			command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
 			
 			/*
 			 * Command will run. If it is meant for a peer, its run method should handle the sending.
@@ -213,10 +203,33 @@ public class UIController
 			id1 = new ID(bArr1);
 			id2 = new ID(bArr2);
 			
-			udpMessage = new UDPMessage(id1, id2, ttl, this.toString());
-			DatagramPacket dp = udpMessage.getDatagramPacket();
+//			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
+//			DatagramPacket dp = udpMessage.getDatagramPacket();
+//			outgoingPacketQueue.enQueue(dp);
+			
+		
+			
+			String message = "hello";
+			byte[] buffer = new byte[message.getBytes().length];
+			
+			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+			
+//			System.out.println("Set address to local host");
+			try {
+				dp.setAddress(InetAddress.getLocalHost());
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+//			System.out.println("Set port 12345");
+			dp.setPort(12345);
+			
+//			System.out.println("Set packet data");
+			dp.setData(message.getBytes());
+			
 			outgoingPacketQueue.enQueue(dp);
-			sendToPeer.run();
+			sendToPeer.startAsThread();
 
 		}
 		
@@ -242,7 +255,6 @@ public class UIController
 		public void run()
 		{
 			println("You are seeing this message because an errenous message was received. Fix that.");
-//			setDoneFlag(true);
 		}
 
 	}
@@ -264,6 +276,7 @@ public class UIController
 		{
 			this.print("Quiting the application");
 			setDoneFlag(true);
+			sendToPeer.stop();
 		}
 
 	}
@@ -282,9 +295,6 @@ public class UIController
 			super("help", "A help command");
 		}
 
-		/**
-		 * TODO come up with a help message
-		 */
 		public void run()
 		{
 			// Get all the commands
@@ -327,7 +337,52 @@ public class UIController
 		public void run()
 		{
 			this.println("You did not enter a command");
-//			setDoneFlag(true);
+		}
+
+	}
+	
+	// TODO might start on the datagram sender receiver
+	public class CommandStart extends UIControllerCommand
+	{
+		/**
+		 * Creates the command
+		 */
+		public CommandStart()
+		{
+			super("start", "start sender and receiver");
+		}
+
+		/**
+		 * Does nothing
+		 */
+		public void run()
+		{
+			this.println("");
+		}
+
+	}
+	
+	public class CommandSend extends UIControllerCommand
+	{
+		/**
+		 * Creates the command
+		 */
+		public CommandSend()
+		{
+			super("send", "send a packet from the outgoing queue");
+		}
+
+		public void run()
+		{
+//			try {
+//				DatagramSocket sendSocket = new DatagramSocket((new PortNumber(12345)).get());
+				this.sendToPeer();
+				
+				
+//			} catch (SocketException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 
 	}
