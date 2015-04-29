@@ -1,50 +1,81 @@
 import java.util.HashMap;
 
-public class RequestManager {
+public class RequestManager 
+{
+	/**
+	 * 
+	 * Miguel Velez
+	 * April 28, 2015
+	 * 
+	 * This singleton class manages the requests.
+	 * 
+	 * Class variables:
+	 * 
+	 * 		private static RequestManager instance
+	 * 			an instance to this class
+	 * 
+	 * 		private HashMap<ID, Request> requestsDirectory
+	 * 			the directory of the requests
+	 * 
+	 * Constructors:
+	 * 		
+	 * 		public RequestManager() 
+	 * 			construct a request manager
+	 * 
+	 * Methods:
+	 * 
+	 * 		public static RequestManager getInstance() 
+	 * 			return the instance of the class
+	 * 
+	 * 		public static RequestManager newInstance() 
+	 * 			return a new instance of the class
+	 * 
+	 * 		public Request getRequest(ID id) 
+	 * 			get a request from the directory
+	 * 
+	 * 		public void insertRequest(Request request) 
+	 * 			insert a request in the directory
+	 * 
+	 *     
+	 * Modification History:
+	 *  
+	 * 		April 28, 2015
+	 * 			Original version.
+	 *  
+	 */
 	
-	private static RequestManager 	instance;
+	private static RequestManager instance;
 	
-	private HashMap<ID, Request>	requestsDirectory;
+	private HashMap<ID, Request> requestsDirectory;
 	
-	public RequestManager() {
+	public RequestManager() 
+	{
+		// Construct a request manager
 		RequestManager.instance = this;
 		this.requestsDirectory = new HashMap<ID, Request>();
 	}
 	
-	/**
-	 * Return the instance of the class
-	 * 
-	 * @return
-	 */
-	public static RequestManager getInstance() {
+	public static RequestManager getInstance() 
+	{
+		// Return the instance of the class
 		return RequestManager.instance;
 	}
-	
-	/**
-	 * Return a new instance of the class
-	 * 
-	 * @return
-	 */
-	public static RequestManager newInstance() {
+
+	public static RequestManager newInstance() 
+	{
+		// Return a new instance of the class
 		return RequestManager.getInstance();
 	}
 	
-	/**
-	 * Get a request from the directory
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public Request getRequest(ID id) {
+	public Request getRequest(ID id) 
+	{
+		// Get a request from the directory
 		return this.requestsDirectory.get(id);
 	}
 	
-	/**
-	 * Insert a request in the directory
-	 * 
-	 * @param request
-	 */
-	public void insertRequest(Request request) {
+	public void insertRequest(Request request) 
+	{
+		// Insert a request in the directory
 		this.requestsDirectory.put(request.getID(), request);
 	}
 
