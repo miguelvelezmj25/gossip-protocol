@@ -26,8 +26,33 @@ public class UDPMessage
 
 	public UDPMessage(DatagramPacket datagramPacket)
 	{
-		byte[] data;
+		byte[]		data;
+		int			messageLength;
+		ID 			id1;
+		ID			id2;
+		TimeToLive	timeToLive;
+		byte[]		message;
+		byte[]		ttl;
+		int			count;
+
 		data = datagramPacket.getData();
+		ttl = new byte[TimeToLive.getLengthInBytes()];
+
+		count = 0;
+		if(data.length>0 && data.length<512)
+		{
+			id1 = new ID(datagramPacket, 0);
+			id2 = new ID(datagramPacket, ID.getLengthInBytes());
+			for(int i= id1.getLengthInBytes()*2; i<((id1.getLengthInBytes()*2)+ttl.length); i++)
+			{
+				ttl[count] = data[i];
+				count = count+1;
+			}
+			timeToLive = new TimeToLive(ttl);
+			messageLength = datagramPacket.getLength()-id1.getLengthInBytes()*2 + ttl.length;
+			message = new byte[messageLength];
+			System.arraycopy(data, id1.getLengthInBytes()*2 + ttl.length, message, 0, messageLength);
+		}
 	}//UDPMessage
 
 	public DatagramPacket getDatagramPacket()
