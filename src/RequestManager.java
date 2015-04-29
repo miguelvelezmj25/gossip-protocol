@@ -70,12 +70,28 @@ public class RequestManager
 	public Request getRequest(ID id) 
 	{
 		// Get a request from the directory
+		// Check if null
+		if(id ==  null) {
+			throw new IllegalArgumentException("The id you provided is null");
+		}
+		
+		// TODO what other checks?
+		
+		// Returns null if not found
 		return this.requestsDirectory.get(id);
 	}
 	
 	public void insertRequest(Request request) 
 	{
 		// Insert a request in the directory
+		// Check if null
+		if(request ==  null) {
+			throw new IllegalArgumentException("The request you provided is null");
+		}
+		
+		// TODO what other checks?
+		
+		// Insert in the hash map
 		this.requestsDirectory.put(request.getID(), request);
 	}
 
