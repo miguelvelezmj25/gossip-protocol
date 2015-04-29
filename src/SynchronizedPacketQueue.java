@@ -4,9 +4,48 @@ import java.net.DatagramPacket;
  * Abstract class that uses DatagramPackets to catch comipler errors.
  *  
  */
-public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueue {
-	
-	public SynchronizedPacketQueue () {
+public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueue 
+{
+	/**
+	 * 
+	 * Miguel Velez
+	 * April 14, 2015
+	 * 
+	 * This class implements a synchronized queue of packets to use the compiler to catch data
+	 * type errors.
+	 * 
+	 * Class variables:
+	 *  
+	 * Constructors:
+	 * 		public SynchronizedPacketQueue () 
+	 * 			construct a queue
+	 *  
+	 * Methods:
+	 * 
+	 * 		public DatagramPacket peek() 
+	 * 			returns but does not remove the first DatagramPacket in the queue.
+	 * 
+	 * 		public DatagramPacket deQueue()
+	 * 			returns and removes the first DatagramPacket in the queue.
+	 * 
+	 * 		public void enQueue(DatagramPacket packet) 
+	 * 			adds a DatagramPacket at the end of the queue.
+	 * 
+	 * 		public void enQueue(SynchronizedPacketQueue queue) 
+	 * 			adds a SynchronizedPacketQueue at the end of the queue.
+	 * 
+	 * Modification History:
+	 * 		April 14, 2015
+	 * 			Original version
+	 * 
+	 * 		April 28, 2015
+	 * 			Added some comments.
+	 */
+
+
+	public SynchronizedPacketQueue () 
+	{
+		// Construct a queue
 		super();
 	}
 	
@@ -16,11 +55,13 @@ public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueu
 	 * @return
 	 */
 	@Override
-	public DatagramPacket peek() {
+	public DatagramPacket peek() 
+	{
 		DatagramPacket result = null;
 		
 		// Check if not null
-		if(!super.isEmpty()) {
+		if(!super.isEmpty()) 
+		{
 			result = (DatagramPacket) super.peek();
 		}
 		
@@ -34,11 +75,13 @@ public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueu
 	 * @return
 	 */
 	@Override
-	public DatagramPacket deQueue() {
+	public DatagramPacket deQueue() 
+	{
 		DatagramPacket result = null;
 		
 		// Check if not null
-		if(!super.isEmpty()) {
+		if(!super.isEmpty()) 
+		{
 			result = (DatagramPacket) super.deQueue();
 		}
 		
@@ -50,7 +93,8 @@ public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueu
 	 * 
 	 * @param packer
 	 */
-	public void enQueue(DatagramPacket packet) {
+	public void enQueue(DatagramPacket packet) 
+	{
 		super.enQueue(packet);
 	}
 	
@@ -59,7 +103,8 @@ public abstract class SynchronizedPacketQueue extends SynchronizedLinkedListQueu
 	 * 
 	 * @param queue
 	 */
-	public void enQueue(SynchronizedPacketQueue queue) {
+	public void enQueue(SynchronizedPacketQueue queue) 
+	{
 		super.enQueue(queue);
 	}
 	

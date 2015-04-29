@@ -18,7 +18,7 @@ public class TimeToLive
 	 * 
 	 * 		public TimeToLive(byte[] byteArray) 
 	 * 			constructor that takes the time to live from the message that is located 32
-				bytes down the message
+	 * 			bytes down the message
 	 * 
 	 * 
 	 * Methods:
