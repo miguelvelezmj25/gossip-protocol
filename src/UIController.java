@@ -1,6 +1,8 @@
 import java.net.*;
 import java.util.*;
 
+import javax.smartcardio.CommandAPDU;
+
 /**
  * @author jens3048
  *
@@ -75,6 +77,9 @@ public class UIController
 		done = false;
 
 		commandProcessor = new CommandProcessor(new CommandError(), new CommandNone());
+		// TODO add all the commands
+		this.commandProcessor.register(new CommandHelp());
+		this.commandProcessor.register(new CommandQuit());
 
 
 	}
@@ -291,6 +296,17 @@ public class UIController
 		public void run()
 		{
 			this.println("Here is a list of currently accepted commands:");
+			
+			Command[] allCommands = this.getCommandProcessor().getAllCommands();
+			Arrays.sort(allCommands);
+			
+			
+			for(int i = 0; i < allCommands.length; i++) {
+				this.println(allCommands[i].toString());
+			}
+			
+//			this.println(this.getCommandProcessor().getAllCommands().length + "");
+			this.println();
 //			this.println("Error");
 //			this.println("Help");
 //			this.println("None");

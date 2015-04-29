@@ -273,8 +273,8 @@ public abstract class Command implements Cloneable, Comparable<Command>, Runnabl
 	public String toString() 
 	{
 		// Print the variables from the command
-		return "Command name: " + this.commandName + " description: " + this.description
-				+ " parameters: " + this.parameters;
+		return "Command name: " + this.commandName + " -- Description: " + this.description
+				+ " -- Parameters: " + this.parameters;
 	}
 
 }
