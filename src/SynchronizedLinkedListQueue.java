@@ -2,89 +2,93 @@
 public class SynchronizedLinkedListQueue extends LinkedListQueue
 {
 	/**
-	 * Instantiates the internal vector.
+	 * 
+	 * Miguel Velez
+	 * April 14, 2015
+	 * 
+	 * This class implements a synchronized queue using a linked list to preserve worst case run time
+	 * of sorting.  
+	 * 
+	 * Class variables:
+	 *  
+	 * Constructors:
+	 * 		public SynchronizedLinkedListQueue()
+	 * 			creates a LinkedListQueue object.
+	 * 
+	 * Methods:
+	 * 
+	 *		public synchronized void removeAll()
+	 *			removes all the Nodes from the linked list.
+	 *
+	 *		public synchronized boolean isEmpty()
+	 *			returns if the linked list is empty.
+	 *
+	 *		public synchronized Object peek()
+	 *			returns, but does not remove, the front of the linked list.
+	 *
+	 *		public synchronized Object deQueue()
+	 *			removes and returns the front of the linked list.
+	 *		
+	 *		public synchronized void enQueue(Object data)
+	 *			appends the data object to the end of the linked list.
+	 *		
+	 *		public synchronized void enQueue(LinkedListQueue queue)
+	 * 			appends the passed queue to the end of this linked list.
+	 *    
+	 * Modification History:
+	 * 		April 14, 2015
+	 * 			Original version
+	 * 
+	 * 		March 28, 2015
+	 * 			Added some comments.
+	 *  
 	 */
+
 	public SynchronizedLinkedListQueue()
 	{
+		// Constructs a synchronized linked list queue
 		super();
 	}
 	
-	/**
-	 * Reinstantiates the internal vector.
-	 */
 	@Override
 	public synchronized void removeAll()
 	{
+		// Removes all elements in the linked list
 		super.removeAll();
 	}
 	
-	/**
-	 * Returns the first element of the queue.
-	 * @return
-	 * 		The first element of the queue.
-	 */
 	@Override
 	public synchronized Object peek()
 	{
+		// Returns but does not remove the first element of the queue.
 		return super.peek();
 	}
-	
-	/**
-	 * Returns and removes the first element of the queue. 
-	 * @return
-	 * 		The first element of the queue.
-	 */
+
 	@Override
 	public synchronized Object deQueue()
 	{
+		// Returns and removes the first element of the queue. 
 		return super.deQueue();
 	}
 	
-	/**
-	 * Addds the object to the end of the queue.
-	 * @param data
-	 */
 	@Override
 	public synchronized void enQueue(Object data)
 	{
+		// Adds the object to the end of the queue.
 		super.enQueue(data);
 	}
 	
-	/**
-	 * Calls the internal vectors addAll method on the internal vector of the parameter, 
-	 * which adds the entirety of the passed queue onto the end of the current queue.
-	 * @param queue
-	 */
 	public synchronized void enQueue(SynchronizedLinkedListQueue queue)
 	{
+		// Adds a linked list to the end of the queue
 		super.enQueue(queue);
 	}
 	
-	/**
-	 * Returns the internal vector's isEmpty() function.
-	 * @return
-	 * 		True if the internal vector is empty, false if not.
-	 */
 	@Override
 	public synchronized boolean isEmpty()
 	{
+		// Checks if the linked list is empty
 		return super.isEmpty();
 	}
 	
-//	@Override
-//	/**
-//	 * Constructs a string representation of the entire queue by using
-//	 * the two string methods on the objects in the queue.
-//	 */
-//	public String toString()
-//	{
-//		String toReturn;
-//		toReturn = "";
-//		for(Object o : this.internalVector)
-//		{
-//			toReturn = toReturn + " "+ o;
-//		}
-//		
-//		return toReturn;
-//	}
 }
