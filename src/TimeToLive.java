@@ -1,16 +1,57 @@
-/**
- * This class determines the time to live of messages that are sent around.
- */
-public class TimeToLive {
+
+public class TimeToLive 
+{
+	/**
+	 * 
+	 * Miguel Velez
+	 * February 19, 2015
+	 * 
+	 * This class determines the time to live of messages that are sent around.
+	 * 
+	 * Class variables:
+	 * 		int timeToLive;
+	 * 			the time to live of the packets that are sent.
+	 *  
+	 * Constructors:
+	 * 		public TimeToLive(int timeToLive) 
+	 * 			constructor that sets the time to live.
+	 * 
+	 * 		public TimeToLive(byte[] byteArray) 
+	 * 			constructor that takes the time to live from the message that is located 32
+				bytes down the message
+	 * 
+	 * 
+	 * Methods:
+	 * 
+	 * 		public static int getLengthInBytes() 
+	 * 			returns the number of bytes that time to live uses.
+	 * 		
+	 * 		public int get() 
+	 * 			returns the time to live
+	 * 		
+	 * 		public void set(int timeToLive)
+	 * 			sets the time to live
+	 * 
+	 * 		public byte[] getBytes()
+	 * 			returns the time to live as a byte array
+	 * 	
+	 * 		public String toString() 
+	 * 			returns a string representation of the time to live
+	 *     
+	 * Modification History:
+	 * 		April 14, 2015
+	 * 			Original version
+	 * 
+	 * 		April 28, 2015
+	 * 			Added some comments.
+	 *  
+	 */
 
 	private int timeToLive;
-	
-	/**
-	 * Constructor that sets the time to live.
-	 * 
-	 * @param timeToLive
-	 */
-	public TimeToLive(int timeToLive) {
+
+	public TimeToLive(int timeToLive) 
+	{
+		// Constructor that sets the time to live.
 		if(timeToLive < 1) {
 			throw new IllegalArgumentException("The time to live that you provided (" + timeToLive 
 					+") is less than 1.");
@@ -19,12 +60,10 @@ public class TimeToLive {
 		this.timeToLive = timeToLive;
 	}
 	
-	/**
-	 * Constructor that takes the time to live from the message that is located 32
-	 * bytes down the message
-	 * @param byteArray
-	 */
-	public TimeToLive(byte[] byteArray) {
+	public TimeToLive(byte[] byteArray) 
+	{
+		// Constructor that takes the time to live from the message that is located 32
+		// bytes down the message
 		// Check if null
 		if(byteArray == null) {
 			throw new IllegalArgumentException("The byte array you provided is null");
@@ -43,6 +82,7 @@ public class TimeToLive {
 
 		int timeToLive  = 0;
 		
+		// Get an int from a byte array
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
 			timeToLive = timeToLive | ((byteArray[i] & 0xFF) << (i * 8));
 		}
@@ -50,29 +90,21 @@ public class TimeToLive {
 		this.timeToLive = timeToLive;
 	}
 	
-	/**
-	 * Returns the number of bytes that time to live uses.
-	 * @return
-	 */
-	public static int getLengthInBytes() {
+	public static int getLengthInBytes() 
+	{
+		// Returns the number of bytes that time to live uses.
 		return 4;
 	}
 	
-	/**
-	 * Returns the time to live
-	 * 
-	 * @return
-	 */
-	public int get() {
+	public int get() 
+	{
+		// Returns the time to live
 		return this.timeToLive;
 	}
 	
-	/**
-	 * Sets the time to live
-	 * 
-	 * @param timeToLive
-	 */
-	public void set(int timeToLive) {
+	public void set(int timeToLive) 
+	{
+		// Sets the time to live
 		if(timeToLive < 1) {
 			throw new IllegalArgumentException("The time to live that you provided (" + timeToLive 
 					+") is less than 1.");
@@ -81,13 +113,9 @@ public class TimeToLive {
 		this.timeToLive = timeToLive;
 	}
 	
-	/**
-	 * Returns the time to live as a byte array
-	 * 
-	 * @return
-	 */
-	public byte[] getBytes() {
-		
+	public byte[] getBytes() 
+	{
+		// Returns the time to live as a byte array
 		byte[] result = new byte[4];
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
@@ -97,12 +125,11 @@ public class TimeToLive {
 		return result;
 	}
 	
-	/**
-	 * Returns a string representation of the time to live
-	 */
 	@Override
-	public String toString() {
-		return ("" + this.timeToLive);
+	public String toString() 
+	{
+		// Returns a string representation of the time to live
+		return ("The time to live is: " + this.timeToLive);
 	}
 	
 }
