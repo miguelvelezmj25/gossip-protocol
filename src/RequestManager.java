@@ -71,7 +71,7 @@ public class RequestManager
 	{
 		// Get a request from the directory
 		// Check if null
-		if(id ==  null) {
+		if(id == null) {
 			throw new IllegalArgumentException("The id you provided is null");
 		}
 		
