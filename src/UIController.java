@@ -86,32 +86,34 @@ public class UIController
 	{
 		UIControllerCommand command;
 		Scanner	scanner;
-		String	commandType;
+		String	userCommand;
 
 		scanner = new Scanner(System.in);
 
 		while(!done)
 		{
-			System.out.println("Type in a type of command to send or done");
-			commandType = scanner.nextLine();
+			System.out.println("Type in a command: ");
+			userCommand = scanner.nextLine();
 			command = null;
-			if(commandType.toLowerCase().equals("done"))
+			
+			if(userCommand.length() < 1) {
+				command = new CommandNone();				
+			}
+			else if(userCommand.toLowerCase().equals("done"))
 			{
 				done = true;
 			}
-			if(commandType.toLowerCase().equals("error"))
+			else if(userCommand.toLowerCase().equals("help"))
+			{
+				command = new CommandHelp();				
+			}
+			else if(userCommand.toLowerCase().equals("quit")) 
+			{
+				command = new CommandQuit();
+			}
+			else 
 			{
 				command = new CommandError();
-			}
-			if(commandType.toLowerCase().equals("none"))
-			{
-				command = new CommandNone();
-			}
-			if(commandType.toLowerCase().equals("help"))
-			{
-				command = new CommandHelp();
-				
-				
 			}
 			/*
 			 * Command will run. If it is meant for a peer, its run method should handle the sending.
@@ -243,6 +245,27 @@ public class UIController
 		public void run()
 		{
 			println("You are seeing this message because an errenous message was received. Fix that.");
+//			setDoneFlag(true);
+		}
+
+	}
+	
+	public class CommandQuit extends UIControllerCommand
+	{
+		/**
+		 * Creates the command
+		 */
+		public CommandQuit()
+		{
+			super("quit", "quit the application");
+		}
+
+		/**
+		 * Informs the user that there is an error somewhere.
+		 */
+		public void run()
+		{
+			this.print("Quiting the application");
 			setDoneFlag(true);
 		}
 
@@ -268,9 +291,9 @@ public class UIController
 		public void run()
 		{
 			this.println("Here is a list of currently accepted commands:");
-			this.println("Error");
-			this.println("Help");
-			this.println("None");
+//			this.println("Error");
+//			this.println("Help");
+//			this.println("None");
 		}
 
 
@@ -287,7 +310,7 @@ public class UIController
 		 */
 		public CommandNone()
 		{
-			super();
+			super("none", "nothing was entered");
 		}
 
 		/**
@@ -295,7 +318,8 @@ public class UIController
 		 */
 		public void run()
 		{
-			setDoneFlag(true);
+			this.println("You did not enter a command");
+//			setDoneFlag(true);
 		}
 
 	}
