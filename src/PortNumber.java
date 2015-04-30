@@ -5,7 +5,7 @@ public class PortNumber
 	 *	Miguel Velez
 	 * 	April 16, 2015
 	 * 
-	 * 	The port number used for communication. // TODO
+	 * 	The port number used for communication.
 	 * 
 	 * Class variables:
 	 * 

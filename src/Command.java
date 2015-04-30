@@ -85,7 +85,9 @@ public abstract class Command implements Cloneable, Comparable<Command>, Runnabl
 	 * 
 	 * 		April 29, 2015
 	 * 			Added some comments.
-	 *  
+	 * 
+	 *  	April 30, 2015
+	 * 			Implemented default constructor.
 	 */
 	
 	private String commandName;
@@ -94,9 +96,8 @@ public abstract class Command implements Cloneable, Comparable<Command>, Runnabl
 	
 	public Command() 
 	{
-		// TODO what should the default be?
-		this.commandName = "none";
-		this.description = "A none command"; 
+		this.commandName = "";
+		this.description = ""; 
 		this.parameters = "";
 	}
 	

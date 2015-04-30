@@ -12,8 +12,6 @@ public class RequestToFindResources extends Request
 	 * 
 	 * Class variables:
 	 * 
-	 * 		private ArrayList<ID> responses;
-	 * 			Where responses are stored
 	 * 
 	 * Constructors:
 	 * 		
@@ -33,27 +31,26 @@ public class RequestToFindResources extends Request
 	 *  
 	 */
 	
-	private ArrayList<ID> responses;
+//	private ArrayList<ID> responses;
 	
 	public RequestToFindResources(ID id) 
 	{
 		// Create a request to find resources from peers
 		// Call the super constructor
 		super(id);
-		
-		// TODO do we need to include something else in this variable?
-		this.responses = new ArrayList<ID>();
 	}
 
 	@Override
 	public void updateRequest(UDPMessage udpMessage) 
 	{
-	// TODO	what needs to be here?
+		// Send the datagram packet to the UI controller
 		// Check if null
 		if(udpMessage == null) 
 		{
 			throw new IllegalArgumentException("The UDP message that you provided is null");
 		}
+		
+		// TODO get the datagramPacket and send it to the UIController
 	}
 
 }
