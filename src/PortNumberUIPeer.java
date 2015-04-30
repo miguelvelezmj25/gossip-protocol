@@ -2,16 +2,15 @@
  * Use port 12345. Might not need this class since we are using the same port
  * for sending and receiving.
  * 
- * TODO this whole class is going to change.
  */
-public class PortNumberForSending extends PortNumber 
+public class PortNumberUIPeer extends PortNumber 
 {
 
 	/** 
 	 *	Miguel Velez
 	 * 	April 16, 2015
 	 * 
-	 * 	The port number used for sending. // TODO
+	 * 	The port number used for communicating between the UI and my peer. 54321
 	 * 
 	 *  Class variables:
 	 * 
@@ -28,12 +27,15 @@ public class PortNumberForSending extends PortNumber
 	 * 
 	 * 	 	April 28, 2015
 	 * 			Added some comments.
+	 * 		
+	 * 	 	April 30, 2015
+	 * 			Changed name of class and assigned number 54321.
 	 * 
 	 */
 	
-	public PortNumberForSending(int portNumber) 
+	public PortNumberUIPeer(int portNumber) 
 	{
-		// Construc a port for sending
+		// Construct a port for sending
 		super(portNumber);
 	}
 

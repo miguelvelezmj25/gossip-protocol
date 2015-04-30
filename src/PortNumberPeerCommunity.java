@@ -1,11 +1,11 @@
 
-public class PortNumberForReceiving extends PortNumber 
+public class PortNumberPeerCommunity extends PortNumber 
 {
 	/** 
 	 *	Miguel Velez
 	 * 	April 16, 2015
 	 * 
-	 * 	The port number used for receiving. // TODO
+	 * 	The port number used to communicate between my peer and the community. 12345
 	 * 
 	 * Class variables:
 	 * 
@@ -23,9 +23,12 @@ public class PortNumberForReceiving extends PortNumber
 	 * 	 	April 28, 2015
 	 * 			Added some comments.
 	 * 
+	 * 	 	April 30, 2015
+	 * 			Changed name of class and assigned number 12345.
+	 * 
 	 */
 	
-	public PortNumberForReceiving(int portNumber) 
+	public PortNumberPeerCommunity(int portNumber) 
 	{	
 		// Construct a port for receiving
 		super(portNumber);
