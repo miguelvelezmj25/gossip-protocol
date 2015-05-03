@@ -35,7 +35,7 @@ public class GetRequestFromPeer extends RequestFromPeer
 			
 			for( int i = 0; i <= numberOfParts; i = i + 1)
 			{
-				randID = new ID(new byte[16]);
+				randID = ID.idFactory();
 				length = randID.getBytes().length;
 				//length = length + pN.getBytes().length;
 				length = length + Math.min(456, fileArray.length - (i * 456));
@@ -44,7 +44,7 @@ public class GetRequestFromPeer extends RequestFromPeer
 				
 				System.arraycopy(randID.getBytes(),0,sentArray,0,randID.getBytes().length);
 				loc = randID.getBytes().length;
-				//System.arraycopy(rN.getBytes(),0,sentArray,16,rN.getBytes().length);
+				//System.arraycopy(rN.getBytes(),0,sentArray,randID.getBytes().length,rN.getBytes().length);
 				//loc = loc + rN.getBytes().length;
 				System.arraycopy(fileArray, (i * 456), sentArray, loc, Math.min(456, fileArray.length - (i * 456)));
 				response = new UDPMessage(identification1,identification2, new TimeToLive(70),sentArray);

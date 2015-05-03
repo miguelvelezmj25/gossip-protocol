@@ -30,13 +30,13 @@ public class FindRequestFromPeer extends RequestFromPeer
 			response = "";
 			for(int i = 0; i < matches.length; i = i + 1)
 			{
-				randID = new ID(new byte[16]);
+				randID = ID.idFactory();
 				id1 = matches[i].getID();
 				response = "," + matches[i].getMimeType() + "," + matches[i].getSizeInBytes() + "," + matches[i].getDescription();
 				ttl = new TimeToLive(70);
-				responseArray = new byte[16 + response.getBytes().length];
+				responseArray = new byte[randID.getBytes().length + response.getBytes().length];
 				System.arraycopy(randID.getBytes(),0,responseArray,0,randID.getBytes().length);
-				System.arraycopy(response.getBytes(),0,responseArray,16,response.getBytes().length);
+				System.arraycopy(response.getBytes(),0,responseArray,randID.getBytes().length,response.getBytes().length);
 				udpMessage = new UDPMessage(id1, id2, ttl, responseArray);
 				//TODO: actually send the response
 			}
