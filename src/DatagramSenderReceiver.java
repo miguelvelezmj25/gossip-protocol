@@ -52,7 +52,7 @@ public abstract class DatagramSenderReceiver implements Runnable
 			
 			try {
 //				System.out.println("DatagramSenderReceiver Sleeping");
-				Thread.sleep(2000);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				System.err.println("Thread sleep method was interrupted.");
 				e.printStackTrace();
