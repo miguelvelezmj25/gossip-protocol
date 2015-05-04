@@ -103,6 +103,17 @@ public abstract class Command implements Cloneable, Comparable<Command>, Runnabl
 	
 	public Command(String commandName, String description) 
 	{
+		// Check if null
+		if(commandName == null) 
+		{
+			throw new IllegalArgumentException("The command name cannot be null");
+		}
+		
+		if(description ==  null) 
+		{
+			throw new IllegalArgumentException("The description of the command cannot be null");
+		}
+		
 		this.commandName = commandName;
 		this.description = description;
 		this.parameters = "";
