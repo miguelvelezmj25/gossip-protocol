@@ -38,6 +38,19 @@ public class PortNumber
 	
 	public PortNumber(int portNumber) 
 	{
+		// Check if less than 0
+		if(portNumber < 0)
+		{
+			throw new IllegalArgumentException("The port number cannot be null");
+		}
+		
+		// Check if greater than the allowed number
+		if(portNumber > 65535)
+		{
+			throw new IllegalArgumentException("The port number you provdided (" + portNumber + ") is"
+					+ "greater than the maximum allowed port number (65535)");
+		}
+		
 		// Creates a port number
 		this.portNumber = portNumber;
 	}
