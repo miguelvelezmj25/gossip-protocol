@@ -38,6 +38,12 @@ public abstract class Request
 	
 	public Request(ID id) 
 	{
+		// Check if null
+		if(id == null) 
+		{
+			throw new IllegalArgumentException("The request id cannot be null");
+		}
+		
 		// Create a request
 		this.requestID = id;
 	}
