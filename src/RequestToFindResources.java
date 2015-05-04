@@ -50,7 +50,7 @@ public class RequestToFindResources extends Request
 			throw new IllegalArgumentException("The UDP message that you provided is null");
 		}
 		
-		// TODO get the datagramPacket and send it to the UIController
+		// TODO get the datagramPacket and send it to the UIController. Done in the peer controller
 	}
 
 }

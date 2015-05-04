@@ -6,7 +6,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, Runnabl
 	 * Miguel Velez
 	 * April 16, 2015
 	 * 
-	 * This class 
+	 * This class is a command that executes some logic
 	 * 
 	 * Class variables:
 	 * 
