@@ -1,6 +1,11 @@
 public class GossipPartners
 {
-	private instance gossipPartners;
+	/*
+	Courtney Karppi
+	CISC 370 - GossipProtocol
+	May 5, 2015
+	*/
+	private static instance gossipPartners;
 	private Collection gossipPartners;
 
 	private GossipPartners()
@@ -8,12 +13,12 @@ public class GossipPartners
 
 	}//constructor
 
-	public GossipPartners getInstance()
+	public static GossipPartners getInstance()
 	{
 
 	}//getInstance
 
-	public GossipPartners newInstance()
+	public static GossipPartners newInstance()
 	{
 
 	}//newInstance
