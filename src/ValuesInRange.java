@@ -1,4 +1,4 @@
-public class ValuesInRange extends PartNumbers
+public class ValuesInRange implements PartNumbers
 {
 	/*
 	Courtney Karppi
