@@ -16,11 +16,7 @@ public class PartNumbers
 		}
 	}
 
-	//???????????????????
-	public int get()
-	{
-		return this.numberOfParts;
-	}
+	public int get(){return this.numberOfParts;}
 
 	public byte[] getBytes()
 	{
