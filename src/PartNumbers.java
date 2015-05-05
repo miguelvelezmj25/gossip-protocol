@@ -28,7 +28,7 @@ public class PartNumbers
 	}
 
 	public int getLengthInBytes()
-	{
+	{//returns size of this.getBytes()
 		return size(this.numberOfParts);
 	}
 
