@@ -1,6 +1,11 @@
 import java.net.*;
-public class GossipPartner
+public class GossipPartner extends GossipPartners
 {
+	/*
+	Courtney Karppi
+	CISC 370 - GossipProtocol
+	May 5, 2015
+	*/
 	private InetSocketAddress gossipPartnerAddress;
 	private boolean isAlive;
 	private OutgoingPacketQueue queue;
