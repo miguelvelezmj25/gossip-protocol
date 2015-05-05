@@ -1,5 +1,5 @@
 import java.net.*;
-public class GossipPartner extends GossipPartners
+public class GossipPartner implements GossipPartners
 {
 	/*
 	Courtney Karppi
