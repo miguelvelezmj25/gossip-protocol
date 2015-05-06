@@ -1,4 +1,6 @@
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 public class PeerController implements Runnable {
 	/**
@@ -31,14 +33,31 @@ public class PeerController implements Runnable {
 	// TODO should this have an incoming and outgoing queue?
 	
 	private InetSocketAddress 		address;
-	private PortNumberPeerCommunity communityPort;
+//	private PortNumberPeerCommunity communityPort;
 	private boolean 				done;
-	private PortNumberUIPeer 		uiPort;
+	private DatagramReceiver        receiveFromUI;
+	private DatagramReceiver        receiveFromCommunity;
+	private DatagramSender			sendToUI;
+	private DatagramSender			sendToCommunity;
+	private IncomingPacketQueue 	incomingPacketsFromUIQueue;
+	private IncomingPacketQueue 	incomingPacketsFromCommunityQueue;
+	private OutgoingPacketQueue 	outgoingPacketsFromUIQueue;
+	private OutgoingPacketQueue 	outgoingPacketsFromCommunityQueue;
 	
 	// TODO have to check what parameter we need to get
 	public PeerController(InetSocketAddress address, PortNumberPeerCommunity communityPort, PortNumberUIPeer uiPort) 
 	{
-		this.done = false;
+		try {
+			this.address = new InetSocketAddress(InetAddress.getLocalHost(), uiPort.get());
+			this.done = false;
+			this.incomingPacketsFromUIQueue = new IncomingPacketQueue();
+			incomingPacketsFromCommunityQueue = new IncomingPacketQueue();
+			outgoingPacketsFromUIQueue = new OutgoingPacketQueue();
+			outgoingPacketsFromCommunityQueue = new OutgoingPacketQueue();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public InetSocketAddress getAddress() 
