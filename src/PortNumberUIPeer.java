@@ -1,8 +1,3 @@
-/**
- * Use port 12345. Might not need this class since we are using the same port
- * for sending and receiving.
- * 
- */
 public class PortNumberUIPeer extends PortNumber 
 {
 
@@ -16,8 +11,8 @@ public class PortNumberUIPeer extends PortNumber
 	 * 
 	 *  Constructors:
 	 * 	
-	 * 		public PortNumberForSending(int portNumber) 
-	 * 			construct a port for sending
+	 * 		public PortNumberUIPeer(int portNumber) 
+	 * 			construct a port for sending from the UI to the Peer
 	 * 			
 	 *  Methods:
 	 *  
