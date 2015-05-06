@@ -1,8 +1,8 @@
 import java.net.*;
 import java.util.*;
 
-import javax.smartcardio.CommandAPDU;
 
+// TODO need instance variable peerAddress
 /**
  * @author jens3048
  *
@@ -38,7 +38,7 @@ public class UIController
 	 *
 	 */
 	private DatagramSender sendToPeer;
-	private int packetSize;
+//	private int packetSize; // TODO what is this?
 
 	/**
 	 * @param incomingPortNumber
@@ -52,7 +52,7 @@ public class UIController
 		
 		
 		
-		this.packetSize = packetSize;
+//		this.packetSize = packetSize; // TODO what is this
 		incomingPacketQueue = new IncomingPacketQueue();
 		outgoingPacketQueue = new OutgoingPacketQueue();
 		try
