@@ -54,7 +54,7 @@ public class ValuesInRange
 	{
 		if(maximumValueInRange < minimumValueInRange)
 		{
-				throw new IllegalArgumentException("The maximum value parameter (" + maximumValueInRange + ") is less than the minimum value parameter (" + minimumValueInRange +")");
+			throw new IllegalArgumentException("The maximum value parameter (" + maximumValueInRange + ") is less than the minimum value parameter (" + minimumValueInRange +")");
 		}
 		this.maximumValueInRange=maximumValueInRange;
 		this.minimumValueInRange=minimumValueInRange;
@@ -86,7 +86,6 @@ public class ValuesInRange
 
 		bitNumber = getBitNumberFor(value);
 		element = getElementNumberFor(value);
-
 
 		return (1 << bitNumber) == (this.bitMap[element] & (1 << bitNumber));
 	}//contains
