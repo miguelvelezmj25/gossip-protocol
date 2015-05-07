@@ -41,8 +41,21 @@ public class GossipPartner
 	{
 		DatagramSender			datagramSender;
 		DatagramSocket			socket;
-		SynchronizedPacketQueue queue;
+		OutgoingPacketQueue queue;
 
+		try
+		{
+			socket = new DatagramSocket(getGossipPartnerAddress());
+			queue = new OutgoingPacketQueue();
+			queue.enQueue(message.getDatagramPacket());
+
+			datagramSender = new DatagramSender(socket, queue, UDPMessage.getMaximumPacketSizeInBytes());
+			datagramSender.action(socket, queue);
+		}
+		catch(SocketException se)
+		{
+			System.out.println(se.getMessage());
+		}
 	}//send
 
 }//gossipPartner
