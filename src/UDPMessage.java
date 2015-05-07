@@ -96,9 +96,34 @@ public class UDPMessage
 
 	}//getDatagramPacket
 
-	public ID getID1(){return this.id1;}
-	public ID getID2(){return this.id2;}
-	public TimeToLive timeToLive(){return this.timeToLive;}
-	public byte[] getMessage(){return this.message;}
+	public ID getID1()
+	{
+		return this.id1;
+	}//ID1
+
+	public ID getID2()
+	{
+		return this.id2;
+	}//ID2
+
+	public TimeToLive getTimeToLive()
+	{
+		return this.timeToLive;
+	}//getTimeToLive
+
+	public byte[] getMessage()
+	{
+		return this.message;
+	}//getMessage
+
+	public static int getMaximumPacketSizeInBytes()
+	{
+		return 5;
+	}//getMaximumPacketSizeInBytes
+
+	public static int getMinimumPacketSizeInBytes()
+	{
+		return 5;
+	}//getMinimumPacketSizeInByte
 
 }//class
