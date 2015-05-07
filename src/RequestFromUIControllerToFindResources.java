@@ -1,19 +1,19 @@
 
-public class RequestToFindResources extends Request 
+public class RequestFromUIControllerToFindResources extends RequestFromUIController 
 {
 	/**
 	 * 
 	 * Miguel Velez
 	 * April 29, 2015
 	 * 
-	 * This class is a request to find resources from other peers
+	 * This class is a request from the ui controller to find resources
 	 * 
 	 * Class variables:
 	 * 
 	 * 
 	 * Constructors:
 	 * 		
-	 * 		public RequestToFindResources(ID id)  
+	 * 		public RequestFromUIControllerToFindResources(ID id)  
 	 * 			create a request to find resources from peers
 	 * 
 	 * Methods:
@@ -26,12 +26,14 @@ public class RequestToFindResources extends Request
 	 *  
 	 * 		April 29, 2015
 	 * 			Original version.
-	 *  
+	 * 
+	 * 		May 7, 2015
+	 * 			Rename class.
 	 */
 	
-//	private ArrayList<ID> responses;
+//	private ArrayList<ID> responses; // TODO what collection should we use?
 	
-	public RequestToFindResources(ID id) 
+	public RequestFromUIControllerToFindResources(ID id) 
 	{
 		// Create a request to find resources from peers
 		// Call the super constructor

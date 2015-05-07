@@ -46,13 +46,13 @@ public class RequestManager
 	
 	private static RequestManager instance;
 	
-	private HashMap<ID, Request> requestsDirectory;
+	private HashMap<ID, RequestFromUIController> requestsDirectory;
 	
 	public RequestManager() 
 	{
 		// Construct a request manager
 		RequestManager.instance = this;
-		this.requestsDirectory = new HashMap<ID, Request>();
+		this.requestsDirectory = new HashMap<ID, RequestFromUIController>();
 	}
 	
 	public static RequestManager getInstance() 
@@ -67,7 +67,7 @@ public class RequestManager
 		return RequestManager.getInstance();
 	}
 	
-	public Request getRequest(ID id) 
+	public RequestFromUIController getRequest(ID id) 
 	{
 		// Get a request from the directory
 		// Check if null
@@ -81,7 +81,7 @@ public class RequestManager
 		return this.requestsDirectory.get(id);
 	}
 	
-	public void insertRequest(Request request) 
+	public void insertRequest(RequestFromUIController request) 
 	{
 		// Insert a request in the directory
 		// Check if null
