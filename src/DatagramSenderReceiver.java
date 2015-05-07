@@ -8,7 +8,7 @@ public abstract class DatagramSenderReceiver implements Runnable
 {
 	
 	private AtomicBoolean 				done;
-	private DatagramSocket 				datagramSocket;
+	protected DatagramSocket 				datagramSocket; // TODO CHANGE TO PRIVATE
 	private int							packetSize;
 	private SynchronizedPacketQueue 	queue;
 	
@@ -44,13 +44,14 @@ public abstract class DatagramSenderReceiver implements Runnable
 	 */
 	public void run()
 	{
-//		System.out.println("DatagramSenderReceiver Running");
 		while(!this.isStopped())
 		{
-//			System.out.println("DatagramSenderReceiver Performing action");
-			this.action(this.datagramSocket, this.queue);
-			
+			System.out.println("Start Receive from peer");
 			try {
+				System.out.println("Receive from peer performing action");
+				this.action(this.datagramSocket, this.queue);
+				System.out.println("Receive from peer done action");
+				
 //				System.out.println("DatagramSenderReceiver Sleeping");
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
@@ -68,7 +69,9 @@ public abstract class DatagramSenderReceiver implements Runnable
 		this.done.set(true);
 		if(!this.datagramSocket.isClosed())
 		{
+			System.out.println("Receive from peer port trying to close: " + this.datagramSocket.getPort());
 			this.datagramSocket.close();
+			System.out.println("Receive from peer closed port");
 		}
 	}
 	
@@ -79,6 +82,7 @@ public abstract class DatagramSenderReceiver implements Runnable
 	 */
 	public boolean isStopped()
 	{
+		System.out.println("Send to peer done: " + this.done.get());
 		return this.done.get();
 	}
 	

@@ -63,7 +63,8 @@ public class UIController
 		this.commandProcessor.register(new CommandHelp());
 		this.commandProcessor.register(new CommandQuit());
 		this.commandProcessor.register(new CommandSend());
-
+		
+		System.out.println("Done with UIController");
 
 	}
 
@@ -72,17 +73,19 @@ public class UIController
 	 */
 	public void start()
 	{
+		System.out.println("Start method UIController");
 		
 		UIControllerCommand command;
 		Scanner	scanner;
 		String	userCommand;
+		
 		receiveFromPeer.startAsThread();
-
 		scanner = new Scanner(System.in);
 
 		while(!done)
 		{
-			System.out.println("Type in a command: ");
+			System.out.println("Number of threads running: " + Thread.activeCount());
+			System.out.print("Type in a command: ");
 			userCommand = scanner.nextLine();
 			command = null;
 			
@@ -95,6 +98,8 @@ public class UIController
 			command.run();	
 		
 		}
+		System.out.println("Done with the start method UIController");
+		System.out.println("Number of threads running: " + Thread.activeCount());
 		scanner.close();
 	}
 
@@ -256,14 +261,14 @@ public class UIController
 		 */
 		public void run()
 		{
-			this.print("Quitting the application");
+			this.println("Quitting the application");
 			
 
 			receiveFromPeer.stop();
-			sendToPeer.stop();
+//			sendToPeer.stop();
 			
 			setDoneFlag(true);
-			System.out.println("Quit successful");
+			System.out.println("Done with QuitCommand");
 		}
 
 	}

@@ -31,18 +31,21 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 		
 		try 
 		{
-			System.out.println("\nDatagramReceiver Listening");
+			System.out.println("DatagramReceiver Listening on port: " + super.datagramSocket.getPort());
+			System.out.println("DatagramReceiver Listening is port closed: " + super.datagramSocket.isClosed());
+			System.out.println("DatagramReceiver Listening is port connected: " + super.datagramSocket.isConnected() + "\n");
 			datagramSocket.receive(p);
-			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
+//			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
 			
 			
-			System.out.println("\nDatagramReceiver Enqueue");
+//			System.out.println("\nDatagramReceiver Enqueue");
 			queue.enQueue(new DatagramPacket(p.getData(), super.getPacketSize()));
 		} 
 		catch (IOException e) 
 		{
-//			System.err.println("Shit man, IOException in the datagramSocket receive method. No idea what would cause this."); 
-			e.printStackTrace();
+			// TODO WHAT THE HECK
+			System.out.println("interrupted the receive");
+//			e.printStackTrace();
 		} 
 				
 	}
