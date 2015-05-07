@@ -265,7 +265,7 @@ public class UIController
 			
 
 			receiveFromPeer.stop();
-//			sendToPeer.stop();
+//			sendToPeer.stop(); // TODO cannot test since it is not created
 			
 			setDoneFlag(true);
 			System.out.println("Done with QuitCommand");
