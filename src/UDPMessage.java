@@ -39,7 +39,7 @@ public class UDPMessage
 		ttl = new byte[TimeToLive.getLengthInBytes()];
 
 		count = 0;
-		if(data.length>0 && data.length<512)
+		if(data.length>0 && data.length<456)
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
@@ -74,9 +74,9 @@ public class UDPMessage
 		int			size;
 		byte[]		buffer;
 
-		id1= ID.idFactory();
-		id2= ID.idFactory();
-		ttl= new TimeToLive(75);
+		id1 = ID.idFactory();
+		id2 = ID.idFactory();
+		ttl = new TimeToLive(75);
 		myData = "Hi";
 
 		size = (ID.getLengthInBytes() *2) + timeToLive.getLengthInBytes() + myData.getBytes().length;
