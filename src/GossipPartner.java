@@ -39,6 +39,9 @@ public class GossipPartner
 
 	public void send(UDPMessage message)
 	{
+		DatagramSender			datagramSender;
+		DatagramSocket			socket;
+		SynchronizedPacketQueue queue;
 
 	}//send
 
