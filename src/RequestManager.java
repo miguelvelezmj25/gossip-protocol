@@ -41,6 +41,9 @@ public class RequestManager
 	 *  
 	 * 		April 28, 2015
 	 * 			Original version.
+	 * 
+	 * 	 	May 7, 2015
+	 * 			Rename classes.
 	 *  
 	 */
 	
