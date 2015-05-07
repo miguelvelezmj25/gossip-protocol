@@ -175,17 +175,13 @@ public class UIController
 		{
 			ID id1;
 			ID id2;
-			byte[] bArr1;
-			byte[] bArr2;
 			UDPMessage udpMessage;
 			TimeToLive ttl;
 			
 			ttl = new TimeToLive(70);
-			bArr1 = new byte[16];
-			bArr2 = new byte[16];
 			
-			id1 = new ID(bArr1);
-			id2 = new ID(bArr2);
+			id1 = ID.idFactory();
+			id2 = ID.idFactory();
 			
 //			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
 //			DatagramPacket dp = udpMessage.getDatagramPacket();
@@ -259,11 +255,13 @@ public class UIController
 		public void run()
 		{
 			this.print("Quitting the application");
-			setDoneFlag(true);
+			
 
 			receiveFromPeer.stop();
 			sendToPeer.stop();
-
+			
+			setDoneFlag(true);
+			System.out.println("Quit successful");
 		}
 
 	}
