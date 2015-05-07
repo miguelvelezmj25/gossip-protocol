@@ -13,7 +13,7 @@ public class UIController
 	private CommandProcessor commandProcessor;
 	private boolean done;
 	private IncomingPacketQueue incomingPacketsFromPeerQueue;
-	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
+//	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
 	private InetSocketAddress peerAddress;
 	private DatagramReceiver receiveFromPeer;
 	private DatagramSender sendToPeer;
@@ -33,7 +33,7 @@ public class UIController
 		
 //		this.packetSize = packetSize; // TODO what is this
 		incomingPacketsFromPeerQueue = new IncomingPacketQueue();
-		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
+//		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
 		try
 		{
 			dsForReceiving = new DatagramSocket(portNumberForReceiving.get());
@@ -46,7 +46,8 @@ public class UIController
 		try
 		{
 			dsForSending = new DatagramSocket(portNumberForSending.get());
-			sendToPeer = new DatagramSender(dsForSending, outgoingPacketsToPeerQueue, packetSize);
+//			sendToPeer = new DatagramSender(dsForSending, outgoingPacketsToPeerQueue, packetSize);
+			// TODO this has to change since we are not using the outgoing queue
 		}
 		catch(SocketException e)
 		{
@@ -208,7 +209,8 @@ public class UIController
 //			System.out.println("Set packet data");
 			dp.setData(message.getBytes());
 			
-			outgoingPacketsToPeerQueue.enQueue(dp);
+//			outgoingPacketsToPeerQueue.enQueue(dp);
+			// TODO we are not using outgoing queue
 			sendToPeer.startAsThread();
 
 		}
