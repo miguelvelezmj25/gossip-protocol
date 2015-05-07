@@ -5,7 +5,7 @@ public class PortNumberPeerCommunity extends PortNumber
 	 *	Miguel Velez
 	 * 	April 16, 2015
 	 * 
-	 * 	The port number used to communicate between my peer and the community. 12345
+	 * 	The port number that the peer uses to listen to the community. 12345
 	 * 
 	 * Class variables:
 	 * 

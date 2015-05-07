@@ -1,8 +1,4 @@
-/**
- * Use port 12345. Might not need this class since we are using the same port
- * for sending and receiving.
- * 
- */
+
 public class PortNumberPeerUI extends PortNumber 
 {
 
@@ -10,7 +6,7 @@ public class PortNumberPeerUI extends PortNumber
 	 *	Miguel Velez
 	 * 	April 16, 2015
 	 * 
-	 * 	The port number used for communicating between the UI and my peer. 54322
+	 * 	The port number that the peer uses to listen to the UI. 12346
 	 * 
 	 *  Class variables:
 	 * 

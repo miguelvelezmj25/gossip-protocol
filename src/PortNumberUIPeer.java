@@ -5,7 +5,7 @@ public class PortNumberUIPeer extends PortNumber
 	 *	Miguel Velez
 	 * 	April 16, 2015
 	 * 
-	 * 	The port number used for communicating between the UI and my peer. 54321
+	 * 	The port number that the UI uses to listen to the peer. 54321
 	 * 
 	 *  Class variables:
 	 * 
