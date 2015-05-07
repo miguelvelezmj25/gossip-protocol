@@ -2,7 +2,7 @@ import java.net.*;
 /**
  * This takes the packets from the outside world and transforms them into
  * UDPMessages according to our protocol. This is where the InvalidPacket
- * exception will be used. Use try catch.
+ * exception will be used.
  */
 public class UDPMessage
 {
@@ -52,6 +52,10 @@ public class UDPMessage
 			messageLength = datagramPacket.getLength()-id1.getLengthInBytes()*2 + ttl.length;
 			message = new byte[messageLength];
 			System.arraycopy(data, id1.getLengthInBytes()*2 + ttl.length, message, 0, messageLength);
+		}
+		else
+		{
+			throw new InvalidPacketFormatException(datagramPacket, "Error: Data is the wrong size");
 		}
 	}//UDPMessage
 
