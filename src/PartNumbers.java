@@ -20,12 +20,12 @@ public class PartNumbers
 
 	public byte[] getBytes()
 	{
-
+		return new byte[1];
 	}
 
 	public int getLengthInBytes()
 	{//returns size of this.getBytes()
-		return size(this.numberOfParts);
+		return this.numberOfParts;
 	}
 
 	public int numberOfMissingParts(){return this.numberOfPartsMissing;}

@@ -75,7 +75,7 @@ public class UIController
 		UIControllerCommand command;
 		Scanner	scanner;
 		String	userCommand;
-		//receiveFromPeer.startAsThread();
+		receiveFromPeer.startAsThread();
 
 		scanner = new Scanner(System.in);
 
@@ -84,6 +84,7 @@ public class UIController
 			System.out.println("Type in a command: ");
 			userCommand = scanner.nextLine();
 			command = null;
+			
 			
 			command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
 			
@@ -260,8 +261,8 @@ public class UIController
 			this.print("Quitting the application");
 			setDoneFlag(true);
 
-			sendToPeer.stop();
 			receiveFromPeer.stop();
+			sendToPeer.stop();
 
 		}
 
