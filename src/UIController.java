@@ -9,34 +9,13 @@ import java.util.*;
  */
 public class UIController
 {
-	/**
-	 *
-	 */
+
 	private CommandProcessor commandProcessor;
-
-	/**
-	 *
-	 */
 	private boolean done;
-
-	/**
-	 *
-	 */
-	private IncomingPacketQueue incomingPacketQueue;
-
-	/**
-	 *
-	 */
-	private OutgoingPacketQueue outgoingPacketQueue;
-
-	/**
-	 *
-	 */
+	private IncomingPacketQueue incomingPacketsFromPeerQueue;
+	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
+	private InetSocketAddress peerAddress;
 	private DatagramReceiver receiveFromPeer;
-
-	/**
-	 *
-	 */
 	private DatagramSender sendToPeer;
 //	private int packetSize; // TODO what is this?
 
@@ -53,12 +32,12 @@ public class UIController
 		
 		
 //		this.packetSize = packetSize; // TODO what is this
-		incomingPacketQueue = new IncomingPacketQueue();
-		outgoingPacketQueue = new OutgoingPacketQueue();
+		incomingPacketsFromPeerQueue = new IncomingPacketQueue();
+		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
 		try
 		{
 			dsForReceiving = new DatagramSocket(portNumberForReceiving.get());
-			receiveFromPeer = new DatagramReceiver(dsForReceiving, incomingPacketQueue, packetSize);
+			receiveFromPeer = new DatagramReceiver(dsForReceiving, incomingPacketsFromPeerQueue, packetSize);
 		}
 		catch(SocketException e)
 		{
@@ -67,7 +46,7 @@ public class UIController
 		try
 		{
 			dsForSending = new DatagramSocket(portNumberForSending.get());
-			sendToPeer = new DatagramSender(dsForSending, outgoingPacketQueue, packetSize);
+			sendToPeer = new DatagramSender(dsForSending, outgoingPacketsToPeerQueue, packetSize);
 		}
 		catch(SocketException e)
 		{
@@ -92,11 +71,11 @@ public class UIController
 	 */
 	public void start()
 	{
+		
 		UIControllerCommand command;
 		Scanner	scanner;
 		String	userCommand;
-
-		receiveFromPeer.startAsThread();
+		//receiveFromPeer.startAsThread();
 
 		scanner = new Scanner(System.in);
 
@@ -232,7 +211,7 @@ public class UIController
 //			System.out.println("Set packet data");
 			dp.setData(message.getBytes());
 			
-			outgoingPacketQueue.enQueue(dp);
+			outgoingPacketsToPeerQueue.enQueue(dp);
 			sendToPeer.startAsThread();
 
 		}
@@ -278,10 +257,12 @@ public class UIController
 		 */
 		public void run()
 		{
-			this.print("Quiting the application");
+			this.print("Quitting the application");
 			setDoneFlag(true);
+
 			sendToPeer.stop();
 			receiveFromPeer.stop();
+
 		}
 
 	}
