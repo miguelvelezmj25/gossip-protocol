@@ -118,12 +118,12 @@ public class UDPMessage
 
 	public static int getMaximumPacketSizeInBytes()
 	{
-		return 5;
+		return 456;
 	}//getMaximumPacketSizeInBytes
 
 	public static int getMinimumPacketSizeInBytes()
 	{
-		return 5;
+		return 0;
 	}//getMinimumPacketSizeInByte
 
 }//class
