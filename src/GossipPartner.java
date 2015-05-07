@@ -1,11 +1,12 @@
 import java.net.*;
-public class GossipPartner implements GossipPartners
+public class GossipPartner
 {
 	/*
 	Courtney Karppi
 	CISC 370 - GossipProtocol
 	May 5, 2015
 	*/
+
 	private InetSocketAddress gossipPartnerAddress;
 	private boolean isAlive;
 	private OutgoingPacketQueue queue;
@@ -14,11 +15,11 @@ public class GossipPartner implements GossipPartners
 	{
 		this.gossipPartnerAddress = gossipPartnerAddress;
 		this.queue = queue;
-	}
+	}//constructor
 
 	public boolean equals(Object other)
 	{
-
+		return this.hashCode() == ((GossipPartner)other).hashCode();
 	}//equals
 
 	public InetSocketAddress getGossipPartnerAddress()
@@ -26,9 +27,9 @@ public class GossipPartner implements GossipPartners
 		return this.gossipPartnerAddress;
 	}//getGossipPartnerAddress
 
-	public int hashcode()
+	public int hashCode()
 	{
-
+		return this.gossipPartnerAddress.toString().hashCode();
 	}//hashcode
 
 	public boolean isAlive()
