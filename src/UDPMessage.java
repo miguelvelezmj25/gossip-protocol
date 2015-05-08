@@ -39,7 +39,7 @@ public class UDPMessage
 		ttl = new byte[TimeToLive.getLengthInBytes()];
 
 		count = 0;
-		if(data.length>0 && data.length<456)
+		if(data.length>0 && data.length<512)
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
@@ -118,12 +118,12 @@ public class UDPMessage
 
 	public static int getMaximumPacketSizeInBytes()
 	{
-		return 512;
+		return 512-(ID.getLengthInBytes()*2)-TimeToLive.getLengthInBytes();
 	}//getMaximumPacketSizeInBytes
 
 	public static int getMinimumPacketSizeInBytes()
 	{
-		return 0;
+		return (ID.getLengthInBytes()*2)-TimeToLive.getLengthInBytes();
 	}//getMinimumPacketSizeInByte
 
 }//class
