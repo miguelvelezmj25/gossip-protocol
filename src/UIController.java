@@ -158,7 +158,7 @@ public class UIController
 			String message = "," + super.getCommandName() + "," + scanner.nextLine();
 			
 			//Create DatagramPacket
-			buffer = new byte[message.getBytes().length];
+			buffer = message.getBytes();
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 			
 			try 
