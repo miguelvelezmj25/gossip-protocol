@@ -13,7 +13,7 @@ public class UIController
 	private CommandProcessor commandProcessor;
 	private boolean done;
 	private IncomingPacketQueue incomingPacketsFromPeerQueue;
-//	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
+	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
 	private InetSocketAddress peerAddress;
 	private DatagramReceiver receiveFromPeer;
 	private DatagramSender sendToPeer;
@@ -29,11 +29,11 @@ public class UIController
 		DatagramSocket dsForReceiving;
 		DatagramSocket dsForSending;
 		
-		
+		this.peerAddress = new InetSocketAddress(portNumberForSending.get());
 		
 //		this.packetSize = packetSize; // TODO what is this
 		incomingPacketsFromPeerQueue = new IncomingPacketQueue();
-//		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
+		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
 		try
 		{
 			dsForReceiving = new DatagramSocket(portNumberForReceiving.get());
@@ -45,8 +45,9 @@ public class UIController
 		}
 		try
 		{
-			dsForSending = new DatagramSocket(portNumberForSending.get());
-//			sendToPeer = new DatagramSender(dsForSending, outgoingPacketsToPeerQueue, packetSize);
+//			dsForSending = new DatagramSocket(portNumberForSending.get());
+			dsForSending = new DatagramSocket();
+			sendToPeer = new DatagramSender(dsForSending, outgoingPacketsToPeerQueue, packetSize);
 			// TODO this has to change since we are not using the outgoing queue
 		}
 		catch(SocketException e)
@@ -64,7 +65,7 @@ public class UIController
 		this.commandProcessor.register(new CommandQuit());
 		this.commandProcessor.register(new CommandSend());
 		
-		System.out.println("Done with UIController");
+//		System.out.println("Done with UIController");
 
 	}
 
@@ -73,7 +74,10 @@ public class UIController
 	 */
 	public void start()
 	{
-		System.out.println("Start method UIController");
+//		System.out.println("Start method UIController");
+		PeerController ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberUIPeer(peerAddress.getPort()));
+		
+		ourPeerController.startAsThread();
 		
 		UIControllerCommand command;
 		Scanner	scanner;
@@ -84,7 +88,7 @@ public class UIController
 
 		while(!done)
 		{
-			System.out.println("Number of threads running: " + Thread.activeCount());
+//			System.out.println("Number of threads running: " + Thread.activeCount());
 			System.out.print("Type in a command: ");
 			userCommand = scanner.nextLine();
 			command = null;
@@ -98,8 +102,10 @@ public class UIController
 			command.run();	
 		
 		}
-		System.out.println("Done with the start method UIController");
-		System.out.println("Number of threads running: " + Thread.activeCount());
+		
+		ourPeerController.setDoneFlag(true);
+//		System.out.println("Done with the start method UIController");
+//		System.out.println("Number of threads running: " + Thread.activeCount());
 		scanner.close();
 	}
 
@@ -191,7 +197,6 @@ public class UIController
 			
 //			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
 //			DatagramPacket dp = udpMessage.getDatagramPacket();
-//			outgoingPacketQueue.enQueue(dp);
 			
 		
 			
@@ -208,14 +213,14 @@ public class UIController
 				e.printStackTrace();
 			}
 			
-//			System.out.println("Set port 12345");
-			dp.setPort(12345);
+			System.out.println("Set port: " + peerAddress.getPort());
+			dp.setPort(peerAddress.getPort());
 			
 //			System.out.println("Set packet data");
 			dp.setData(message.getBytes());
 			
-//			outgoingPacketsToPeerQueue.enQueue(dp);
 			// TODO we are not using outgoing queue
+			outgoingPacketsToPeerQueue.enQueue(dp);
 			sendToPeer.startAsThread();
 
 		}
@@ -265,10 +270,10 @@ public class UIController
 			
 
 			receiveFromPeer.stop();
-//			sendToPeer.stop(); // TODO cannot test since it is not created
+			sendToPeer.stop();
 			
 			setDoneFlag(true);
-			System.out.println("Done with QuitCommand");
+//			System.out.println("Done with QuitCommand");
 		}
 
 	}
@@ -349,7 +354,7 @@ public class UIController
 		 */
 		public void run()
 		{
-			this.println("");
+			this.println("Starting PeerController");
 		}
 
 	}

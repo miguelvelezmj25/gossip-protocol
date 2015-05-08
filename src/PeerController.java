@@ -1,6 +1,9 @@
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PeerController implements Runnable {
 	/**
@@ -32,42 +35,89 @@ public class PeerController implements Runnable {
 	
 	// TODO should this have an incoming and outgoing queue?
 	
-	private InetSocketAddress 		address;
+//	private InetSocketAddress 		address;
 //	private PortNumberPeerCommunity communityPort;
-	private boolean 				done;
+	private AtomicBoolean			done;
 	private DatagramReceiver        receiveFromUI;
 	private DatagramReceiver        receiveFromCommunity;
-	private DatagramSender			sendToUI;
-	private DatagramSender			sendToCommunity;
+	private DatagramSender			sender;
 	private IncomingPacketQueue 	incomingPacketsFromUIQueue;
 	private IncomingPacketQueue 	incomingPacketsFromCommunityQueue;
-	private OutgoingPacketQueue 	outgoingPacketsFromUIQueue;
-	private OutgoingPacketQueue 	outgoingPacketsFromCommunityQueue;
+	private OutgoingPacketQueue 	outgoingPacketsQueue;
 	
 	// TODO have to check what parameter we need to get
-	public PeerController(InetSocketAddress address, PortNumberPeerCommunity communityPort, PortNumberUIPeer uiPort) 
+	public PeerController(PortNumberPeerCommunity communityPort, PortNumberUIPeer uiPort) 
 	{
+		// TODO what is packet size
 		try {
-			this.address = new InetSocketAddress(InetAddress.getLocalHost(), uiPort.get());
-			this.done = false;
+//			this.address = new InetSocketAddress(InetAddress.getLocalHost(), uiPort.get());
+			this.done = new AtomicBoolean(false);
 			this.incomingPacketsFromUIQueue = new IncomingPacketQueue();
-			incomingPacketsFromCommunityQueue = new IncomingPacketQueue();
-			outgoingPacketsFromUIQueue = new OutgoingPacketQueue();
-			outgoingPacketsFromCommunityQueue = new OutgoingPacketQueue();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			this.incomingPacketsFromCommunityQueue = new IncomingPacketQueue();
+			this.outgoingPacketsQueue = new OutgoingPacketQueue();
+			this.receiveFromUI = new DatagramReceiver(new DatagramSocket(uiPort.get()), this.incomingPacketsFromUIQueue, 512);
+			this.receiveFromCommunity = new DatagramReceiver(new DatagramSocket(communityPort.get()), this.incomingPacketsFromCommunityQueue, 512);
+			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);
+		} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+//		
 	}
 	
-	public InetSocketAddress getAddress() 
+	@Override
+	public void run() 
 	{
-		return this.address;
+		// Start listening for messages from the UI
+		this.receiveFromUI.startAsThread();
+		
+		// Start listening for messages from the Community
+//		this.receiveFromCommunity.startAsThread();
+		
+		while(!this.isStopped()) 
+		{
+			try 
+			{
+				// Check UI
+				
+				// Check Community
+				
+				
+				// Sleep
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		this.receiveFromUI.stop();
+		
 	}
+//	public InetSocketAddress getAddress() 
+//	{
+//		return this.address;
+//	}
+	
+	public Thread startAsThread() 
+	{
+		Thread thread;
+		
+		thread = new Thread(this);
+		thread.start();
+		
+		return thread;
+	}
+	
 	
 	public void setDoneFlag(boolean flag)
 	{
-		done = flag;
+		this.done.set(flag);
+	}
+	
+	public boolean isStopped()
+	{
+		return this.done.get();
 	}
 	
 	public void findRequest() 
@@ -80,9 +130,4 @@ public class PeerController implements Runnable {
 		
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
 }

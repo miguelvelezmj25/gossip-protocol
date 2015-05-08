@@ -31,11 +31,11 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 		
 		try 
 		{
-			System.out.println("DatagramReceiver Listening on port: " + super.datagramSocket.getPort());
-			System.out.println("DatagramReceiver Listening is port closed: " + super.datagramSocket.isClosed());
-			System.out.println("DatagramReceiver Listening is port connected: " + super.datagramSocket.isConnected() + "\n");
+//			System.out.println("DatagramReceiver Listening on port: " + super.datagramSocket.getPort());
+//			System.out.println("DatagramReceiver Listening is port closed: " + super.datagramSocket.isClosed());
+//			System.out.println("DatagramReceiver Listening is port connected: " + super.datagramSocket.isConnected() + "\n");
 			datagramSocket.receive(p);
-//			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
+			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
 			
 			
 //			System.out.println("\nDatagramReceiver Enqueue");
