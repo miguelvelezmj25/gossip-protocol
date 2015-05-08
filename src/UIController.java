@@ -2,7 +2,6 @@ import java.net.*;
 import java.util.*;
 
 
-// TODO need instance variable peerAddress
 /**
  * @author jens3048
  *
@@ -10,14 +9,14 @@ import java.util.*;
 public class UIController
 {
 
-	private CommandProcessor commandProcessor;
-	private boolean done;
+	private CommandProcessor 	commandProcessor;
+	private boolean 			done;
 	private IncomingPacketQueue incomingPacketsFromPeerQueue;
 	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
-	private InetSocketAddress peerAddress;
-	private DatagramReceiver receiveFromPeer;
-	private DatagramSender sendToPeer;
-//	private int packetSize; // TODO what is this?
+	private InetSocketAddress 	peerAddress;
+	private DatagramReceiver 	receiveFromPeer;
+	private Scanner				scanner;
+	private DatagramSender 		sendToPeer;
 
 	/**
 	 * @param incomingPortNumber
@@ -29,11 +28,11 @@ public class UIController
 		DatagramSocket dsForReceiving;
 		DatagramSocket dsForSending;
 		
+		//Set instance variables
 		this.peerAddress = new InetSocketAddress(portNumberForSending.get());
-		
-//		this.packetSize = packetSize; // TODO what is this
 		incomingPacketsFromPeerQueue = new IncomingPacketQueue();
 		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
+		
 		try
 		{
 			dsForReceiving = new DatagramSocket(portNumberForReceiving.get());
@@ -45,10 +44,9 @@ public class UIController
 		}
 		try
 		{
-//			dsForSending = new DatagramSocket(portNumberForSending.get());
+			//Sending socket doesn't matter
 			dsForSending = new DatagramSocket();
 			sendToPeer = new DatagramSender(dsForSending, outgoingPacketsToPeerQueue, packetSize);
-			// TODO this has to change since we are not using the outgoing queue
 		}
 		catch(SocketException e)
 		{
@@ -58,54 +56,49 @@ public class UIController
 		
 
 		done = false;
-
 		commandProcessor = new CommandProcessor(new CommandNone(), new CommandError());
+		
 		// TODO add all the commands
 		this.commandProcessor.register(new CommandHelp());
 		this.commandProcessor.register(new CommandQuit());
 		this.commandProcessor.register(new CommandSend());
+		this.commandProcessor.register(new CommandFind());
 		
-//		System.out.println("Done with UIController");
 
 	}
 
 	/**
-	 *
+	 *	Do Everything
 	 */
 	public void start()
 	{
-//		System.out.println("Start method UIController");
-		PeerController ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberUIPeer(peerAddress.getPort()));
-		
-		ourPeerController.startAsThread();
 		
 		UIControllerCommand command;
-		Scanner	scanner;
-		String	userCommand;
+		PeerController 		ourPeerController;
+		String				userCommand;
 		
+		//Create PeerController
+		ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberUIPeer(peerAddress.getPort()));
+		ourPeerController.startAsThread();
+		
+		//Start Receiving from peer
 		receiveFromPeer.startAsThread();
+
+		//Check for uer input
 		scanner = new Scanner(System.in);
 
 		while(!done)
 		{
-//			System.out.println("Number of threads running: " + Thread.activeCount());
 			System.out.print("Type in a command: ");
+			
 			userCommand = scanner.nextLine();
-			command = null;
-			
-			
 			command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
-			
-			/*
-			 * Command will run. If it is meant for a peer, its run method should handle the sending.
-			 */
+
+			// Command will run. If it is meant for a peer, its run method should handle the sending.
 			command.run();	
-		
 		}
-		
+		//Finish everything
 		ourPeerController.setDoneFlag(true);
-//		System.out.println("Done with the start method UIController");
-//		System.out.println("Number of threads running: " + Thread.activeCount());
 		scanner.close();
 	}
 
@@ -115,111 +108,72 @@ public class UIController
 	 */
 	public abstract class UIControllerCommand extends Command
 	{
-
-		/**
-		 *
-		 */
+		
 		public UIControllerCommand()
 		{
 			super();
 		}
-
-		/**
-		 * @param commandName
-		 * @param description
-		 */
+		
 		public UIControllerCommand(String commandName, String description)
 		{
 			super(commandName, description);
 		}
 
-		/**
-		 * @return
-		 */
 		public CommandProcessor getCommandProcessor()
 		{
 			return commandProcessor;
 		}
 
-		/**
-		 * @return
-		 */
 		public boolean getDoneFlag()
 		{
 			return done;
 		}
 
-		/* (non-Javadoc)
-		 * @see Command#print(java.lang.String)
-		 */
 		public void print(String message)
 		{
 			super.print(message);
 		}
 
-		/* (non-Javadoc)
-		 * @see Command#println()
-		 */
 		public void println()
 		{
 			super.println();
 		}
 
-		/* (non-Javadoc)
-		 * @see Command#println(java.lang.String)
-		 */
 		public void println(String data)
 		{
 			super.println(data);
 		}
 
-		/**
-		 * @param flag
-		 */
 		public void setDoneFlag(boolean flag)
 		{
 			done = flag;
 		}
-		/**
-		 *
-		 */
+		
 		public void sendToPeer()
 		{
-			ID id1;
-			ID id2;
-			UDPMessage udpMessage;
-			TimeToLive ttl;
+			byte[] buffer;
 			
-			ttl = new TimeToLive(70);
+			//Ask user what they would like to send
+			System.out.println("Please type what you would like to " + super.getCommandName() + ":");
+			String message = "," + super.getCommandName() + "," + scanner.nextLine();
 			
-			id1 = ID.idFactory();
-			id2 = ID.idFactory();
-			
-//			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
-//			DatagramPacket dp = udpMessage.getDatagramPacket();
-			
-		
-			
-			String message = "hello"; // TODO do not hardcode a message
-			byte[] buffer = new byte[message.getBytes().length];
-			
+			//Create DatagramPacket
+			buffer = new byte[message.getBytes().length];
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 			
-//			System.out.println("Set address to local host");
-			try {
+			try 
+			{
 				dp.setAddress(InetAddress.getLocalHost());
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
+			} 
+			catch (UnknownHostException e) 
+			{
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 			
-//			System.out.println("Set port: " + peerAddress.getPort());
 			dp.setPort(peerAddress.getPort());
-			
-//			System.out.println("Set packet data");
 			dp.setData(message.getBytes());
 			
-			// TODO we are not using outgoing queue
 			outgoingPacketsToPeerQueue.enQueue(dp);
 			sendToPeer.startAsThread();
 
@@ -350,15 +304,24 @@ public class UIController
 
 		public void run()
 		{
-//			try {
-//				DatagramSocket sendSocket = new DatagramSocket((new PortNumber(12345)).get());
 				this.sendToPeer();
-				
-				
-//			} catch (SocketException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+		}
+
+	}
+	
+	public class CommandFind extends UIControllerCommand
+	{
+		/**
+		 * Creates the command
+		 */
+		public CommandFind()
+		{
+			super("find", "Search for something");
+		}
+
+		public void run()
+		{
+			this.sendToPeer();
 		}
 
 	}
