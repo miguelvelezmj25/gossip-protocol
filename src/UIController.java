@@ -200,7 +200,7 @@ public class UIController
 			
 		
 			
-			String message = "hello";
+			String message = "hello"; // TODO do not hardcode a message
 			byte[] buffer = new byte[message.getBytes().length];
 			
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
@@ -334,27 +334,6 @@ public class UIController
 		public void run()
 		{
 			this.println("You did not enter a command");
-		}
-
-	}
-	
-	// TODO might start on the datagram sender receiver
-	public class CommandStart extends UIControllerCommand
-	{
-		/**
-		 * Creates the command
-		 */
-		public CommandStart()
-		{
-			super("start", "start sender and receiver");
-		}
-
-		/**
-		 * Does nothing
-		 */
-		public void run()
-		{
-			this.println("Starting PeerController");
 		}
 
 	}
