@@ -213,7 +213,7 @@ public class UIController
 				e.printStackTrace();
 			}
 			
-			System.out.println("Set port: " + peerAddress.getPort());
+//			System.out.println("Set port: " + peerAddress.getPort());
 			dp.setPort(peerAddress.getPort());
 			
 //			System.out.println("Set packet data");

@@ -1,3 +1,4 @@
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -79,7 +80,10 @@ public class PeerController implements Runnable {
 			try 
 			{
 				// Check UI
-				
+				if(this.incomingPacketsFromUIQueue.peek() != null)
+				{
+					this.processCommandFromUI();
+				}
 				// Check Community
 				
 				
@@ -94,10 +98,13 @@ public class PeerController implements Runnable {
 		this.receiveFromUI.stop();
 		
 	}
-//	public InetSocketAddress getAddress() 
-//	{
-//		return this.address;
-//	}
+
+	private void processCommandFromUI() 
+	{
+		DatagramPacket packet = this.incomingPacketsFromUIQueue.deQueue();
+
+		System.out.println(new String(packet.getData()));
+	}
 	
 	public Thread startAsThread() 
 	{

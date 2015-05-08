@@ -35,7 +35,7 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 //			System.out.println("DatagramReceiver Listening is port closed: " + super.datagramSocket.isClosed());
 //			System.out.println("DatagramReceiver Listening is port connected: " + super.datagramSocket.isConnected() + "\n");
 			datagramSocket.receive(p);
-			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
+//			System.out.println("\nDatagramReceiver Receiving: " + new String(p.getData()));
 			
 			
 //			System.out.println("\nDatagramReceiver Enqueue");
