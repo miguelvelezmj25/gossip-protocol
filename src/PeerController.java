@@ -16,18 +16,55 @@ public class PeerController implements Runnable {
 	 * 
 	 * Class variables:
 	 * 
+	 * 		AtomicBoolean done
+	 * 			Check if we are done processing packets
+	 * 
+	 * 		IncomingPacketQueue incomingPacketsFromCommunityQueue
+	 * 			Queue with packets from the community
+	 * 		
+	 * 		IncomingPacketQueue incomingPacketsFromUIQueue
+	 * 			Queue with packets from the UI
+	 * 
+	 * 		DatagramReceiver receiveFromUI
+	 * 			Receiver for the UI
+	 * 		
+	 * 		OutgoingPacketQueue outgoingPacketsQueue
+	 * 			Queue for sending out packets to the UI or the community
+	 * 
+	 * 		DatagramReceiver receiveFromCommunity
+	 * 			Receiver for the community
+	 * 
+	 * 		DatagramSender sender
+	 * 			Sender for the ui or the community
+	 * 
 	 * 
  	 * Constructors:
  	 * 
- 	 * 		public Command() 
- 	 * 			create a default command
+ 	 * 		public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort) 
+ 	 * 			create a peer controller
  	 * 
- 	 * 
+ 	 *  
 	 * Methods:
-	 *	
-	 *		public abstract void run();
-	 * 			execute the command
+	 * 	
+	 * 		public void run() 
+	 * 			Process packets from the UI and community
+	 * 		
+	 * 		private void processCommandFromCommunity()
+	 * 			Process packet from the community
 	 * 
+	 *  	private void processCommandFromUI() 
+	 *  		Process packets from the UI
+	 *  
+	 *  	public Thread startAsThread() 
+	 *  		Start this class as a thread
+	 *  
+	 *  	public void setDoneFlag(boolean flag)
+	 *  		Setter for the done flag
+	 *  
+	 *  	public boolean isStopped()
+	 *  		Check if the peer has stopped processing packets
+	 *  
+	 *  	 
 	 *      
 	 * Modification History:
 	 * 		May 3, 2015
@@ -35,6 +72,7 @@ public class PeerController implements Runnable {
 	 * 
 	 * 		May 8, 2015
 	 * 			Implemented receiving from the UI
+	 * 
 	 */
 	
 	private AtomicBoolean			done;
@@ -108,7 +146,7 @@ public class PeerController implements Runnable {
 	}
 
 	private void processCommandFromCommunity() {
-		
+		// Process a command from the community
 	}
 
 	private void processCommandFromUI() 
@@ -140,22 +178,24 @@ public class PeerController implements Runnable {
 	
 	public void setDoneFlag(boolean flag)
 	{
+		// Setter for the done flag
 		this.done.set(flag);
 	}
 	
 	public boolean isStopped()
 	{
+		// Check iff the peer is done processing packets
 		return this.done.get();
 	}
 	
-	public void findRequest() 
-	{
-		
-	}
-
-	public void getRequest()
-	{
-		
-	}
+//	public void findRequest() 
+//	{
+//		
+//	}
+//
+//	public void getRequest()
+//	{
+//		
+//	}
 
 }
