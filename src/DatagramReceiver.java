@@ -25,12 +25,12 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 	public void action(DatagramSocket datagramSocket, SynchronizedPacketQueue queue)
 	{
 //		System.out.println("\nDatagramReceiver Action");
-		DatagramPacket p;
-		
-		p = new DatagramPacket(new byte[super.getPacketSize()], super.getPacketSize());
-		
 		try 
 		{
+			DatagramPacket p;
+			
+			p = new DatagramPacket(new byte[super.getPacketSize()], super.getPacketSize());
+		
 //			System.out.println("DatagramReceiver Listening on port: " + super.datagramSocket.getPort());
 //			System.out.println("DatagramReceiver Listening is port closed: " + super.datagramSocket.isClosed());
 //			System.out.println("DatagramReceiver Listening is port connected: " + super.datagramSocket.isConnected() + "\n");
@@ -44,7 +44,7 @@ public class DatagramReceiver extends DatagramSenderReceiver {
 		catch (IOException e) 
 		{
 			// TODO WHAT THE HECK
-			System.out.println("interrupted the receive");
+			System.out.println(e.getMessage());
 //			e.printStackTrace();
 		} 
 				
