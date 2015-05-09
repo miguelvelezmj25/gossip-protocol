@@ -10,7 +10,7 @@ public class UIControllerTester
 		UIController uiControl;
 		// First port is the UI listening
 		// Second port is the peer listening to the UI
-		uiControl = new UIController(new PortNumber(12347), new PortNumber(12346), 512);
+		uiControl = new UIController(new PortNumberUIPeer(54321), new PortNumberPeerUI(12346), 512);
 		uiControl.start();
 		
 //		System.out.println(Thread.activeCount());

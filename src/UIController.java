@@ -23,19 +23,19 @@ public class UIController
 	 * @param outgoingPortNumber
 	 * @param packetSize
 	 */
-	public UIController(PortNumber portNumberForReceiving, PortNumber portNumberForSending, int packetSize)
+	public UIController(PortNumberUIPeer portNumberUIPeer, PortNumberPeerUI portNumberPeerUI, int packetSize)
 	{
 		DatagramSocket dsForReceiving;
 		DatagramSocket dsForSending;
 		
 		//Set instance variables
-		this.peerAddress = new InetSocketAddress(portNumberForSending.get());
+		this.peerAddress = new InetSocketAddress(portNumberPeerUI.get());
 		incomingPacketsFromPeerQueue = new IncomingPacketQueue();
 		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
 		
 		try
 		{
-			dsForReceiving = new DatagramSocket(portNumberForReceiving.get());
+			dsForReceiving = new DatagramSocket(portNumberUIPeer.get());
 			receiveFromPeer = new DatagramReceiver(dsForReceiving, incomingPacketsFromPeerQueue, packetSize);
 		}
 		catch(SocketException e)
@@ -78,7 +78,8 @@ public class UIController
 		String				userCommand;
 		
 		//Create PeerController
-		ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberUIPeer(peerAddress.getPort()));
+		// TODO how does the peer get the port to listen to the community? We are hard coding it
+		ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberPeerUI(peerAddress.getPort()));
 		ourPeerController.startAsThread();
 		
 		//Start Receiving from peer

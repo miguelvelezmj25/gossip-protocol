@@ -32,38 +32,38 @@ public class PeerController implements Runnable {
 	 * Modification History:
 	 * 		May 3, 2015
 	 * 			Original version
+	 * 
+	 * 		May 8, 2015
+	 * 			Implemented receiving from the UI
 	 */
 	
-	// TODO should this have an incoming and outgoing queue?
-	
-//	private InetSocketAddress 		address;
-//	private PortNumberPeerCommunity communityPort;
 	private AtomicBoolean			done;
+	private IncomingPacketQueue 	incomingPacketsFromCommunityQueue;
+	private IncomingPacketQueue 	incomingPacketsFromUIQueue;
 	private DatagramReceiver        receiveFromUI;
+	private OutgoingPacketQueue 	outgoingPacketsQueue;
 	private DatagramReceiver        receiveFromCommunity;
 	private DatagramSender			sender;
-	private IncomingPacketQueue 	incomingPacketsFromUIQueue;
-	private IncomingPacketQueue 	incomingPacketsFromCommunityQueue;
-	private OutgoingPacketQueue 	outgoingPacketsQueue;
 	
 	// TODO have to check what parameter we need to get
-	public PeerController(PortNumberPeerCommunity communityPort, PortNumberUIPeer uiPort) 
+	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort) 
 	{
 		// TODO what is packet size
 		try {
-//			this.address = new InetSocketAddress(InetAddress.getLocalHost(), uiPort.get());
 			this.done = new AtomicBoolean(false);
+			
 			this.incomingPacketsFromUIQueue = new IncomingPacketQueue();
-			this.incomingPacketsFromCommunityQueue = new IncomingPacketQueue();
-			this.outgoingPacketsQueue = new OutgoingPacketQueue();
 			this.receiveFromUI = new DatagramReceiver(new DatagramSocket(uiPort.get()), this.incomingPacketsFromUIQueue, 512);
+			this.incomingPacketsFromCommunityQueue = new IncomingPacketQueue();
 			this.receiveFromCommunity = new DatagramReceiver(new DatagramSocket(communityPort.get()), this.incomingPacketsFromCommunityQueue, 512);
+	
+			this.outgoingPacketsQueue = new OutgoingPacketQueue();
 			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);
-		} catch (SocketException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			
+		} catch (SocketException se) {
+				se.printStackTrace();
 			} 
-//		
+	
 	}
 	
 	@Override
@@ -84,11 +84,19 @@ public class PeerController implements Runnable {
 				{
 					this.processCommandFromUI();
 				}
-				// Check Community
-				
 				
 				// Sleep
 				Thread.sleep(50);
+				
+				// Check Community
+				if(this.incomingPacketsFromCommunityQueue.peek() != null)
+				{
+					this.processCommandFromCommunity();
+				}
+				
+				// Sleep
+				Thread.sleep(50);
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -99,18 +107,31 @@ public class PeerController implements Runnable {
 		
 	}
 
+	private void processCommandFromCommunity() {
+		
+	}
+
 	private void processCommandFromUI() 
 	{
+		// Process a command from the UI
+		// Dequeue the packet from the UI
 		DatagramPacket packet = this.incomingPacketsFromUIQueue.deQueue();
 
-		System.out.println(new String(packet.getData()));
+		System.out.println("We got: " + new String(packet.getData()));
+		
+		// TODO check if find
+		// TODO check if get
+		// TODO otherwise, it is trash
 	}
 	
 	public Thread startAsThread() 
 	{
+		// Start this class a a thread
 		Thread thread;
 		
 		thread = new Thread(this);
+		
+		// Execute the run method
 		thread.start();
 		
 		return thread;
