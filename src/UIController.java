@@ -82,9 +82,9 @@ public class UIController
 		ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberPeerUI(peerAddress.getPort()));
 		ourPeerController.startAsThread();
 		
-		//Start Receiving from peer
+		//Start Threads
 		receiveFromPeer.startAsThread();
-
+		sendToPeer.startAsThread();
 		//Check for uer input
 		scanner = new Scanner(System.in);
 
@@ -176,7 +176,6 @@ public class UIController
 			dp.setData(message.getBytes());
 			
 			outgoingPacketsToPeerQueue.enQueue(dp);
-			sendToPeer.startAsThread();
 
 		}
 		
