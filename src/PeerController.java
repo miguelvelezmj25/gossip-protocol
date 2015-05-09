@@ -1,7 +1,6 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -63,7 +62,7 @@ public class PeerController implements Runnable {
 	 *  
 	 *  	public boolean isStopped()
 	 *  		Check if the peer has stopped processing packets
-	 *  
+	 *   
 	 *  	 
 	 *      
 	 * Modification History:
@@ -72,6 +71,9 @@ public class PeerController implements Runnable {
 	 * 
 	 * 		May 8, 2015
 	 * 			Implemented receiving from the UI
+	 * 
+	 * 		May 8, 2015
+	 * 			Process requests from the UI
 	 * 
 	 */
 	
@@ -113,6 +115,9 @@ public class PeerController implements Runnable {
 		// Start listening for messages from the Community
 //		this.receiveFromCommunity.startAsThread();
 		
+		// Start sending packets from the outgoing queue
+		this.sender.startAsThread();
+		
 		while(!this.isStopped()) 
 		{
 			try 
@@ -134,7 +139,7 @@ public class PeerController implements Runnable {
 				
 				// Sleep
 				Thread.sleep(50);
-				
+								
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -142,8 +147,10 @@ public class PeerController implements Runnable {
 		}
 		
 		this.receiveFromUI.stop();
+		this.sender.stop();
 		
 	}
+
 
 	private void processCommandFromCommunity() {
 		// Process a command from the community
@@ -157,11 +164,51 @@ public class PeerController implements Runnable {
 
 		System.out.println("We got: " + new String(packet.getData()));
 		
-		// TODO check if find
-		// TODO check if get
-		// TODO otherwise, it is trash
+		// Set the request to lower case
+		String request = new String(packet.getData()).toLowerCase();
+		
+		// Check if it is a find request
+		if(request.contains("find")) 
+		{
+			
+		}
+		// Check if it is a get request
+		else if(request.contains("get")) 
+		{
+			
+		}
+		// The UI send an invalid command, send error back
+		else
+		{
+			String message = "UIController, you sent a bad request to the PeerController"; 
+			byte[] buffer = new byte[message.getBytes().length];
+			
+			// Create a packet to send the error message
+			DatagramPacket errorPacket = new DatagramPacket(buffer, buffer.length);
+			
+			try {
+				// Send to local host
+				errorPacket.setAddress(InetAddress.getLocalHost());
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// Set the listening port of the UI
+			// TODO do not hard code
+			errorPacket.setPort(54321);
+			
+			// Set the data
+			errorPacket.setData(message.getBytes());
+			
+			// Enqueue the packet in the outgoing queue
+			outgoingPacketsQueue.enQueue(errorPacket);
+			
+			System.out.println("Sent error message");
+		}
+		
 	}
-	
+		
 	public Thread startAsThread() 
 	{
 		// Start this class a a thread
