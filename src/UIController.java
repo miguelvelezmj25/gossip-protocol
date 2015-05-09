@@ -97,6 +97,11 @@ public class UIController
 
 			// Command will run. If it is meant for a peer, its run method should handle the sending.
 			command.run();	
+			if(!incomingPacketsFromPeerQueue.isEmpty())
+			{
+				System.out.println(new String(incomingPacketsFromPeerQueue.deQueue().getData()));
+				
+			}
 		}
 		//Finish everything
 		ourPeerController.setDoneFlag(true);
