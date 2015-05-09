@@ -88,7 +88,7 @@ public class UDPMessage
 		System.arraycopy(id2.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
 		System.arraycopy(ttl.getBytes(), 0, buffer, ID.getLengthInBytes()*2, TimeToLive.getLengthInBytes());
 		System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length);
-		System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length + payload.length);
+		//System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length + payload.length);
 
 		return new DatagramPacket(buffer, size);
 
@@ -125,3 +125,4 @@ public class UDPMessage
 	}//getMinimumPacketSizeInByte
 
 }//class
+
