@@ -8,7 +8,7 @@ public abstract class DatagramSenderReceiver implements Runnable
 {
 	
 	private AtomicBoolean 				done;
-	protected DatagramSocket 				datagramSocket; // TODO CHANGE TO PRIVATE
+	private DatagramSocket 				datagramSocket; 
 	private int							packetSize;
 	private SynchronizedPacketQueue 	queue;
 	
