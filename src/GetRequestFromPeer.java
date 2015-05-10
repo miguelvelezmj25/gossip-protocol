@@ -48,7 +48,7 @@ public class GetRequestFromPeer extends RequestFromPeer
 				//loc = loc + rN.getBytes().length;
 				System.arraycopy(fileArray, (i * 456), sentArray, loc, Math.min(456, fileArray.length - (i * 456)));
 				response = new UDPMessage(identification1,identification2, new TimeToLive(70),sentArray);
-				//GossipPartners.getInstance().send(response);
+				GossipPartners.getInstance().send(response);
 			}
 		}
 		catch(IOException ioe)

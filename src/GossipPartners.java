@@ -33,5 +33,17 @@ public class GossipPartners
 	{
 		gossipPartners.add(gossipPartner);
 	}//addPartner
+	
+	public void send(UDPMessage udpMessage)
+	{
+		Iterator<GossipPartner> ie;
+		
+		ie = gossipPartners.iterator();
+		
+		while(ie.hasNext())
+		{
+			ie.next().send(udpMessage);
+		}
+	}
 
 }//class
