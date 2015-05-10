@@ -39,7 +39,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	{
 		// Create a request to find resources from peers
 		// Call the super constructor
-		super(id);
+		super(id, uiControllerAccess, outgoingPacketQueue);
 	}
 
 	@Override

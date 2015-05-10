@@ -48,7 +48,7 @@ public abstract class RequestFromUIController
 	private OutgoingPacketQueue outgoingPacketQueue; // TODO what is this?
 	private InetSocketAddress	uiControllerAddress; // TODO what is this?
 	
-	public RequestFromUIController(ID id) 
+	public RequestFromUIController(ID id, InetSocketAddress uiController, OutgoingPacketQueue outgoingPacketQueue) 
 	{
 		// Check if null
 		if(id == null) 
@@ -56,8 +56,9 @@ public abstract class RequestFromUIController
 			throw new IllegalArgumentException("The request id cannot be null");
 		}
 		
-		// Create a request
 		this.requestID = id;
+		this.outgoingPacketQueue = outgoingPacketQueue;
+		this.uiControllerAddress = uiController;
 	}
 
 	public ID getID() 
