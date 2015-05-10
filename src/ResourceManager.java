@@ -40,7 +40,7 @@ public class ResourceManager
 			line = bf.readLine();
 			while(line != null)
 			{
-				resourceID = new ID(new byte[16]);
+				resourceID = ID.idFactory();
 				resource = new Resource(resourceID,line);
 				resourceDirectory.put(resourceID, resource);
 				
