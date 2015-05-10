@@ -38,19 +38,16 @@ public class GossipPartner
 	}//isAlive
 
 	public void send(UDPMessage message)
-	{
-		DatagramSender			datagramSender;
+	{;
 		DatagramSocket			socket;
-//		OutgoingPacketQueue 	queue;
-
+		DatagramPacket			dp;
 		try
 		{
 			socket = new DatagramSocket(this.getGossipPartnerAddress());
-//			queue = new OutgoingPacketQueue();
+			dp = message.getDatagramPacket();
+			dp.setAddress(socket.getInetAddress());
 			this.queue.enQueue(message.getDatagramPacket());
 
-			datagramSender = new DatagramSender(socket, queue, UDPMessage.getMaximumPacketSizeInBytes());
-			datagramSender.action(socket, queue);
 		}
 		catch(SocketException se)
 		{
