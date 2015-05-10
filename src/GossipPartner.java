@@ -41,13 +41,13 @@ public class GossipPartner
 	{
 		DatagramSender			datagramSender;
 		DatagramSocket			socket;
-		OutgoingPacketQueue queue;
+//		OutgoingPacketQueue 	queue;
 
 		try
 		{
 			socket = new DatagramSocket(this.getGossipPartnerAddress());
-			queue = new OutgoingPacketQueue();
-			queue.enQueue(message.getDatagramPacket());
+//			queue = new OutgoingPacketQueue();
+			this.queue.enQueue(message.getDatagramPacket());
 
 			datagramSender = new DatagramSender(socket, queue, UDPMessage.getMaximumPacketSizeInBytes());
 			datagramSender.action(socket, queue);
