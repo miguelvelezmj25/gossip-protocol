@@ -34,7 +34,7 @@ public class GossipPartner
 
 	public boolean isAlive()
 	{
-		return this.isAlive();
+		return this.isAlive;
 	}//isAlive
 
 	public void send(UDPMessage message)
