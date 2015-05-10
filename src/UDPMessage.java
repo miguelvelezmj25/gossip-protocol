@@ -28,23 +28,18 @@ public class UDPMessage
 	{
 		byte[]		data;
 		int			messageLength;
-		ID 			id1;
-		ID			id2;
 		byte[]		message;
-		byte[]		ttl;
-		int			count;
 
 		data = datagramPacket.getData();
 
-		count = 0;
 		if(data.length>0 && data.length<512)
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
 			timeToLive = new TimeToLive();
-			messageLength = datagramPacket.getLength()-id1.getLengthInBytes()*2 + timeToLive.getBytes().length;
+			messageLength = datagramPacket.getLength() - ID.getLengthInBytes()*2 - timeToLive.getBytes().length;
 			message = new byte[messageLength];
-			System.arraycopy(data, id1.getLengthInBytes()*2 + timeToLive.getBytes().length, message, 0, messageLength);
+			System.arraycopy(data, ID.getLengthInBytes()*2 + timeToLive.getBytes().length, message, 0, messageLength);
 		}
 		else
 		{
@@ -74,7 +69,7 @@ public class UDPMessage
 		id2 = ID.idFactory();
 		ttl = new TimeToLive(75);
 
-		size = (ID.getLengthInBytes() *2) + timeToLive.getLengthInBytes() + payload.length;
+		size = (ID.getLengthInBytes() *2) + TimeToLive.getLengthInBytes() + payload.length;
 		buffer = new byte[size];
 
 		System.arraycopy(id1.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
