@@ -15,15 +15,12 @@ public class ResourceManager
 	}
 	
 	public static ResourceManager getInstance()
-	{
-		ResourceManager result;
-		
+	{	
 		if(resourcesManager == null)
 		{
 			resourcesManager = new ResourceManager();
 		}
-		result = resourcesManager;
-		return result;
+		return resourcesManager;
 	}
 	
 	public static ResourceManager newInstance()
