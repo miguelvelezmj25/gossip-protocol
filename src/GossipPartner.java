@@ -45,7 +45,7 @@ public class GossipPartner
 
 		try
 		{
-			socket = new DatagramSocket(getGossipPartnerAddress());
+			socket = new DatagramSocket(this.getGossipPartnerAddress());
 			queue = new OutgoingPacketQueue();
 			queue.enQueue(message.getDatagramPacket());
 
