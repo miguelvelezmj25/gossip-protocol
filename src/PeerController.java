@@ -18,10 +18,7 @@ public class PeerController implements Runnable {
 	 * 
 	 * 		AtomicBoolean done
 	 * 			Check if we are done processing packets
-	 * 
-	 * 		ID id	
-	 * 			Id class to use
-	 * 
+	 *  
 	 * 		IncomingPacketQueue incomingPacketsFromCommunityQueue
 	 * 			Queue with packets from the community
 	 * 		
@@ -235,40 +232,13 @@ public class PeerController implements Runnable {
 			// TODO is this ok for TTL?
 			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
 			
-			// Create a datagram packet from the find message
-			DatagramPacket findPacket = findMessage.getDatagramPacket();
+			// TODO call send message in gossip partners by passing a UDP message
 			
-			// TODO how to send since enqueue generates an error since the packet does not have a address
-			
-			// Enqueue the packet to be sent
-			this.outgoingPacketsQueue.enQueue(findPacket);
-					
 		}
 		// Check if it is a get request
 		else if(request.contains("get")) 
 		{
-//			// Get an ID for the find request
-//			ID id = ID.idFactory();
-//			
-//			// create a find request
-//			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(id);	
-//			
-//			// Save it in our request manager
-//			this.requestManager.insertRequest(findRequest);
-//			
-////						System.out.println(this.requestManager.getRequest(id));
-//			
-//			// Create a UDP message with format RequestID, random ID, TTL, text
-//			// TODO is this ok for TTL?
-//			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
-//			
-//			// Create a datagram packet from the find message
-//			DatagramPacket findPacket = findMessage.getDatagramPacket();
-//			
-//			// TODO how to send since enqueue generates an error since the packet does not have a address
-//			
-//			// Enqueue the packet to be sent
-//			this.outgoingPacketsQueue.enQueue(findPacket);
+			// TODO call send message in gossip partners by passing a UDP message
 		}
 		// The UI send an invalid command, send error back
 		else
