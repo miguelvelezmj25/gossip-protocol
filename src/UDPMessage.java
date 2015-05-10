@@ -42,7 +42,9 @@ public class UDPMessage
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
 			timeToLive = new TimeToLive();
-			messageLength = datagramPacket.getLength()-id1.getLengthInBytes()*2 + timeToLive.getBytes().length;
+			messageLength = datagramPacket.getLength()-id1.getLengthInBytes()*2 - timeToLive.getBytes().length;
+			
+			System.out.println(messageLength);
 			message = new byte[messageLength];
 			System.arraycopy(data, id1.getLengthInBytes()*2 + timeToLive.getBytes().length, message, 0, messageLength);
 		}
