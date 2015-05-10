@@ -14,20 +14,27 @@ public class PartNumbers
 		{
 			this.numberOfParts = numberOfParts;
 		}
-	}
+	}//constructor
 
-	public int get(){return this.numberOfParts;}
+	public int get()
+	{//returns the instance variable numberOfParts
+		return this.numberOfParts;
+	}//get
 
-	public byte[] getBytes()
+//need to finish
+	public static byte[] getBytes()
 	{
 		return new byte[1];
-	}
+	}//getBytes()
 
-	public int getLengthInBytes()
+	public static int getLengthInBytes()
 	{//returns size of this.getBytes()
-		return this.numberOfParts;
-	}
+		return 5;
+	}//getLengthInBytes
 
-	public int numberOfMissingParts(){return this.numberOfPartsMissing;}
+	public int numberOfMissingParts()
+	{//returns the total number of missing parts
+		return this.numberOfPartsMissing;
+	}//numberOfMissingParts
 
 }//class
