@@ -3,6 +3,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PeerController implements Runnable {
@@ -18,6 +19,9 @@ public class PeerController implements Runnable {
 	 * 		AtomicBoolean done
 	 * 			Check if we are done processing packets
 	 * 
+	 * 		ID id	
+	 * 			Id class to use
+	 * 
 	 * 		IncomingPacketQueue incomingPacketsFromCommunityQueue
 	 * 			Queue with packets from the community
 	 * 		
@@ -32,6 +36,12 @@ public class PeerController implements Runnable {
 	 * 
 	 * 		DatagramReceiver receiveFromCommunity
 	 * 			Receiver for the community
+	 * 
+	 * 		ResourceManager resourceManager
+	 * 			Manager for this peer's resources
+	 * 
+	 * 		RequestManager requestManager
+	 * 			Manager for this peer's requests
 	 * 
 	 * 		DatagramSender sender
 	 * 			Sender for the ui or the community
@@ -83,13 +93,16 @@ public class PeerController implements Runnable {
 	private DatagramReceiver        receiveFromUI;
 	private OutgoingPacketQueue 	outgoingPacketsQueue;
 	private DatagramReceiver        receiveFromCommunity;
+	private RequestManager			requestManager;
+	private ResourceManager			resourceManager;
 	private DatagramSender			sender;
 	
 	// TODO have to check what parameter we need to get
 	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort) 
 	{
 		// TODO what is packet size
-		try {
+		try 
+		{
 			this.done = new AtomicBoolean(false);
 			
 			this.incomingPacketsFromUIQueue = new IncomingPacketQueue();
@@ -100,9 +113,14 @@ public class PeerController implements Runnable {
 			this.outgoingPacketsQueue = new OutgoingPacketQueue();
 			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);
 			
-		} catch (SocketException se) {
+			this.requestManager = new RequestManager();
+			this.resourceManager = new ResourceManager();
+					
+		} 
+		catch (SocketException se) 
+		{
 				se.printStackTrace();
-			} 
+		} 
 	
 	}
 	
@@ -113,7 +131,7 @@ public class PeerController implements Runnable {
 		this.receiveFromUI.startAsThread();
 		
 		// Start listening for messages from the Community
-//		this.receiveFromCommunity.startAsThread();
+//		this.receiveFromCommunity.startAsThread(); // TODO uncomment
 		
 		// Start sending packets from the outgoing queue
 		this.sender.startAsThread();
@@ -139,6 +157,12 @@ public class PeerController implements Runnable {
 				
 				// Sleep
 				Thread.sleep(50);
+				
+				// Generate a new ID
+				ID.generateID();
+				
+				// Sleep
+				Thread.sleep(50);
 								
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -146,14 +170,40 @@ public class PeerController implements Runnable {
 			
 		}
 		
+		// Stop all threads
 		this.receiveFromUI.stop();
 		this.sender.stop();
+//		this.receiveFromCommunity.stop(); // TODO uncomment
 		
 	}
 
 
 	private void processCommandFromCommunity() {
 		// Process a command from the community
+		// Dequeue the packet from the community
+		DatagramPacket communityPacket = this.incomingPacketsFromCommunityQueue.deQueue();
+		
+		// Create a UDP message
+		UDPMessage response = new UDPMessage(communityPacket);
+		
+		// TODO send this UDP to the gossip partners
+		
+		// Check if the ID2 matches one of our responses
+		if(this.requestManager.getRequest(response.getID2()) != null)
+		{
+			// TODO what happens here
+			
+		}
+		// Check if the ID2 matches one of our resources
+		else if(this.resourceManager.getResourceFromID(response.getID2()) != null)
+		{
+			// TODO what happens here
+		}
+		// Check if the text criteria matches something we have
+		else if(this.resourceManager.getResourcesThatMatch(new String(response.getMessage())) != null)
+		{
+			// TODO what happens here
+		}
 	}
 
 	private void processCommandFromUI() 
@@ -162,7 +212,7 @@ public class PeerController implements Runnable {
 		// Dequeue the packet from the UI
 		DatagramPacket packet = this.incomingPacketsFromUIQueue.deQueue();
 
-		System.out.println("We got: " + new String(packet.getData()));
+//		System.out.println("We got: " + new String(packet.getData()));
 		
 		// Set the request to lower case
 		String request = new String(packet.getData()).toLowerCase();
@@ -170,12 +220,55 @@ public class PeerController implements Runnable {
 		// Check if it is a find request
 		if(request.contains("find")) 
 		{
+			// Get an ID for the find request
+			ID id = ID.idFactory();
 			
+			// create a find request
+			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(id);	
+			
+			// Save it in our request manager
+			this.requestManager.insertRequest(findRequest);
+			
+//			System.out.println(this.requestManager.getRequest(id));
+			
+			// Create a UDP message with format RequestID, random ID, TTL, text
+			// TODO is this ok for TTL?
+			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
+			
+			// Create a datagram packet from the find message
+			DatagramPacket findPacket = findMessage.getDatagramPacket();
+			
+			// TODO how to send since enqueue generates an error since the packet does not have a address
+			
+			// Enqueue the packet to be sent
+			this.outgoingPacketsQueue.enQueue(findPacket);
+					
 		}
 		// Check if it is a get request
 		else if(request.contains("get")) 
 		{
-			
+//			// Get an ID for the find request
+//			ID id = ID.idFactory();
+//			
+//			// create a find request
+//			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(id);	
+//			
+//			// Save it in our request manager
+//			this.requestManager.insertRequest(findRequest);
+//			
+////						System.out.println(this.requestManager.getRequest(id));
+//			
+//			// Create a UDP message with format RequestID, random ID, TTL, text
+//			// TODO is this ok for TTL?
+//			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
+//			
+//			// Create a datagram packet from the find message
+//			DatagramPacket findPacket = findMessage.getDatagramPacket();
+//			
+//			// TODO how to send since enqueue generates an error since the packet does not have a address
+//			
+//			// Enqueue the packet to be sent
+//			this.outgoingPacketsQueue.enQueue(findPacket);
 		}
 		// The UI send an invalid command, send error back
 		else
@@ -187,16 +280,15 @@ public class PeerController implements Runnable {
 			DatagramPacket errorPacket = new DatagramPacket(buffer, buffer.length);
 			
 			try {
-				// Send to local host
+				// Send to the UI controller
 				errorPacket.setAddress(InetAddress.getLocalHost());
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			// Set the listening port of the UI
 			// TODO do not hard code
-			errorPacket.setPort(54321);
+			errorPacket.setPort(new PortNumberUIPeer(54321).get());
 			
 			// Set the data
 			errorPacket.setData(message.getBytes());
