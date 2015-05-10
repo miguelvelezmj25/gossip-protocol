@@ -32,12 +32,23 @@ public class UDPMessage
 
 		data = datagramPacket.getData();
 
+<<<<<<< HEAD
 		if(data.length>0 && data.length<512)
+=======
+		count = 0;
+		if(data.length>0 && data.length<513)
+>>>>>>> origin/master
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
 			timeToLive = new TimeToLive();
+<<<<<<< HEAD
 			messageLength = datagramPacket.getLength() - ID.getLengthInBytes()*2 - timeToLive.getBytes().length;
+=======
+			messageLength = datagramPacket.getLength()-id1.getLengthInBytes()*2 - timeToLive.getBytes().length;
+			
+			System.out.println(messageLength);
+>>>>>>> origin/master
 			message = new byte[messageLength];
 			System.arraycopy(data, ID.getLengthInBytes()*2 + timeToLive.getBytes().length, message, 0, messageLength);
 		}
