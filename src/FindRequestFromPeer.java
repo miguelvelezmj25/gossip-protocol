@@ -33,7 +33,7 @@ public class FindRequestFromPeer extends RequestFromPeer
 				randID = ID.idFactory();
 				id1 = matches[i].getID();
 				response = "," + matches[i].getMimeType() + "," + matches[i].getSizeInBytes() + "," + matches[i].getDescription();
-				ttl = new TimeToLive(70);
+				ttl = new TimeToLive();
 				responseArray = new byte[randID.getBytes().length + response.getBytes().length];
 				System.arraycopy(randID.getBytes(),0,responseArray,0,randID.getBytes().length);
 				System.arraycopy(response.getBytes(),0,responseArray,randID.getBytes().length,response.getBytes().length);

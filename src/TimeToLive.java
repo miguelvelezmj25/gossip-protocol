@@ -49,6 +49,11 @@ public class TimeToLive
 
 	private int timeToLive;
 
+	public TimeToLive()
+	{
+		this(10);
+	}
+	
 	public TimeToLive(int timeToLive) 
 	{
 		// Constructor that sets the time to live.
