@@ -1,3 +1,5 @@
+import java.net.InetSocketAddress;
+
 
 public class RequestFromUIControllerToGetaResource extends RequestFromUIController 
 {
@@ -31,11 +33,11 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	
 //	private ArrayList<ID> responses; // TODO what collection should we use
 	
-	public RequestFromUIControllerToGetaResource(ID id) 
+	public RequestFromUIControllerToGetaResource(ID id, InetSocketAddress uiController, OutgoingPacketQueue outgoingPacket) 
 	{
 		// Create a request to find resources from peers
 		// Call the super constructor
-		super(id);
+		super(id, uiController, outgoingPacket);
 	}
 
 	@Override

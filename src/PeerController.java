@@ -188,8 +188,10 @@ public class PeerController implements Runnable {
 		// Check if the ID2 matches one of our responses
 		if(RequestManager.getInstance().getRequest(response.getID2()) != null)
 		{
-			// TODO what happens here
+			// TODO test
+			RequestFromUIControllerToFindResources responseRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(response.getID2());
 			
+			responseRequest.updateRequest(response);
 		}
 		// Check if the ID2 matches one of our resources
 		else if(ResourceManager.getInstance().getResourceFromID(response.getID2()) != null)

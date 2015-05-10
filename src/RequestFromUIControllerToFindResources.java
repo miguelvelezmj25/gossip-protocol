@@ -1,4 +1,5 @@
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 
 
 public class RequestFromUIControllerToFindResources extends RequestFromUIController 
@@ -33,13 +34,15 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 			Rename class.
 	 */
 	
-//	private ArrayList<ID> responses; // TODO what collection should we use?
+	private ArrayList<ID> responses;
 	
 	public RequestFromUIControllerToFindResources(ID id, InetSocketAddress uiControllerAccess, OutgoingPacketQueue outgoingPacketQueue) 
 	{
 		// Create a request to find resources from peers
 		// Call the super constructor
 		super(id, uiControllerAccess, outgoingPacketQueue);
+		
+		this.responses = new ArrayList<ID>();
 	}
 
 	@Override
@@ -50,6 +53,14 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 		if(udpMessage == null) 
 		{
 			throw new IllegalArgumentException("The UDP message that you provided is null");
+		}
+		
+		if(!responses.contains(udpMessage.getID1()))
+		{
+			responses.add(udpMessage.getID1());
+			
+			System.out.println(udpMessage.getID1());
+			System.out.println(udpMessage.getMessage());
 		}
 		
 		// TODO get the datagramPacket and send it to the UIController. Done in the peer controller
