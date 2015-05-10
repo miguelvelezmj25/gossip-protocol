@@ -28,7 +28,6 @@ public class UDPMessage
 	{
 		byte[]		data;
 		int			messageLength;
-		byte[]		message;
 
 		data = datagramPacket.getData();
 
