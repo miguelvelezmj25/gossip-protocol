@@ -62,22 +62,16 @@ public class UDPMessage
 
 	public DatagramPacket getDatagramPacket(byte[] payload)
 	{
-		ID			id1;
-		ID 			id2;
-		TimeToLive	ttl;
 		int			size;
 		byte[]		buffer;
 
-		id1 = ID.idFactory();
-		id2 = ID.idFactory();
-		ttl = new TimeToLive(75);
 
 		size = (ID.getLengthInBytes() *2) + TimeToLive.getLengthInBytes() + payload.length;
 		buffer = new byte[size];
 
 		System.arraycopy(id1.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
 		System.arraycopy(id2.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
-		System.arraycopy(ttl.getBytes(), 0, buffer, ID.getLengthInBytes()*2, TimeToLive.getLengthInBytes());
+		System.arraycopy(timeToLive.getBytes(), 0, buffer, ID.getLengthInBytes()*2, TimeToLive.getLengthInBytes());
 		System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length);
 		//System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length + payload.length);
 
