@@ -17,11 +17,12 @@ public class ResourceManager
 	public static ResourceManager getInstance()
 	{
 		ResourceManager result;
-		result = resourcesManager;
+		
 		if(resourcesManager == null)
 		{
-			result = new ResourceManager();
+			resourcesManager = new ResourceManager();
 		}
+		result = resourcesManager;
 		return result;
 	}
 	
