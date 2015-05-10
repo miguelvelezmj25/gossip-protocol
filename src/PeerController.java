@@ -1,9 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -128,7 +126,7 @@ public class PeerController implements Runnable {
 		this.receiveFromUI.startAsThread();
 		
 		// Start listening for messages from the Community
-		this.receiveFromCommunity.startAsThread(); // TODO uncomment
+		this.receiveFromCommunity.startAsThread();
 		
 		// Start sending packets from the outgoing queue
 		this.sender.startAsThread();
@@ -170,7 +168,7 @@ public class PeerController implements Runnable {
 		// Stop all threads
 		this.receiveFromUI.stop();
 		this.sender.stop();
-		this.receiveFromCommunity.stop(); // TODO uncomment
+		this.receiveFromCommunity.stop();
 		
 	}
 
@@ -181,25 +179,26 @@ public class PeerController implements Runnable {
 		DatagramPacket communityPacket = this.incomingPacketsFromCommunityQueue.deQueue();
 		
 		// Create a UDP message
-		UDPMessage response = new UDPMessage(communityPacket);
+		UDPMessage message = new UDPMessage(communityPacket);
 		
-		// TODO send this UDP to the gossip partners
+		// Pass the message to my peers
+		GossipPartners.getInstance().send(message);
 		
 		// Check if the ID2 matches one of our responses
-		if(RequestManager.getInstance().getRequest(response.getID2()) != null)
+		if(RequestManager.getInstance().getRequest(message.getID2()) != null)
 		{
 			// TODO test
-			RequestFromUIControllerToFindResources responseRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(response.getID2());
+			RequestFromUIControllerToFindResources responseRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(message.getID2());
 			
-			responseRequest.updateRequest(response);
+			responseRequest.updateRequest(message);
 		}
 		// Check if the ID2 matches one of our resources
-		else if(ResourceManager.getInstance().getResourceFromID(response.getID2()) != null)
+		else if(ResourceManager.getInstance().getResourceFromID(message.getID2()) != null)
 		{
 			// TODO what happens here
 		}
 		// Check if the text criteria matches something we have
-		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(response.getMessage())) != null)
+		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(message.getMessage())) != null)
 		{
 			// TODO what happens here
 		}
@@ -233,8 +232,7 @@ public class PeerController implements Runnable {
 			// Create a UDP message with format RequestID, random ID, TTL, text
 			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
 			
-			// TODO call send message in gossip partners by passing a UDP message
-			
+			GossipPartners.getInstance().send(findMessage);			
 		}
 		// Check if it is a get request
 		else if(request.contains("get")) 
