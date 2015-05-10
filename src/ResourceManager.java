@@ -8,10 +8,9 @@ public class ResourceManager
 	
 	private static ResourceManager resourcesManager;
 	
-	public ResourceManager()
+	private ResourceManager()
 	{
 		this.resourceDirectory = new HashMap<ID,Resource>();
-		this.resourcesManager = this;
 	}
 	
 	public static ResourceManager getInstance()
