@@ -37,7 +37,7 @@ public class UDPMessage
 		data = datagramPacket.getData();
 
 		count = 0;
-		if(data.length>0 && data.length<512)
+		if(data.length>0 && data.length<513)
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
