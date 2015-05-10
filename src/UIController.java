@@ -166,43 +166,30 @@ public class UIController
 		
 		public void sendToPeer()
 		{
-			ID id1;
-			ID id2;
-			UDPMessage udpMessage;
-			TimeToLive ttl;
+			byte[] buffer;
 			
-			ttl = new TimeToLive(70);
+			//Ask user what they would like to send
+			System.out.println("Please type what you would like to " + super.getCommandName() + ":");
+			String message = "," + super.getCommandName() + "," + scanner.nextLine();
 			
-			id1 = ID.idFactory();
-			id2 = ID.idFactory();
-			
-//			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
-//			DatagramPacket dp = udpMessage.getDatagramPacket();
-			
-		
-			
-			String message = "jklsadf"; // TODO do not hardcode a message
-			byte[] buffer = new byte[message.getBytes().length];
-			
+			//Create DatagramPacket
+			buffer = message.getBytes();
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 			
-//			System.out.println("Set address to local host");
-			try {
+			try 
+			{
 				dp.setAddress(InetAddress.getLocalHost());
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
+			} 
+			catch (UnknownHostException e) 
+			{
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 			
-//			System.out.println("Set port: " + peerAddress.getPort());
 			dp.setPort(peerAddress.getPort());
-			
-//			System.out.println("Set packet data");
 			dp.setData(message.getBytes());
 			
-			// TODO we are not using outgoing queue
 			outgoingPacketsToPeerQueue.enQueue(dp);
-//			sendToPeer.startAsThread();
 
 		}
 		
