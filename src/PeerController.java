@@ -1,6 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Random;
@@ -90,12 +91,13 @@ public class PeerController implements Runnable {
 	private DatagramReceiver        receiveFromUI;
 	private OutgoingPacketQueue 	outgoingPacketsQueue;
 	private DatagramReceiver        receiveFromCommunity;
-	private RequestManager			requestManager;
-	private ResourceManager			resourceManager;
+//	private RequestManager			requestManager;
+//	private ResourceManager			resourceManager;
 	private DatagramSender			sender;
+	private InetSocketAddress		uiControllerAddress;
 	
 	// TODO have to check what parameter we need to get
-	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort) 
+	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort, InetSocketAddress uiControllerAddress) 
 	{
 		// TODO what is packet size
 		try 
@@ -108,11 +110,9 @@ public class PeerController implements Runnable {
 			this.receiveFromCommunity = new DatagramReceiver(new DatagramSocket(communityPort.get()), this.incomingPacketsFromCommunityQueue, 512);
 	
 			this.outgoingPacketsQueue = new OutgoingPacketQueue();
-			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);
+			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);			
 			
-			this.requestManager = new RequestManager();
-			this.resourceManager = new ResourceManager();
-					
+			this.uiControllerAddress = uiControllerAddress;
 		} 
 		catch (SocketException se) 
 		{
@@ -186,18 +186,18 @@ public class PeerController implements Runnable {
 		// TODO send this UDP to the gossip partners
 		
 		// Check if the ID2 matches one of our responses
-		if(this.requestManager.getRequest(response.getID2()) != null)
+		if(RequestManager.getInstance().getRequest(response.getID2()) != null)
 		{
 			// TODO what happens here
 			
 		}
 		// Check if the ID2 matches one of our resources
-		else if(this.resourceManager.getResourceFromID(response.getID2()) != null)
+		else if(ResourceManager.getInstance().getResourceFromID(response.getID2()) != null)
 		{
 			// TODO what happens here
 		}
 		// Check if the text criteria matches something we have
-		else if(this.resourceManager.getResourcesThatMatch(new String(response.getMessage())) != null)
+		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(response.getMessage())) != null)
 		{
 			// TODO what happens here
 		}
@@ -221,10 +221,10 @@ public class PeerController implements Runnable {
 			ID id = ID.idFactory();
 			
 			// create a find request
-			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(id);	
+			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(id, this.uiControllerAddress, this.outgoingPacketsQueue);	
 			
 			// Save it in our request manager
-			this.requestManager.insertRequest(findRequest);
+			RequestManager.getInstance().insertRequest(findRequest);
 			
 //			System.out.println(this.requestManager.getRequest(id));
 			
@@ -247,25 +247,18 @@ public class PeerController implements Runnable {
 			
 			// Create a packet to send the error message
 			DatagramPacket errorPacket = new DatagramPacket(buffer, buffer.length);
-			
-			try {
-				// Send to the UI controller
-				errorPacket.setAddress(InetAddress.getLocalHost());
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
-			
+						
+			// Set the address
+			errorPacket.setAddress(this.uiControllerAddress.getAddress());;
+				
 			// Set the listening port of the UI
-			// TODO do not hard code
-			errorPacket.setPort(new PortNumberUIPeer(54321).get());
+			errorPacket.setPort(this.uiControllerAddress.getPort());
 			
 			// Set the data
 			errorPacket.setData(message.getBytes());
 			
 			// Enqueue the packet in the outgoing queue
 			outgoingPacketsQueue.enQueue(errorPacket);
-			
-			System.out.println("Sent error message");
 		}
 		
 	}

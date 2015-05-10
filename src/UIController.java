@@ -13,6 +13,7 @@ public class UIController
 	private boolean 			done;
 	private IncomingPacketQueue incomingPacketsFromPeerQueue;
 	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
+	private PeerController		ourPeerController;
 	private InetSocketAddress 	peerAddress;
 	private DatagramReceiver 	receiveFromPeer;
 	private Scanner				scanner;
@@ -52,6 +53,16 @@ public class UIController
 		{
 			System.out.println("Caught socket exception " + e.getMessage());
 		}
+				
+		//Create PeerController
+		try {
+			ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberPeerUI(peerAddress.getPort()), new InetSocketAddress(InetAddress.getLocalHost(),portNumberUIPeer.get()));
+
+			ourPeerController.startAsThread();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 
@@ -74,13 +85,8 @@ public class UIController
 	{
 		
 		UIControllerCommand command;
-		PeerController 		ourPeerController;
 		String				userCommand;
 		
-		//Create PeerController
-		// TODO how does the peer get the port to listen to the community? We are hard coding it
-		ourPeerController = new PeerController(new PortNumberPeerCommunity(12345), new PortNumberPeerUI(peerAddress.getPort()));
-		ourPeerController.startAsThread();
 		
 		//Start Threads
 		receiveFromPeer.startAsThread();
@@ -88,6 +94,8 @@ public class UIController
 		//Check for uer input
 		scanner = new Scanner(System.in);
 
+		
+		
 		while(!done)
 		{
 			System.out.print("Type in a command: ");
@@ -158,30 +166,43 @@ public class UIController
 		
 		public void sendToPeer()
 		{
-			byte[] buffer;
+			ID id1;
+			ID id2;
+			UDPMessage udpMessage;
+			TimeToLive ttl;
 			
-			//Ask user what they would like to send
-			System.out.println("Please type what you would like to " + super.getCommandName() + ":");
-			String message = "," + super.getCommandName() + "," + scanner.nextLine();
+			ttl = new TimeToLive(70);
 			
-			//Create DatagramPacket
-			buffer = message.getBytes();
+			id1 = ID.idFactory();
+			id2 = ID.idFactory();
+			
+//			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
+//			DatagramPacket dp = udpMessage.getDatagramPacket();
+			
+		
+			
+			String message = "jklsadf"; // TODO do not hardcode a message
+			byte[] buffer = new byte[message.getBytes().length];
+			
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 			
-			try 
-			{
+//			System.out.println("Set address to local host");
+			try {
 				dp.setAddress(InetAddress.getLocalHost());
-			} 
-			catch (UnknownHostException e) 
-			{
-				System.out.println(e.getMessage());
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
+//			System.out.println("Set port: " + peerAddress.getPort());
 			dp.setPort(peerAddress.getPort());
+			
+//			System.out.println("Set packet data");
 			dp.setData(message.getBytes());
 			
+			// TODO we are not using outgoing queue
 			outgoingPacketsToPeerQueue.enQueue(dp);
+//			sendToPeer.startAsThread();
 
 		}
 		
@@ -331,6 +352,8 @@ public class UIController
 		}
 
 	}
+	
+
 }
 
 

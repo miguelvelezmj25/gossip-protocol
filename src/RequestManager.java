@@ -60,6 +60,11 @@ public class RequestManager
 	
 	public static RequestManager getInstance() 
 	{
+		if(RequestManager.instance == null)
+		{
+			RequestManager.instance = new RequestManager();
+		}
+		
 		// Return the instance of the class
 		return RequestManager.instance;
 	}
