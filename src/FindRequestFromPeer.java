@@ -38,7 +38,7 @@ public class FindRequestFromPeer extends RequestFromPeer
 				System.arraycopy(randID.getBytes(),0,responseArray,0,randID.getBytes().length);
 				System.arraycopy(response.getBytes(),0,responseArray,randID.getBytes().length,response.getBytes().length);
 				udpMessage = new UDPMessage(id1, id2, ttl, responseArray);
-				//TODO: actually send the response
+				//TODO: GossipPartners.getInstance().send(udpMessage);
 			}
 			
 			

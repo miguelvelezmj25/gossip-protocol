@@ -91,16 +91,17 @@ public class UIController
 		while(!done)
 		{
 			System.out.print("Type in a command: ");
-			
-			userCommand = scanner.nextLine();
-			command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
+			if(scanner.hasNextLine())
+			{
+				userCommand = scanner.nextLine();
+				command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
 
-			// Command will run. If it is meant for a peer, its run method should handle the sending.
-			command.run();	
+				// Command will run. If it is meant for a peer, its run method should handle the sending.
+				command.run();	
+			}
 			if(!incomingPacketsFromPeerQueue.isEmpty())
 			{
 				System.out.println(new String(incomingPacketsFromPeerQueue.deQueue().getData()));
-				
 			}
 		}
 		//Finish everything
