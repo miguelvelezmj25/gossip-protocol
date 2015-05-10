@@ -78,8 +78,6 @@ public class RequestManager
 			throw new IllegalArgumentException("The id you provided is null");
 		}
 		
-		// TODO what other checks?
-		
 		// Returns null if not found
 		return this.requestsDirectory.get(id);
 	}
@@ -91,8 +89,6 @@ public class RequestManager
 		if(request ==  null) {
 			throw new IllegalArgumentException("The request you provided is null");
 		}
-		
-		// TODO what other checks?
 		
 		// Insert in the hash map
 		this.requestsDirectory.put(request.getID(), request);

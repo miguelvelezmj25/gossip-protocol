@@ -229,7 +229,6 @@ public class PeerController implements Runnable {
 //			System.out.println(this.requestManager.getRequest(id));
 			
 			// Create a UDP message with format RequestID, random ID, TTL, text
-			// TODO is this ok for TTL?
 			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
 			
 			// TODO call send message in gossip partners by passing a UDP message
@@ -296,15 +295,5 @@ public class PeerController implements Runnable {
 		// Check iff the peer is done processing packets
 		return this.done.get();
 	}
-	
-//	public void findRequest() 
-//	{
-//		
-//	}
-//
-//	public void getRequest()
-//	{
-//		
-//	}
 
 }

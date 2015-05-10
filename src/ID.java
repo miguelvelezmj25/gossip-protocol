@@ -349,15 +349,5 @@ public class ID
 		// Converts each byte to hex, and returns the string consisting of consecutive hex characters.
 		return "This id: " + this.getAsHex();
 	}
-
-//	public boolean isRequestID() {
-//		// TODO might need this later
-//		return false;
-//	}
-//	
-//	public boolean isResourceID() {
-//		// TODO later
-//		return false;
-//	}
 	
 }

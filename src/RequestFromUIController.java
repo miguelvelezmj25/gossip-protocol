@@ -1,7 +1,5 @@
 import java.net.InetSocketAddress;
 
-// TODO Test
-
 public abstract class RequestFromUIController 
 {
 	/**
@@ -47,8 +45,8 @@ public abstract class RequestFromUIController
 	 */
 		
 	private ID 					requestID;
-	private OutgoingPacketQueue outgoingPacketQueue;
-	private InetSocketAddress	uiControllerAddress;
+	private OutgoingPacketQueue outgoingPacketQueue; // TODO what is this?
+	private InetSocketAddress	uiControllerAddress; // TODO what is this?
 	
 	public RequestFromUIController(ID id) 
 	{
