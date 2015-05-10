@@ -70,7 +70,7 @@ public class UDPMessage
 		buffer = new byte[size];
 
 		System.arraycopy(id1.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
-		System.arraycopy(id2.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
+		System.arraycopy(id2.getBytes(), 0, buffer, ID.getLengthInBytes(), ID.getLengthInBytes());
 		System.arraycopy(timeToLive.getBytes(), 0, buffer, ID.getLengthInBytes()*2, TimeToLive.getLengthInBytes());
 		System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length);
 		//System.arraycopy(payload, 0, buffer, ID.getLengthInBytes()*2 + TimeToLive.getLengthInBytes(), payload.length + payload.length);
