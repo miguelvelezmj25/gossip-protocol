@@ -128,7 +128,7 @@ public class PeerController implements Runnable {
 		this.receiveFromUI.startAsThread();
 		
 		// Start listening for messages from the Community
-//		this.receiveFromCommunity.startAsThread(); // TODO uncomment
+		this.receiveFromCommunity.startAsThread(); // TODO uncomment
 		
 		// Start sending packets from the outgoing queue
 		this.sender.startAsThread();
@@ -170,7 +170,7 @@ public class PeerController implements Runnable {
 		// Stop all threads
 		this.receiveFromUI.stop();
 		this.sender.stop();
-//		this.receiveFromCommunity.stop(); // TODO uncomment
+		this.receiveFromCommunity.stop(); // TODO uncomment
 		
 	}
 
