@@ -242,23 +242,24 @@ public class PeerController implements Runnable {
 		// The UI send an invalid command, send error back
 		else
 		{
-			String message = "UIController, you sent a bad request to the PeerController"; 
-			byte[] buffer = new byte[message.getBytes().length];
-			
-			// Create a packet to send the error message
-			DatagramPacket errorPacket = new DatagramPacket(buffer, buffer.length);
-						
-			// Set the address
-			errorPacket.setAddress(this.uiControllerAddress.getAddress());;
-				
-			// Set the listening port of the UI
-			errorPacket.setPort(this.uiControllerAddress.getPort());
-			
-			// Set the data
-			errorPacket.setData(message.getBytes());
-			
-			// Enqueue the packet in the outgoing queue
-			outgoingPacketsQueue.enQueue(errorPacket);
+			System.out.println("UIController, you sent a bad request to the PeerController");
+//			String message = "UIController, you sent a bad request to the PeerController"; 
+//			byte[] buffer = new byte[message.getBytes().length];
+//			
+//			// Create a packet to send the error message
+//			DatagramPacket errorPacket = new DatagramPacket(buffer, buffer.length);
+//						
+//			// Set the address
+//			errorPacket.setAddress(this.uiControllerAddress.getAddress());;
+//				
+//			// Set the listening port of the UI
+//			errorPacket.setPort(this.uiControllerAddress.getPort());
+//			
+//			// Set the data
+//			errorPacket.setData(message.getBytes());
+//			
+//			// Enqueue the packet in the outgoing queue
+//			outgoingPacketsQueue.enQueue(errorPacket);
 		}
 		
 	}
