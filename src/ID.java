@@ -335,7 +335,7 @@ public class ID
 	public int hashCode()
 	{
 		// Returns the hashCode of the toString method.
-		return this.id.toString().hashCode();
+		return new String(this.id).hashCode();
 	}
 	
 	public boolean isZero()
