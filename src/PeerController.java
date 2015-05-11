@@ -1,7 +1,9 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -89,10 +91,10 @@ public class PeerController implements Runnable {
 	private DatagramReceiver        receiveFromUI;
 	private OutgoingPacketQueue 	outgoingPacketsQueue;
 	private DatagramReceiver        receiveFromCommunity;
-//	private RequestManager			requestManager;
-//	private ResourceManager			resourceManager;
 	private DatagramSender			sender;
 	private InetSocketAddress		uiControllerAddress;
+	
+	// TODO save resources
 	
 	// TODO have to check what parameter we need to get
 	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort, InetSocketAddress uiControllerAddress) 
@@ -177,20 +179,31 @@ public class PeerController implements Runnable {
 		// Process a command from the community
 		// Dequeue the packet from the community
 		DatagramPacket communityPacket = this.incomingPacketsFromCommunityQueue.deQueue();
-		
+			
 		// Create a UDP message
 		UDPMessage message = new UDPMessage(communityPacket);
 		
 		// Pass the message to my peers
 		GossipPartners.getInstance().send(message);
-		
+						
 		// Check if the ID2 matches one of our responses
-		if(RequestManager.getInstance().getRequest(message.getID2()) != null)
+		if(RequestManager.getInstance().getRequest(message.getID2()) != null) // TODO should be 2
 		{
-			// TODO test
-			RequestFromUIControllerToFindResources responseRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(message.getID2());
-			
-			responseRequest.updateRequest(message);
+			if(RequestManager.getInstance().getRequest(message.getID1()).getClass() == RequestFromUIControllerToFindResources.class)  // TODO should be 2
+			{
+				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(message.getID1());  // TODO should be 2
+				
+				// 
+				findRequest.updateRequest(message);				
+			}
+			else if(RequestManager.getInstance().getRequest(message.getID1()).getClass() == RequestFromUIControllerToGetaResource.class)
+			{
+				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) RequestManager.getInstance().getRequest(message.getID1());  // TODO should be 2
+
+				// TODO what should we do?
+				System.out.println("get: " + getRequest.getID());
+			}
+				
 		}
 		// Check if the ID2 matches one of our resources
 		else if(ResourceManager.getInstance().getResourceFromID(message.getID2()) != null)
@@ -198,46 +211,98 @@ public class PeerController implements Runnable {
 			// TODO what happens here
 		}
 		// Check if the text criteria matches something we have
-		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(message.getMessage())) != null)
+		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(message.getMessage())).length != 0)
 		{
-			// TODO what happens here
+			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(message.getMessage()));
+			
+			for(Resource resource : resources)
+			{
+				StringBuilder resourceInfo = new StringBuilder(ID.idFactory().getAsHex());
+				
+				resourceInfo.append(",");
+				resourceInfo.append(resource.getMimeType());
+				resourceInfo.append(",");
+				resourceInfo.append(resource.getSizeInBytes());
+				resourceInfo.append(",");
+				resourceInfo.append(resource.getDescription());
+				resourceInfo.append(",");
+						
+				UDPMessage resourceMessage = new UDPMessage(ID.idFactory(), message.getID1(), new TimeToLive(), resourceInfo.toString());
+				
+				GossipPartners.getInstance().send(resourceMessage);		
+			}
+		}
+		else {
+			System.out.println("Testing receiving from community");
 		}
 	}
 
 	private void processCommandFromUI() 
 	{
 		// Process a command from the UI
+		
 		// Dequeue the packet from the UI
-		DatagramPacket packet = this.incomingPacketsFromUIQueue.deQueue();
-
-//		System.out.println("We got: " + new String(packet.getData()));
+		DatagramPacket uiPacket = this.incomingPacketsFromUIQueue.deQueue();
 		
-		// Set the request to lower case
-		String request = new String(packet.getData()).toLowerCase();
+		// Set the command to lower case
+		String uiCommand = new String(uiPacket.getData()).toLowerCase();
 		
+		char delimiter = uiCommand.charAt(0);
+				
 		// Check if it is a find request
-		if(request.contains("find")) 
+		if(uiCommand.indexOf(delimiter + "find") == 0) 
 		{
 			// Get an ID for the find request
-			ID id = ID.idFactory();
+			ID findId = ID.idFactory();
 			
 			// create a find request
-			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(id, this.uiControllerAddress, this.outgoingPacketsQueue);	
+			RequestFromUIControllerToFindResources findRequest = new RequestFromUIControllerToFindResources(findId, this.uiControllerAddress, this.outgoingPacketsQueue);	
 			
 			// Save it in our request manager
 			RequestManager.getInstance().insertRequest(findRequest);
-			
-//			System.out.println(this.requestManager.getRequest(id));
-			
+					
 			// Create a UDP message with format RequestID, random ID, TTL, text
-			UDPMessage findMessage = new UDPMessage(id, ID.idFactory(), new TimeToLive(new Random().nextInt(100) + 1), "frogs");
+			UDPMessage findMessage = new UDPMessage(findId, ID.idFactory(), new TimeToLive(), uiCommand.substring(6));
+									
+//			GossipPartners.getInstance().send(findMessage);			// TODO uncomment
 			
-			GossipPartners.getInstance().send(findMessage);			
+/////////////////// TODO delete
+//			System.out.println("id1: " + findMessage.getID1());
+//			System.out.println("id2: " + findMessage.getID2());
+//			System.out.println("tll: " + findMessage.getTimeToLive());
+//			System.out.println(new String(findMessage.getMessage()));
+
+			DatagramPacket send = findMessage.getDatagramPacket();
+			
+			send.setPort(12345);
+			
+			try {
+				send.setAddress(InetAddress.getLocalHost());
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			this.outgoingPacketsQueue.enQueue(send);
+/////////////////// TODO delete	
 		}
 		// Check if it is a get request
-		else if(request.contains("get")) 
+		else if(uiCommand.indexOf(delimiter + "get") == 0) 
 		{
-			// TODO call send message in gossip partners by passing a UDP message
+			ID getId = ID.idFactory();
+			
+			// create a get request
+			RequestFromUIControllerToGetaResource getRequest = new RequestFromUIControllerToGetaResource(getId, uiControllerAddress, this.outgoingPacketsQueue);
+			
+			// save it in our request manager
+			RequestManager.getInstance().insertRequest(getRequest);
+			
+			// Create a UDP message with format RequestID, ResourceID, TTL, text // TODO we need to get the resource id
+			UDPMessage getMessage = new UDPMessage(getId, ID.idFactory(), new TimeToLive(), uiCommand.substring(5));
+			
+//			GossipPartners.getInstance().send(getMessage);			// TODO uncomment
+			
+			// TODO we need to finish this
 		}
 		// The UI send an invalid command, send error back
 		else
