@@ -17,23 +17,35 @@ public class PartNumbers
 	}//constructor
 
 	public int get()
-	{//returns the instance variable numberOfParts
+	{
+		//returns the instance variable numberOfParts
 		return this.numberOfParts;
 	}//get
 
 //need to finish
-	public static byte[] getBytes()
+	public static boolean[] getBytes(int size)
 	{
-		return new byte[1];
+		boolean[]	array;
+		array = new boolean[size];
+
+		for (int i=0; i<size; i++)
+		{
+			array[i]= false;
+		}
+
+		return array;
+
 	}//getBytes()
 
 	public static int getLengthInBytes()
-	{//returns size of this.getBytes()
-		return 5;
+	{
+		//returns size of this.getBytes()
+		return 4;
 	}//getLengthInBytes
 
 	public int numberOfMissingParts()
-	{//returns the total number of missing parts
+	{
+		//returns the total number of missing parts
 		return this.numberOfPartsMissing;
 	}//numberOfMissingParts
 
