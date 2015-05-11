@@ -34,7 +34,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 			Rename class.
 	 */
 	
-	private ArrayList<ID> responses;
+	private ArrayList<ID> responses; // TODO this is not shared among the class
 	
 	public RequestFromUIControllerToFindResources(ID id, InetSocketAddress uiControllerAccess, OutgoingPacketQueue outgoingPacketQueue) 
 	{
@@ -55,15 +55,22 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			throw new IllegalArgumentException("The UDP message that you provided is null");
 		}
 		
+		
+		// Check if we have received this response
 		if(!responses.contains(udpMessage.getID1()))
 		{
+			// Add to our responses
 			responses.add(udpMessage.getID1());
 			
+			// Print the ID and the message
 			System.out.println(udpMessage.getID1());
-			System.out.println(udpMessage.getMessage());
+			System.out.println(new String(udpMessage.getMessage()));
 		}
 		
-		// TODO get the datagramPacket and send it to the UIController. Done in the peer controller
+		// TODO save in a collection and print 6: ID, mime type, length
 	}
+	
+	
+	// TODO might need a private class to save resources
 
 }

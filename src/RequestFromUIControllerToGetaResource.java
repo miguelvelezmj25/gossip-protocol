@@ -1,6 +1,5 @@
 import java.net.InetSocketAddress;
 
-
 public class RequestFromUIControllerToGetaResource extends RequestFromUIController 
 {
 	/**
@@ -31,7 +30,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	 *  
 	 */
 	
-//	private ArrayList<ID> responses; // TODO what collection should we use
+//	private ArrayList<ID> responses; // TODO what collection should we use // TODO this is not shared among the class
 	
 	public RequestFromUIControllerToGetaResource(ID id, InetSocketAddress uiController, OutgoingPacketQueue outgoingPacket) 
 	{
