@@ -45,8 +45,8 @@ public abstract class RequestFromUIController
 	 */
 		
 	private ID 					requestID;
-	private OutgoingPacketQueue outgoingPacketQueue; // TODO what is this?
-	private InetSocketAddress	uiControllerAddress; // TODO what is this?
+	private OutgoingPacketQueue outgoingPacketQueue; 
+	private InetSocketAddress	uiControllerAddress; 
 	
 	public RequestFromUIController(ID id, InetSocketAddress uiController, OutgoingPacketQueue outgoingPacketQueue) 
 	{
