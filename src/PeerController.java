@@ -7,6 +7,8 @@ import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+// TODO comment
+
 public class PeerController implements Runnable {
 	/**
 	 * 

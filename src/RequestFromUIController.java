@@ -1,5 +1,7 @@
 import java.net.InetSocketAddress;
 
+//TODO comment
+
 public abstract class RequestFromUIController 
 {
 	/**
