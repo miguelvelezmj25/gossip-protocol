@@ -74,7 +74,7 @@ public class UIController
 		this.commandProcessor.register(new CommandQuit());
 		this.commandProcessor.register(new CommandSend());
 		this.commandProcessor.register(new CommandFind());
-		
+		this.commandProcessor.register(new CommandGet());
 
 	}
 
@@ -381,6 +381,22 @@ public class UIController
 	}
 	
 
+	public class CommandGet extends UIControllerCommand
+	{
+		/**
+		 * Creates the command
+		 */
+		public CommandGet()
+		{
+			super("get", "Search for something");
+		}
+
+		public void run()
+		{
+			this.sendToPeer();
+		}
+
+	}
 }
 
 
