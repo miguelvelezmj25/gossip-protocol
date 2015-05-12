@@ -186,8 +186,8 @@ public class PeerController implements Runnable {
 		GossipPartners.getInstance().send(communityMessage);
 						
 		// Check if the ID2 matches is one of our responses
-//		if(RequestManager.getInstance().getRequest(communityMessage.getID2()) != null) // TODO uncomment 
-		if(RequestManager.getInstance().getRequest(communityMessage.getID1()) != null) // TODO testing
+		if(RequestManager.getInstance().getRequest(communityMessage.getID2()) != null) // TODO uncomment 
+//		if(RequestManager.getInstance().getRequest(communityMessage.getID1()) != null) // TODO testing
 		{
 			// TODO almost done, just need to implement when getting a response for a get request
 			
@@ -217,7 +217,8 @@ public class PeerController implements Runnable {
 				
 		}
 		// Check if the ID2 matches one of our specific resources that the community wants
-		else if(ResourceManager.getInstance().getResourceFromID(communityMessage.getID2()) != null)
+//		else if(ResourceManager.getInstance().getResourceFromID(communityMessage.getID2()) != null) // TODO uncomment
+		else if(ResourceManager.getInstance().getResourceFromID(communityMessage.getID1()) != null) // TODO uncomment
 		{
 /////////////////// TODO all of this logic might be in a thread
 			// Create a message with format resourceID, requestID, TTL, randomId, part number, bytes. 
@@ -226,13 +227,17 @@ public class PeerController implements Runnable {
 			// Send to my peers
 			GossipPartners.getInstance().send(resourceMessage);
 /////////////////// TODO all of this logic should be in a thread
+			
+			System.out.println("We got a message");
 		}
 		// Check if the text criteria matches something we might have
-		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()).toLowerCase().trim()).length != 0)
+		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage())).length != 0)
 		{
 			// TODO still need to check if this is right
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
+			
+			System.out.println("Number of resources that match our files: " + resources.length);
 			
 			// Process each resource
 			for(Resource resource : resources)
@@ -253,7 +258,28 @@ public class PeerController implements Runnable {
 				UDPMessage resourceMessage = new UDPMessage(ID.idFactory(), communityMessage.getID1(), new TimeToLive(), resourceInfo.toString());
 				
 				// Send to my peers
-				GossipPartners.getInstance().send(resourceMessage);		
+				GossipPartners.getInstance().send(resourceMessage);	
+				
+				/////////////////// TODO delete testing
+				//			System.out.println("id1: " + findMessage.getID1());
+				//			System.out.println("id2: " + findMessage.getID2());
+							System.out.println("tll: " + resourceMessage.getTimeToLive());
+							System.out.println("message of the file we just sent: " + new String(resourceMessage.getMessage()));
+				
+							DatagramPacket send = resourceMessage.getDatagramPacket();
+								
+							send.setPort(12345);
+							
+							try {
+								send.setAddress(InetAddress.getLocalHost());
+				//				send.setAddress(InetAddress.getByName("10.20.38.174"));
+							} catch (UnknownHostException e) {
+								e.printStackTrace();
+							}
+							
+//							this.outgoingPacketsQueue.enQueue(send);
+				/////////////////// TODO delete	testing
+				
 			}
 		}
 		else {
@@ -297,11 +323,12 @@ public class PeerController implements Runnable {
 //			System.out.println(new String(findMessage.getMessage()));
 
 			DatagramPacket send = findMessage.getDatagramPacket();
-			
+				
 			send.setPort(12345);
 			
 			try {
 				send.setAddress(InetAddress.getLocalHost());
+//				send.setAddress(InetAddress.getByName("10.20.38.174"));
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
@@ -414,5 +441,7 @@ public class PeerController implements Runnable {
 	// TODO how do we calculate how many parts to send?
 	// TODO how to separate random ID and partNumber and bytes
 	// TODO Didn't you say start and end byte?
+	
+	// TODO when the community requests for a part number, I just send that part number, not with a thread.
 
 }

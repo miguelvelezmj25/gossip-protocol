@@ -12,10 +12,6 @@ public class UIControllerTester
 		uiControl = new UIController(new PortNumberUIPeer(54321), new PortNumberPeerUI(12346), 512);
 		uiControl.start();
 		
-		String s = ",get,0";
-		
-		System.out.println(Integer.parseInt(s.substring(5)));
-		
 	}
 
 }
