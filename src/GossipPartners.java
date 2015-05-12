@@ -57,7 +57,7 @@ public class GossipPartners
 	public void send(UDPMessage udpMessage)
 	{
 		//Sends the message to all the gossipPartners if the TTL is not zero
-		if(udpMessage.getTimeToLive() == 0)
+		if(udpMessage.getTimeToLive().getLengthInBytes() == 0)
 		{
 			//doesn't send
 		}
