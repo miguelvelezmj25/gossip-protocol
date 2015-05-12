@@ -1,24 +1,3 @@
-
-/**
- * The PartsNumber class is used by a Peer that has requested a resource from another peer.
- * Since it knows the resource size in bytes and the number of bytes per part 
- * (except for the last part), it is able to calculate the number of parts it 
- * will need to get from that other peer in order to have the complete resource (file).
- * 
- * The Peer is going to request a part periodically, but, since it is IP, it doesn't know 
- * if that request will arrive of if that part will be received. So, it keeps track of the 
- * parts it has received using the values in range thing.
- * 
- * It continues to get missing part numbers from the values in range and keeps updating 
- * the values in range when it receives parts until all parts have been received.
-
-
-I am still confused about the getBytes method because you only know the total number of parts missing and not the individual part numbers
- * 
- * 
- * */
-
-
 public class PartNumbers
 {
 	/*
@@ -42,16 +21,24 @@ public class PartNumbers
 		public static int getLengthInBytes()
 			Returns 4
 		public int numberOfMissingParts()
-			Returns the instance variable numberOfPartsMissing
+
 	*/
-	private int numberOfParts;
-	private int numberOfPartsMissing;
+	private int 		numberOfParts;
+//	private int 		numberOfPartsMissing;
+// everything in the boolean[] is set to false whenever the object is created
+
+	private boolean[]	partsReceived;
 
 	public PartNumbers(int numberOfParts)
 	{
 		if(numberOfParts>0)
 		{
 			this.numberOfParts = numberOfParts;
+		}
+		partsReceived = new boolean[numberOfParts];
+		for(int i=0; i<numberOfParts; i++)
+		{
+			partsReceived[i] = false;
 		}
 	}//constructor
 
@@ -61,32 +48,16 @@ public class PartNumbers
 		return this.numberOfParts;
 	}//get
 
-//CONFUSED ON THIS
-	public static byte[] getBytes(int size)
+
+//after each part number is recieved, you then call this to change it to true(received)
+	public boolean[] getBytes(int numberReceived)
 	{
 		//
-		byte[]	array;
-
-		array = new byte[size];
-
-		return array;
+		this.partsReceived[numberReceived] = true;
+		return this.partsReceived;
 	}//getBytes()
-	/*
-		public static boolean[] getBytes(int size)
-	{
-		//
-		boolean[]	array;
 
-		array = new boolean[size];
-		for(int i=0; i<size; i++)
-		{
-			array[i] = false;
-		}
-
-		return array;
-	}//getBytes()
-	*/
-	public static int getLengthInBytes()
+	public int getLengthInBytes()
 	{
 		//Returns 4
 		return 4;
@@ -94,8 +65,16 @@ public class PartNumbers
 
 	public int numberOfMissingParts()
 	{
-		//Returns the instance variable numberOfPartsMissing
-		return this.numberOfPartsMissing;
+		int missingParts;
+		missingParts = 0;
+		for(int i=0; i<get(); i++)
+		{
+			if(this.partsReceived[i]==false)
+			{
+				missingParts = missingParts+1;
+			}
+		}
+		return missingParts;
 	}//numberOfMissingParts
 
 }//class
