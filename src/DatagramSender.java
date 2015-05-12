@@ -29,6 +29,8 @@ public class DatagramSender extends DatagramSenderReceiver {
 			if(!queue.isEmpty())
 			{
 //				System.out.println("DatagramSender Sending packet: " + new String(queue.peek().getData()));
+//				System.out.println("DatagramSender Sending packet: " + queue.peek().getAddress());
+//				System.out.println("DatagramSender Sending packet: " + queue.peek().getPort());
 				datagramSocket.send(queue.deQueue());
 			}
 //			else {

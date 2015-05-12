@@ -47,6 +47,9 @@ public class RequestManager
 	 * 
 	 * 	 	May 10, 2015
 	 * 			Inserted requests in the directory.
+	 * 
+	 * 	 	May 12, 2015
+	 * 			Added check if there was a duplicate request.
 	 *  
 	 */
 	
@@ -98,8 +101,11 @@ public class RequestManager
 			throw new IllegalArgumentException("The request you provided is null");
 		}
 		
-		// Insert in the hash map
-		this.requestsDirectory.put(request.getID(), request);
+		// Check if the hash map already has this request ID, which should not happen
+		if(!this.requestsDirectory.containsKey(request.getID())) {
+			// Insert in the hash map
+			this.requestsDirectory.put(request.getID(), request);
+		}
 	}
 
 }

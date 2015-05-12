@@ -237,14 +237,14 @@ public class PeerController implements Runnable {
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
 			
-			System.out.println("Number of resources that match our files: " + resources.length);
+//			System.out.println("Number of resources that match our files: " + resources.length);
 			
 			// Process each resource
 			for(Resource ourResource : resources)
 			{
 				// Adding random ID
-				StringBuilder resourceInfo = new StringBuilder(ID.idFactory().getAsHex());
-				
+				StringBuilder resourceInfo = new StringBuilder(new String(ID.idFactory().getBytes()));
+								
 				// Add mimeType, length, and description
 				resourceInfo.append(",");
 				resourceInfo.append(ourResource.getMimeType());
@@ -260,10 +260,10 @@ public class PeerController implements Runnable {
 				GossipPartners.getInstance().send(resourceMessage);	
 				
 				/////////////////// TODO delete testing
-				//			System.out.println("id1: " + findMessage.getID1());
-				//			System.out.println("id2: " + findMessage.getID2());
+//							System.out.println("id1: " + resourceMessage.getID1().getBytes().length);
+//							System.out.println("id2: " + resourceMessage.getID2().getBytes().length);
 //							System.out.println("tll: " + resourceMessage.getTimeToLive());
-							System.out.println("message of the file we just sent: " + new String(resourceMessage.getMessage()));
+//							System.out.println("message of the file we just sent: " + new String(resourceMessage.getMessage()));
 				
 							DatagramPacket send = resourceMessage.getDatagramPacket();
 								
@@ -315,7 +315,7 @@ public class PeerController implements Runnable {
 									
 			GossipPartners.getInstance().send(findMessage);
 			
-/////////////////// TODO delete testing
+///////////////// TODO delete testing
 //			System.out.println("id1: " + findMessage.getID1());
 //			System.out.println("id2: " + findMessage.getID2());
 //			System.out.println("tll: " + findMessage.getTimeToLive());
