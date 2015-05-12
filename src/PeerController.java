@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 // TODO comment
@@ -36,13 +35,10 @@ public class PeerController implements Runnable {
 	 * 
 	 * 		DatagramReceiver receiveFromCommunity
 	 * 			Receiver for the community
-	 * 
-	 * 		ResourceManager resourceManager
-	 * 			Manager for this peer's resources
-	 * 
-	 * 		RequestManager requestManager
-	 * 			Manager for this peer's requests
-	 * 
+	 * 		
+	 * 		InetSocketAddress uiControllerAddress
+	 * 			Address and port of the ui
+	 *  
 	 * 		DatagramSender sender
 	 * 			Sender for the ui or the community
 	 * 
@@ -82,8 +78,11 @@ public class PeerController implements Runnable {
 	 * 		May 8, 2015
 	 * 			Implemented receiving from the UI
 	 * 
-	 * 		May 8, 2015
+	 * 		May 9, 2015
 	 * 			Process requests from the UI
+	 * 
+	 * 	 	May 11, 2015
+	 * 			Receiving packets from the community
 	 * 
 	 */
 	
@@ -95,8 +94,6 @@ public class PeerController implements Runnable {
 	private DatagramReceiver        receiveFromCommunity;
 	private DatagramSender			sender;
 	private InetSocketAddress		uiControllerAddress;
-	
-	// TODO save resources
 	
 	// TODO have to check what parameter we need to get
 	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort, InetSocketAddress uiControllerAddress) 
@@ -118,7 +115,7 @@ public class PeerController implements Runnable {
 		} 
 		catch (SocketException se) 
 		{
-				se.printStackTrace();
+			se.printStackTrace();
 		} 
 	
 	}
@@ -176,7 +173,6 @@ public class PeerController implements Runnable {
 		
 	}
 
-
 	private void processCommandFromCommunity() {
 		// Process a command from the community
 		
@@ -190,44 +186,51 @@ public class PeerController implements Runnable {
 		GossipPartners.getInstance().send(communityMessage);
 						
 		// Check if the ID2 matches is one of our responses
-		if(RequestManager.getInstance().getRequest(communityMessage.getID1()) != null) // TODO should be 2
+//		if(RequestManager.getInstance().getRequest(communityMessage.getID2()) != null) // TODO uncomment 
+		if(RequestManager.getInstance().getRequest(communityMessage.getID1()) != null) // TODO testing
 		{
+			// TODO almost done, just need to implement when getting a response for a get request
+			
 			// Check if it is a find
-			if(RequestManager.getInstance().getRequest(communityMessage.getID1()).getClass() == RequestFromUIControllerToFindResources.class)  // TODO should be 2
+//			if(RequestManager.getInstance().getRequest(communityMessage.getID2()).getClass() == RequestFromUIControllerToFindResources.class)  // TODO uncomment
+			if(RequestManager.getInstance().getRequest(communityMessage.getID1()).getClass() == RequestFromUIControllerToFindResources.class)  // TODO testing
 			{
-				// TODO done
 				// Get the find request
-				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(communityMessage.getID1());  // TODO should be 2
+//				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(communityMessage.getID2());  // TODO uncomment
+				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(communityMessage.getID1());  // TODO testing				
 				
 				// Update this request
 				findRequest.updateRequest(communityMessage);				
 			}
 			// Check if it is a find or a get
-			else if(RequestManager.getInstance().getRequest(communityMessage.getID1()).getClass() == RequestFromUIControllerToGetaResource.class) // TODO should be 2
+//			else if(RequestManager.getInstance().getRequest(communityMessage.getID2()).getClass() == RequestFromUIControllerToGetaResource.class) // TODO uncomment
+			else if(RequestManager.getInstance().getRequest(communityMessage.getID1()).getClass() == RequestFromUIControllerToGetaResource.class) // TODO testing
+						
 			{
-				// TODO still need to implement
-				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) RequestManager.getInstance().getRequest(communityMessage.getID1());  // TODO should be 2
-
+//				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) RequestManager.getInstance().getRequest(communityMessage.getID2());  // TODO uncomment
+				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) RequestManager.getInstance().getRequest(communityMessage.getID1());  // TODO testing
+				
 				System.out.println("get: " + getRequest.getID());
+				
+				// TODO don't I have to just send the bytes to the UI? Maybe the starting, end byte, length?
 			}
 				
 		}
-		// Check if the ID2 matches one of our resources
+		// Check if the ID2 matches one of our specific resources that the community wants
 		else if(ResourceManager.getInstance().getResourceFromID(communityMessage.getID2()) != null)
 		{
-			// TODO still need to implement
-			// TODO the community has requested an specific resource
-			// Create a message with format resourceID, requestID, TTL, description // TODO
+/////////////////// TODO all of this logic might be in a thread
+			// Create a message with format resourceID, requestID, TTL, randomId, part number, bytes. 
 			UDPMessage resourceMessage = new UDPMessage(communityMessage.getID2(), communityMessage.getID1(), new TimeToLive(), "");
 			
 			// Send to my peers
-			GossipPartners.getInstance().send(resourceMessage);		
-			
+			GossipPartners.getInstance().send(resourceMessage);
+/////////////////// TODO all of this logic should be in a thread
 		}
 		// Check if the text criteria matches something we might have
-		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage())).length != 0)
+		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()).toLowerCase().trim()).length != 0)
 		{
-			// TODO still need to implement
+			// TODO still need to check if this is right
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
 			
@@ -254,7 +257,7 @@ public class PeerController implements Runnable {
 			}
 		}
 		else {
-			System.out.println("Testing receiving from community");
+			System.out.println("Testing that the peer is listening to the community: " + new String(communityMessage.getMessage()));
 		}
 	}
 
@@ -266,7 +269,7 @@ public class PeerController implements Runnable {
 		DatagramPacket uiPacket = this.incomingPacketsFromUIQueue.deQueue();
 		
 		// Set the command to lower case
-		String uiCommand = new String(uiPacket.getData()).toLowerCase();
+		String uiCommand = new String(uiPacket.getData()).toLowerCase().trim();
 		
 		char delimiter = uiCommand.charAt(0);
 				
@@ -281,13 +284,13 @@ public class PeerController implements Runnable {
 			
 			// Save it in our request manager
 			RequestManager.getInstance().insertRequest(findRequest);
-					
+								
 			// Create a UDP message with format RequestID, random ID, TTL, text
 			UDPMessage findMessage = new UDPMessage(findId, ID.idFactory(), new TimeToLive(), uiCommand.substring(6));
 									
-//			GossipPartners.getInstance().send(findMessage);			// TODO uncomment
+			GossipPartners.getInstance().send(findMessage);
 			
-/////////////////// TODO delete since we are done
+/////////////////// TODO delete testing
 //			System.out.println("id1: " + findMessage.getID1());
 //			System.out.println("id2: " + findMessage.getID2());
 //			System.out.println("tll: " + findMessage.getTimeToLive());
@@ -300,12 +303,11 @@ public class PeerController implements Runnable {
 			try {
 				send.setAddress(InetAddress.getLocalHost());
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			this.outgoingPacketsQueue.enQueue(send);
-/////////////////// TODO delete	
+/////////////////// TODO delete	testing
 		}
 		// Check if it is a get request
 		else if(uiCommand.indexOf(delimiter + "get") == 0) 
@@ -315,23 +317,24 @@ public class PeerController implements Runnable {
 			// create a get request
 			RequestFromUIControllerToGetaResource getRequest = new RequestFromUIControllerToGetaResource(getId, uiControllerAddress, this.outgoingPacketsQueue);
 			
-			// save it in our request manager
+			// Save it in our request manager
 			RequestManager.getInstance().insertRequest(getRequest);
-						
-			// Split the response
-			String uiResourceID = uiCommand.split(""+ delimiter)[2];
 			
-			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiResourceID));
+			// Get the resource id			
+			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
 			
-			// Create a UDP message with format RequestID, ResourceID, TTL, text // TODO we need to get the resource id
-			UDPMessage getMessage = new UDPMessage(getId, resourceID, new TimeToLive(), uiCommand.split(""+ delimiter)[3]);
+/////////////////// TODO all of this logic should be in a thread
+			// TODO this is where a new object should be created that uses a thread to request for parts			
+			// Create a UDP message with format RequestID, ResourceID, TTL, text 
+			UDPMessage getMessage = new UDPMessage(getId, resourceID, new TimeToLive(), ID.idFactory().getAsHex()); // TODO there is no part number
 			
-//			GossipPartners.getInstance().send(getMessage);			// TODO uncomment
+			GossipPartners.getInstance().send(getMessage);
 			
-		System.out.println("id1: " + getMessage.getID1());
-		System.out.println("id2: " + getMessage.getID2());
-		System.out.println("tll: " + getMessage.getTimeToLive());
-		System.out.println(new String(getMessage.getMessage()));
+			System.out.println("id1: " + getMessage.getID1());
+			System.out.println("id2: " + getMessage.getID2());
+			System.out.println("tll: " + getMessage.getTimeToLive());
+			System.out.println("message: " + new String(getMessage.getMessage()));
+/////////////////// TODO all of this logic should be in a thread
 			
 /////////////////// TODO delete
 //
@@ -352,7 +355,6 @@ public class PeerController implements Runnable {
 		// The UI send an invalid command, send error back
 		else
 		{
-			// TODO We are done
 			System.out.println("UIController, you sent a bad request to the PeerController");
 //			String message = "UIController, you sent a bad request to the PeerController"; 
 //			byte[] buffer = new byte[message.getBytes().length];
@@ -400,5 +402,17 @@ public class PeerController implements Runnable {
 		// Check iff the peer is done processing packets
 		return this.done.get();
 	}
+	
+	// TODO create a class to REQUEST A RESOURCE
+	// TODO Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber
+	// TODO how do we calculate how many parts to request?
+	// TODO how to separate random ID and partNumber
+	// TODO Didn't you say start and end byte?
+	
+	// TODO maybe create a class to SEND A RESOURCE
+	// TODO Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber, bytes
+	// TODO how do we calculate how many parts to send?
+	// TODO how to separate random ID and partNumber and bytes
+	// TODO Didn't you say start and end byte?
 
 }
