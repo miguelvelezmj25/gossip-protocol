@@ -353,7 +353,7 @@ public class UIController
 		 */
 		public CommandSend()
 		{
-			super("get", "send a packet from the outgoing queue");
+			super("send", "send a packet from the outgoing queue");
 		}
 
 		public void run()
