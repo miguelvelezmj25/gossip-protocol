@@ -57,7 +57,7 @@ public class PartNumbers
 		return this.partsReceived;
 	}//getBytes()
 
-	public int getLengthInBytes()
+	public static int getLengthInBytes()
 	{
 		//Returns 4
 		return 4;
