@@ -96,7 +96,7 @@ public class Resource
 	public boolean matches(String searchString)
 	{
 		String otherString;
-		otherString = searchString.toLowerCase();
+		otherString = searchString.toLowerCase().trim();
 		return description.contains(otherString) || mimeType.contains(otherString) || resourceID.toString().contains(otherString) || location.getAbsolutePath().contains(otherString);
 	}
 	
