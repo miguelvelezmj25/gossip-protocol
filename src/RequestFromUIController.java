@@ -1,7 +1,5 @@
 import java.net.InetSocketAddress;
 
-//TODO comment
-
 public abstract class RequestFromUIController 
 {
 	/**
@@ -15,6 +13,13 @@ public abstract class RequestFromUIController
 	 * 
 	 * 		private ID requestID
 	 * 			the request id
+	 * 
+	 * 		private OutgoingPacketQueue outgoingPacketQueue; 
+	 * 			the outgoing packet queue to send packets to the UI
+	 * 
+	 * 		private InetSocketAddress uiControllerAddress;
+	 * 			the UI controller address which should be local host and the port number
+	 * 			that it listen to 
 	 * 
 	 * Constructors:
 	 * 		
