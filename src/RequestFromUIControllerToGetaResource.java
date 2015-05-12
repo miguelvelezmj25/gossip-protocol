@@ -1,6 +1,5 @@
 import java.net.InetSocketAddress;
-
-//TODO comment
+import java.util.ArrayList;
 
 public class RequestFromUIControllerToGetaResource extends RequestFromUIController 
 {
@@ -9,10 +8,11 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	 * Miguel Velez
 	 * April 29, 2015
 	 * 
-	 * This class is a request from ui controller to get a resouce
+	 * This class is a request from ui controller to get a resource
 	 * 
 	 * Class variables:
-	 * 
+	 * 		
+	 * 		private ArrayList<ID> responses; 
 	 * 
 	 * Constructors:
 	 * 		
@@ -32,7 +32,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	 *  
 	 */
 	
-//	private ArrayList<ID> responses; // TODO what collection should we use // TODO this is not shared among the class
+	private ArrayList<ID> responses; 
 	
 	public RequestFromUIControllerToGetaResource(ID id, InetSocketAddress uiController, OutgoingPacketQueue outgoingPacket) 
 	{
