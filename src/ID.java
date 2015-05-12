@@ -1,8 +1,6 @@
 import java.net.DatagramPacket;
 import java.security.SecureRandom;
 
-//TODO comment
-
 public class ID 
 {
 	/**

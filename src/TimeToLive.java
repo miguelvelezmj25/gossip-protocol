@@ -1,20 +1,23 @@
 
-// TODO comment
-
 public class TimeToLive 
 {
 	/**
 	 * 
 	 * Miguel Velez
-	 * February 19, 2015
+	 * April 14, 2015
 	 * 
 	 * This class determines the time to live of messages that are sent around.
 	 * 
 	 * Class variables:
+	 * 
 	 * 		int timeToLive;
 	 * 			the time to live of the packets that are sent.
 	 *  
 	 * Constructors:
+	 * 
+	 * 		public TimeToLive()
+	 * 			default constructor
+	 * 
 	 * 		public TimeToLive(int timeToLive) 
 	 * 			constructor that sets the time to live.
 	 * 
