@@ -46,6 +46,9 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 
 	 * 		May 10, 2015
 	 * 			Added the community resources object.
+	 * 
+	 * 	 	May 11, 2015
+	 * 			Was saving the wrong ID in the responses.
 	 */
 	
 	private static ArrayList<CommunityResources> communityResources = new ArrayList<RequestFromUIControllerToFindResources.CommunityResources>();
@@ -74,17 +77,14 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 		if(udpMessage == null) 
 		{
 			throw new IllegalArgumentException("The UDP message that you provided is null");
-		}
-		
+		}		
 		
 		// Check if we have received this response
-		if(!responses.contains(udpMessage.getID1()))
+		if(!responses.contains(udpMessage.getID2()))
 		{
 			// Add to our responses
-			responses.add(udpMessage.getID1());
-			
-			System.out.println(udpMessage.getID1());
-			
+			responses.add(udpMessage.getID2());
+						
 			// Get the response to a string
 			String response = new String(udpMessage.getMessage());
 			
@@ -102,7 +102,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 									") Description(" + resource.getDescription() + 
 									") MimeType(" + resource.getMimeType() +
 									") Length (" + resource.getLength() + ")");	
-			
+						
 			// Add this resource to our history
 			RequestFromUIControllerToFindResources.communityResources.add(communityResourcesId, resource);
 			RequestFromUIControllerToFindResources.communityResourcesId++;
