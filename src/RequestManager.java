@@ -1,7 +1,5 @@
 import java.util.HashMap;
 
-//TODO comment
-
 public class RequestManager 
 {
 	/**
@@ -46,6 +44,9 @@ public class RequestManager
 	 * 
 	 * 	 	May 7, 2015
 	 * 			Rename classes.
+	 * 
+	 * 	 	May 10, 2015
+	 * 			Inserted requests in the directory.
 	 *  
 	 */
 	
