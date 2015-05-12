@@ -102,6 +102,9 @@ public class ID
 	 * 
 	 * 		April 28, 2015
 	 * 			Added some comments.
+	 * 
+	 * 		May 10, 2015
+	 * 			Fixed hashcode
 	 *  
 	 */
 
@@ -307,7 +310,6 @@ public class ID
 	public boolean equals(Object other)
 	{
 		// Checks to see if two ID objects have the same internal bytes. 
-		// TODO is this how it should be implemented
 		if(this == other) {
 			return true;
 		}

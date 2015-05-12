@@ -189,8 +189,48 @@ public class UIController
 			dp.setPort(peerAddress.getPort());
 			dp.setData(message.getBytes());
 			
+//			System.out.println(new String(message.getBytes()));
+			
 			outgoingPacketsToPeerQueue.enQueue(dp);
 
+//			ID id1;
+//			ID id2;
+//			UDPMessage udpMessage;
+//			TimeToLive ttl;
+//			
+//			ttl = new TimeToLive(70);
+//			
+//			id1 = ID.idFactory();
+//			id2 = ID.idFactory();
+//			
+////			udpMessage = new UDPMessage(id1, id2, ttl, this.getCommandName());
+////			DatagramPacket dp = udpMessage.getDatagramPacket();
+//			
+//		
+//			
+//			String message = "jklsadf"; // TODO do not hardcode a message
+//			byte[] buffer = new byte[message.getBytes().length];
+//			
+//			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+//			
+////			System.out.println("Set address to local host");
+//			try {
+//				dp.setAddress(InetAddress.getLocalHost());
+//			} catch (UnknownHostException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+////			System.out.println("Set port: " + peerAddress.getPort());
+//			dp.setPort(peerAddress.getPort());
+//			
+////			System.out.println("Set packet data");
+//			dp.setData(message.getBytes());
+//			
+//			// TODO we are not using outgoing queue
+//			outgoingPacketsToPeerQueue.enQueue(dp);
+////			sendToPeer.startAsThread();
+			
 		}
 		
 	}
@@ -313,7 +353,7 @@ public class UIController
 		 */
 		public CommandSend()
 		{
-			super("send", "send a packet from the outgoing queue");
+			super("get", "send a packet from the outgoing queue");
 		}
 
 		public void run()
