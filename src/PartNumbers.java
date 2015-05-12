@@ -71,7 +71,21 @@ public class PartNumbers
 
 		return array;
 	}//getBytes()
+	/*
+		public static boolean[] getBytes(int size)
+	{
+		//
+		boolean[]	array;
 
+		array = new boolean[size];
+		for(int i=0; i<size; i++)
+		{
+			array[i] = false;
+		}
+
+		return array;
+	}//getBytes()
+	*/
 	public static int getLengthInBytes()
 	{
 		//Returns 4
