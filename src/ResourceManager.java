@@ -44,7 +44,7 @@ public class ResourceManager
 				resource = new Resource(resourceID,line);
 				resourceDirectory.put(resourceID, resource);
 				
-				
+				line = bf.readLine();
 			}
 		}
 		catch(FileNotFoundException fnfe)

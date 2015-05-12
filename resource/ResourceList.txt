@@ -1,0 +1,2 @@
+~text/plain~resource/A Modest Proposal.txt~A Modest Proposal, Jonathan Swift
+~text/plain~resource/dog.txt~Dog, bark bark woof

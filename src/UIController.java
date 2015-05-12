@@ -1,3 +1,4 @@
+import java.io.File;
 import java.net.*;
 import java.util.*;
 
@@ -87,7 +88,7 @@ public class UIController
 		UIControllerCommand command;
 		String				userCommand;
 		
-		
+		ResourceManager.getInstance().loadResourcesFrom(new File("resource/ResourceList.txt"));
 		//Start Threads
 		receiveFromPeer.startAsThread();
 		sendToPeer.startAsThread();
