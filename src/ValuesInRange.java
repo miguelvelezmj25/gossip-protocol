@@ -1,6 +1,7 @@
 public class ValuesInRange
 {
 	/*
+	
 	Courtney Karppi
 	CISC 370
 	February 12, 2015
