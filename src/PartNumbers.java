@@ -1,3 +1,24 @@
+
+/**
+ * The PartsNumber class is used by a Peer that has requested a resource from another peer.
+ * Since it knows the resource size in bytes and the number of bytes per part 
+ * (except for the last part), it is able to calculate the number of parts it 
+ * will need to get from that other peer in order to have the complete resource (file).
+ * 
+ * The Peer is going to request a part periodically, but, since it is IP, it doesn't know 
+ * if that request will arrive of if that part will be received. So, it keeps track of the 
+ * parts it has received using the values in range thing.
+ * 
+ * It continues to get missing part numbers from the values in range and keeps updating 
+ * the values in range when it receives parts until all parts have been received.
+
+
+I am still confused about the getBytes method because you only know the total number of parts missing and not the individual part numbers
+ * 
+ * 
+ * */
+
+
 public class PartNumbers
 {
 	/*
