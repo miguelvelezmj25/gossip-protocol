@@ -1,8 +1,6 @@
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
-//TODO comment
-
 public class RequestFromUIControllerToFindResources extends RequestFromUIController 
 {
 	/**
@@ -14,6 +12,14 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 
 	 * Class variables:
 	 * 
+	 * 		private static ArrayList<CommunityResources> communityResources
+	 * 			all the resources that the UI requested and got a response to
+	 * 		
+	 * 		private static int communityResourcesId
+	 * 			the total number of resources that the ui requested and got a response to
+	 * 
+	 * 		private ArrayList<ID> responses
+	 * 			the specific responses that the ui requested 
 	 * 
 	 * Constructors:
 	 * 		
@@ -24,6 +30,10 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 	 	
 	 * 		public void updateRequest(UDPMessage udpMessage);
 	 *			update the request
+	 *
+	 *		public static ID getResource(int communityResourceID) 
+	 *			get the resource that the UI got based on the community
+	 *			resource ID
 	 * 
 	 *      
 	 * Modification History:
@@ -33,12 +43,15 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 
 	 * 		May 7, 2015
 	 * 			Rename class.
+	 * 
+	 * 		May 10, 2015
+	 * 			Added the community resources object.
 	 */
 	
 	private static ArrayList<CommunityResources> communityResources = new ArrayList<RequestFromUIControllerToFindResources.CommunityResources>();
 	private static int							 communityResourcesId = 0;
 	
-	private ArrayList<ID> responses; // TODO this is not shared among the class
+	private ArrayList<ID> responses; 
 	
 	public RequestFromUIControllerToFindResources(ID id, InetSocketAddress uiControllerAccess, OutgoingPacketQueue outgoingPacketQueue) 
 	{
@@ -88,7 +101,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			System.out.println("Resource(" + RequestFromUIControllerToFindResources.communityResourcesId + 
 									") Description(" + resource.getDescription() + 
 									") MimeType(" + resource.getMimeType() +
-									") Length (" + resource.getlength() + ")");	
+									") Length (" + resource.getLength() + ")");	
 			
 			// Add this resource to our history
 			RequestFromUIControllerToFindResources.communityResources.add(communityResourcesId, resource);
@@ -96,43 +109,48 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			
 		}
 		
-		// TODO save in a collection and print 6: ID, mime type, length
 	}
 	
-	
-	// TODO Comment
-	
+
 	private class CommunityResources 
 	{
-		
 		/**
 		 * 
 		 * Miguel Velez
-		 * April 29, 2015
+		 * May 10, 2015
 		 * 
-		 * This class is a request from the ui controller to find resources
+		 * This class is a resource from the community that the UI searched for
 		 * 
 		 * Class variables:
 		 * 
 		 * 
 		 * Constructors:
 		 * 		
-		 * 		public RequestFromUIControllerToFindResources(ID id)  
-		 * 			create a request to find resources from peers
+		 * 		public CommunityResources(ID resourceID, String delimiter, String mimeType, String length, String description)
+		 * 			create a resource from the community
 		 * 
 		 * Methods:
-		 * 	 	
-		 * 		public void updateRequest(UDPMessage udpMessage);
-		 *			update the request
 		 * 
-		 *      
+		 * 		public String getDelimiter
+		 * 			gets the delimiter
+		 * 
+		 * 		public String getMimeType
+		 * 			gets the mime type
+		 * 
+		 * 		public String getLength
+		 * 			gets the length()
+		 * 
+		 * 		public String getDescription
+		 * 			gets the description
+		 * 
+		 * 		public ID getResourceID
+		 * 			gets the resource ID
+		 * 
+		 *        
 		 * Modification History:
-		 *  
-		 * 		April 29, 2015
+		 *   
+		 * 		May 10, 2015
 		 * 			Original version.
-		 * 
-		 * 		May 7, 2015
-		 * 			Rename class.
 		 */
 		
 		private ID		resourceID;
@@ -141,7 +159,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 		private String 	length;
 		private String 	description;
 		
-		private CommunityResources(ID resourceID, String delimiter, String mimeType, String length, String description)
+		public CommunityResources(ID resourceID, String delimiter, String mimeType, String length, String description)
 		{
 			this.resourceID = resourceID; // TODO do i have to clone this?
 			this.delimiter = delimiter;
@@ -161,7 +179,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			return this.mimeType;
 		}
 
-		public String getlength()
+		public String getLength()
 		{
 			return this.length;
 		}
