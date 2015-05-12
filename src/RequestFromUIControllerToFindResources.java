@@ -84,9 +84,26 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 		{
 			// Add to our responses
 			responses.add(udpMessage.getID2());
-						
+			
+			// Get the description of the resource
+			byte[] resourceDescription = new byte[udpMessage.getMessage().length];
+			resourceDescription = udpMessage.getMessage();
+			
+			System.out.println(resourceDescription.length);
+			
+			// Get the text part
+			byte[] resourceText = new byte[resourceDescription.length - ID.getLengthInBytes()];
+
+			System.out.println(resourceText.length);
+			
+			System.arraycopy(resourceDescription, ID.getLengthInBytes(), resourceText, 0, resourceText.length);
+			
 			// Get the response to a string
-			String response = new String(udpMessage.getMessage());
+			String response = new String(resourceText);
+			
+			System.out.println(resourceDescription[0]);
+			
+			System.out.println("text:" + response);
 			
 			// Get the delimiter
 			char delimiter = response.charAt(0);

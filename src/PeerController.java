@@ -186,29 +186,30 @@ public class PeerController implements Runnable {
 		GossipPartners.getInstance().send(communityMessage);
 						
 		// Check if the ID2 matches is one of our responses
-		if(RequestManager.getInstance().getRequest(communityMessage.getID2()) != null) // TODO uncomment 
-//		if(RequestManager.getInstance().getRequest(communityMessage.getID1()) != null) // TODO testing
+		RequestFromUIController request = RequestManager.getInstance().getRequest(communityMessage.getID2()); // TODO uncomment
+//		RequestFromUIController request = RequestManager.getInstance().getRequest(communityMessage.getID1()); // TODO testing
+
+//		Resource resource = ResourceManager.getInstance().getResourceFromID(communityMessage.getID2()); // TODO uncomment
+		Resource resource = ResourceManager.getInstance().getResourceFromID(communityMessage.getID1()); // TODO testing
+		
+		if(request != null) 
 		{
 			// TODO almost done, just need to implement when getting a response for a get request
 			
 			// Check if it is a find
-//			if(RequestManager.getInstance().getRequest(communityMessage.getID2()).getClass() == RequestFromUIControllerToFindResources.class)  // TODO uncomment
-			if(RequestManager.getInstance().getRequest(communityMessage.getID1()).getClass() == RequestFromUIControllerToFindResources.class)  // TODO testing
+			if(request.getClass() == RequestFromUIControllerToFindResources.class)  
 			{
 				// Get the find request
-//				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(communityMessage.getID2());  // TODO uncomment
-				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) RequestManager.getInstance().getRequest(communityMessage.getID1());  // TODO testing				
+				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) request;  		
 				
 				// Update this request
 				findRequest.updateRequest(communityMessage);				
 			}
+			
 			// Check if it is a find or a get
-//			else if(RequestManager.getInstance().getRequest(communityMessage.getID2()).getClass() == RequestFromUIControllerToGetaResource.class) // TODO uncomment
-			else if(RequestManager.getInstance().getRequest(communityMessage.getID1()).getClass() == RequestFromUIControllerToGetaResource.class) // TODO testing
-						
+			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
 			{
-//				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) RequestManager.getInstance().getRequest(communityMessage.getID2());  // TODO uncomment
-				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) RequestManager.getInstance().getRequest(communityMessage.getID1());  // TODO testing
+				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
 				
 				System.out.println("get: " + getRequest.getID());
 				
@@ -217,8 +218,7 @@ public class PeerController implements Runnable {
 				
 		}
 		// Check if the ID2 matches one of our specific resources that the community wants
-//		else if(ResourceManager.getInstance().getResourceFromID(communityMessage.getID2()) != null) // TODO uncomment
-		else if(ResourceManager.getInstance().getResourceFromID(communityMessage.getID1()) != null) // TODO uncomment
+		else if(resource != null) 
 		{
 /////////////////// TODO all of this logic might be in a thread
 			// Create a message with format resourceID, requestID, TTL, randomId, part number, bytes. 
@@ -240,22 +240,21 @@ public class PeerController implements Runnable {
 			System.out.println("Number of resources that match our files: " + resources.length);
 			
 			// Process each resource
-			for(Resource resource : resources)
+			for(Resource ourResource : resources)
 			{
 				// Adding random ID
 				StringBuilder resourceInfo = new StringBuilder(ID.idFactory().getAsHex());
 				
 				// Add mimeType, length, and description
 				resourceInfo.append(",");
-				resourceInfo.append(resource.getMimeType());
+				resourceInfo.append(ourResource.getMimeType());
 				resourceInfo.append(",");
-				resourceInfo.append(resource.getSizeInBytes());
+				resourceInfo.append(ourResource.getSizeInBytes());
 				resourceInfo.append(",");
-				resourceInfo.append(resource.getDescription());
-				resourceInfo.append(",");
+				resourceInfo.append(ourResource.getDescription());
 						
 				// Create a message with format resourceID, peerID, TTL, description
-				UDPMessage resourceMessage = new UDPMessage(ID.idFactory(), communityMessage.getID1(), new TimeToLive(), resourceInfo.toString());
+				UDPMessage resourceMessage = new UDPMessage(ourResource.getID(), communityMessage.getID1(), new TimeToLive(), resourceInfo.toString());
 				
 				// Send to my peers
 				GossipPartners.getInstance().send(resourceMessage);	
@@ -263,7 +262,7 @@ public class PeerController implements Runnable {
 				/////////////////// TODO delete testing
 				//			System.out.println("id1: " + findMessage.getID1());
 				//			System.out.println("id2: " + findMessage.getID2());
-							System.out.println("tll: " + resourceMessage.getTimeToLive());
+//							System.out.println("tll: " + resourceMessage.getTimeToLive());
 							System.out.println("message of the file we just sent: " + new String(resourceMessage.getMessage()));
 				
 							DatagramPacket send = resourceMessage.getDatagramPacket();
@@ -277,7 +276,7 @@ public class PeerController implements Runnable {
 								e.printStackTrace();
 							}
 							
-//							this.outgoingPacketsQueue.enQueue(send);
+							this.outgoingPacketsQueue.enQueue(send);
 				/////////////////// TODO delete	testing
 				
 			}
@@ -436,11 +435,7 @@ public class PeerController implements Runnable {
 	// TODO how to separate random ID and partNumber
 	// TODO Didn't you say start and end byte?
 	
-	// TODO maybe create a class to SEND A RESOURCE
-	// TODO Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber, bytes
-	// TODO how do we calculate how many parts to send?
-	// TODO how to separate random ID and partNumber and bytes
-	// TODO Didn't you say start and end byte?
+
 	
 	// TODO when the community requests for a part number, I just send that part number, not with a thread.
 
