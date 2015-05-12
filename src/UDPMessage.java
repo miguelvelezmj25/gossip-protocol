@@ -76,11 +76,11 @@ public class UDPMessage
 		//the four parts of the message then it determines the size of the byte[] for the message.
 		//If it does not then it calles the InvalidPacketFormatException class.
 		byte[]		data;
-		int			messageLength;
+		int		messageLength;
 
 		data = datagramPacket.getData();
 
-		if(data.length>0 && data.length<512)
+		if(data.length>0 && data.length<=512)
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
