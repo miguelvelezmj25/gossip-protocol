@@ -175,7 +175,6 @@ public class ID
 	public synchronized static ID idFactory()
 	{
 		// Checks if the queue length is equal to 0. If so, returns an ID from the queue. If not, constructs a new ID.
-		// TODO How is this used
 		ID returnID;
 
 		// If there are not any ids available, get a new one

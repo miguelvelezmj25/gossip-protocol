@@ -163,7 +163,7 @@ public abstract class Command implements Cloneable, Comparable<Command>, Runnabl
 	public boolean equals(Object other) 
 	{		
 		// Check if the command objects are the same
-		// TODO is this right
+		
 		// Check if they are the same command
 		if(this == other) {
 			return true;
