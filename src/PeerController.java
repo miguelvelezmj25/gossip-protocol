@@ -95,7 +95,6 @@ public class PeerController implements Runnable {
 	private DatagramSender			sender;
 	private InetSocketAddress		uiControllerAddress;
 	
-	// TODO have to check what parameter we need to get
 	public PeerController(PortNumberPeerCommunity communityPort, PortNumberPeerUI uiPort, InetSocketAddress uiControllerAddress) 
 	{
 		// TODO what is packet size
@@ -112,11 +111,19 @@ public class PeerController implements Runnable {
 			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);			
 			
 			this.uiControllerAddress = uiControllerAddress;
+			
+			GossipPartners.getInstance().addPartner(new GossipPartner(new InetSocketAddress(InetAddress.getLocalHost(), 12345), this.outgoingPacketsQueue));
+//			GossipPartners.getInstance().addPartner(new GossipPartner(new InetSocketAddress(InetAddress.getByName("140.209.121.69"), 12345), this.outgoingPacketsQueue));
+
 		} 
 		catch (SocketException se) 
 		{
 			se.printStackTrace();
 		} 
+		catch (UnknownHostException ue)
+		{
+			ue.printStackTrace();
+		}
 	
 	}
 	
@@ -235,9 +242,10 @@ public class PeerController implements Runnable {
 			int partNumberRequested = Integer.parseInt(new String(partRequested).trim());
 			
 			// Attache the bytes of the resource
-//			resource.getBytes(456 * (partNumberRequested - 1), 456 * (partNumberRequested)); // TODO waiting for this to be implemented
-			resourceResponse.append("\n" + (456 * (partNumberRequested - 1)) + ",");
-			resourceResponse.append(456 * (partNumberRequested));
+			resourceResponse.append(new String(resource.getBytesForPart(partNumberRequested)));
+
+			System.out.println(resource.getBytesForPart(partNumberRequested).length);
+			System.out.println(new String(resource.getBytesForPart(partNumberRequested)));
 			
 			// Create a message with format resourceID, requestID, TTL, randomId, part number, bytes. 
 			UDPMessage resourceMessage = new UDPMessage(communityMessage.getID2(), communityMessage.getID1(), new TimeToLive(), resourceResponse.toString());
@@ -250,7 +258,9 @@ public class PeerController implements Runnable {
 		{
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
-						
+			
+			System.out.println("Somebody is searching our files");
+			
 			// Process each resource
 			for(Resource ourResource : resources)
 			{
@@ -283,7 +293,7 @@ public class PeerController implements Runnable {
 				
 				try {
 					send.setAddress(InetAddress.getLocalHost());
-	//				send.setAddress(InetAddress.getByName("10.20.38.174"));
+//					send.setAddress(InetAddress.getByName("140.209.121.69"));
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
 				}
@@ -294,7 +304,7 @@ public class PeerController implements Runnable {
 			}
 		}
 		else {
-			System.out.println("Testing that the peer is listening to the community: " + new String(communityMessage.getMessage()));
+			System.out.println("Testing that the peer is listening to the community: " + new String(communityMessage.getMessage()).trim());
 		}
 	}
 
@@ -340,7 +350,7 @@ public class PeerController implements Runnable {
 			
 			try {
 				send.setAddress(InetAddress.getLocalHost());
-//				send.setAddress(InetAddress.getByName("10.20.38.174"));
+//				send.setAddress(InetAddress.getByName("140.209.121.69"));
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
@@ -367,7 +377,7 @@ public class PeerController implements Runnable {
 				
 			// Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber
 			
-			byte[] part = new byte[] {0,0,0,49};
+			byte[] part = new byte[] {0,0,0,48};
 			
 			UDPMessage getMessage = new UDPMessage(getId, resourceID, new TimeToLive(), new String(ID.idFactory().getBytes()) + new String(part)); 
 			
