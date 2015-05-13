@@ -63,22 +63,23 @@ public class GossipPartner
 		return this.isAlive;
 	}//isAlive
 
+
 	public void send(UDPMessage message)
 	{
 		//Creates the datagramSocket and datagramPacket sets the IP address of the machine to
 		//which this datagram is being sent. Then the messages datagramPacket is put in queue.
-		DatagramSocket			socket;
+		//DatagramSocket			socket;
 		DatagramPacket			dp;
 		try
 		{
-			socket = new DatagramSocket(this.getGossipPartnerAddress());
+		//	socket = new DatagramSocket(this.getGossipPartnerAddress());
 			dp = message.getDatagramPacket();
-			dp.setAddress(socket.getInetAddress());
+			dp.setAddress(getGossipPartnerAddress().getAddress());
 			this.queue.enQueue(message.getDatagramPacket());
 		}
-		catch(SocketException se)
+		catch(Exception e)
 		{
-			System.out.println(se.getMessage());
+			System.out.println(e.getMessage());
 		}
 	}//send
 
