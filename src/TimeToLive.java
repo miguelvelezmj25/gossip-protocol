@@ -49,6 +49,9 @@ public class TimeToLive
 	 * 
 	 * 		April 28, 2015
 	 * 			Added some comments.
+	 * 
+	 * 		May 13, 2015
+	 * 			Using BIG endian.
 	 *  
 	 */
 
@@ -94,7 +97,7 @@ public class TimeToLive
 		
 		// Get an int from a byte array
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
-			timeToLive = timeToLive | ((byteArray[i] & 0xFF) << (i * 8));
+			timeToLive = timeToLive | ((byteArray[i] & 0xFF) << ((TimeToLive.getLengthInBytes() - 1 - i) * 8));
 		}
 		
 		this.timeToLive = timeToLive;
@@ -129,7 +132,7 @@ public class TimeToLive
 		byte[] result = new byte[4];
 		
 		for(int i = 0; i < TimeToLive.getLengthInBytes(); i++) {
-			result[i] = (byte) (this.timeToLive >> (i * 8));
+			result[i] = (byte) (this.timeToLive >> ((TimeToLive.getLengthInBytes() - 1 - i) * 8));
 		}
 		
 		return result;
