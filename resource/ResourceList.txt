@@ -1,6 +1,6 @@
 ~text/plain~resource/A Modest Proposal.txt~Ireland, Eating Children, Jonathan Swift
 ~text/plain~resource/A Translation of The Koran.txt~religion, translation, Mohammed, Islam
-~text/plain~resource/A Vindication of the Rights of Women.txt~A Vindication of the rights of women, Mary Wollstonecraft, feminism
+~text/plain~resource/A Vindication of the Rights of Woman.txt~A Vindication of the rights of women, Mary Wollstonecraft, feminism
 ~text/plain~resource/Adventures of Huckleberry Finn.txt~Adventures of Huckleberry Finn, America, Mark Twain, Samuel Clemens
 ~text/plain~resource/Alice's Adventures in Wonderland.txt~Alice's Adventures in Wonderland, Lewis Carroll
 ~text/plain~resource/Anna Karenina.txt~Anna Karenina, Russia, Leo Tolstoy
@@ -22,7 +22,7 @@
 ~text/plain~resource/Love and Freindship.txt~Jane Austen, friendship
 ~text/plain~resource/Metamorphosis.txt~Franz Kafka
 ~text/plain~resource/Myths and Legends of China.txt~Mythology
-~text/plain~resource/Myths of Babylon and Assyria.txt~Mythology
+~text/plain~resource/Myths of Babylonia and Assyria.txt~Mythology
 ~text/plain~resource/Narrative of the Life of Frederick Douglass, an American Slave.txt~Slavery
 ~text/plain~resource/Novum Organum.txt~Sir Francis Bacon, science
 ~text/plain~resource/Oliver Twist.txt~Charles Dickens
@@ -34,11 +34,11 @@
 ~text/plain~resource/Relativity, The Special and General Theory.txt~Albert Einstein, science
 ~text/plain~resource/The Adventures of Sherlock Holmes.txt~Arthur Conan Doyle
 ~text/plain~resource/The Age of Reason.txt~Thomas Paine
-~text/plain~resource/The Analetics.txt~Confuscius, China
+~text/plain~resource/The Analects.txt~Confuscius, China
 ~text/plain~resource/The Black Man, the Father of Civilization.txt~James Morris Webb
 ~text/plain~resource/The Book of Mormon.txt~Joseph Smith, Junior Jr.
 ~text/plain~resource/The Communist Manifesto.txt~Karl Marx, Friedrich Engels, communism, socialism, socialist
-~text/plain~resource/The Comlete Works of William Shakespeare.txt~Hamlet, plays, english
+~text/plain~resource/The Complete Works of William Shakespeare.txt~Hamlet, plays, english
 ~text/plain~resource/The Edda, Volume 1.txt~Norse Mythology
 ~text/plain~resource/The Edda, Volume 2.txt~Norse Mythology
 ~text/plain~resource/The Iliad.txt~Greek Mythology, Greek
