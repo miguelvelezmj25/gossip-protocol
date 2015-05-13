@@ -115,8 +115,8 @@ public class Resource
 	{
 		int start;
 		int end;
-		start = part * UDPMessage.getMaximumPacketSizeInBytes();
-		end = start + UDPMessage.getMaximumPacketSizeInBytes() + 1;
+		start = part * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
+		end = start + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
 		
 		return getBytes(start,end);
 	}
