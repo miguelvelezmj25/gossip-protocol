@@ -111,13 +111,20 @@ public class Resource
 		return description.contains(otherString) || mimeType.contains(otherString) || resourceID.toString().contains(otherString) || location.getAbsolutePath().contains(otherString);
 	}
 	
-	public byte[] getPart(int part)
+	public byte[] getBytesForPart(int part)
+	{
+		int start;
+		int end;
+		start = part * UDPMessage.getMaximumPacketSizeInBytes();
+		end = start + UDPMessage.getMaximumPacketSizeInBytes() + 1;
+		
+		return getBytes(start,end);
+	}
+	public byte[] getBytes(int start, int end)
 	{
 		byte[] result;
-		int amountOfBytesSoFar;
-		amountOfBytesSoFar = part * UDPMessage.getMaximumPacketSizeInBytes();
-		result = new byte[Math.min(UDPMessage.getMaximumPacketSizeInBytes(), fileData.length - amountOfBytesSoFar)];
-		System.arraycopy(fileData, amountOfBytesSoFar, result, 0, result.length);
+		result = new byte[Math.min(end - start, fileData.length - start)];
+		System.arraycopy(fileData, start, result, 0, result.length);
 		return result;
 	}
 	
