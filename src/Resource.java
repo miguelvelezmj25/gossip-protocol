@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 
 /**
@@ -13,6 +15,7 @@ public class Resource
 	private File location;
 	private String mimeType;
 	private ID resourceID;
+	private byte[] fileData;
 	
 	/**
 	 * Constructor. Calls other constructor.
@@ -40,7 +43,15 @@ public class Resource
 		mimeType = data.substring(1, loc);
 		location = new File(data.substring(loc + 1, loc2));
 		description = data.substring(loc2 + 1);
-		
+		try 
+		{
+			fileData = Files.readAllBytes(location.toPath());
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -100,5 +111,14 @@ public class Resource
 		return description.contains(otherString) || mimeType.contains(otherString) || resourceID.toString().contains(otherString) || location.getAbsolutePath().contains(otherString);
 	}
 	
+	public byte[] getPart(int part)
+	{
+		byte[] result;
+		int amountOfBytesSoFar;
+		amountOfBytesSoFar = part * UDPMessage.getMaximumPacketSizeInBytes();
+		result = new byte[Math.min(UDPMessage.getMaximumPacketSizeInBytes(), fileData.length - amountOfBytesSoFar)];
+		System.arraycopy(fileData, amountOfBytesSoFar, result, 0, result.length);
+		return result;
+	}
 	
 }
