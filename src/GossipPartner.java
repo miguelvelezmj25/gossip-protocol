@@ -63,7 +63,6 @@ public class GossipPartner
 		return this.isAlive;
 	}//isAlive
 
-
 	public void send(UDPMessage message)
 	{
 		//Creates the datagramSocket and datagramPacket sets the IP address of the machine to
@@ -75,8 +74,7 @@ public class GossipPartner
 			//socket = (this.getGossipPartnerAddress());
 			dp = message.getDatagramPacket();
 			dp.setAddress(this.getGossipPartnerAddress().getAddress());
-			System.out.println(dp.getAddress());
-			this.queue.enQueue(message.getDatagramPacket());
+			this.queue.enQueue(dp);
 		}
 		catch(Exception e)
 		{
@@ -85,4 +83,3 @@ public class GossipPartner
 	}//send
 
 }//gossipPartner
-
