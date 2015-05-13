@@ -26,8 +26,8 @@ public class GossipPartner
 		public boolean isAlive()
 			Returns the instance variable isAlive
 		public void send(UDPMessage message)
-			Creates the datagramSocket and datagramPacket sets the IP address of the machine to
-			which this datagram is being sent. Then the messages datagramPacket is put in queue.
+			Creates the datagramPacket sets the IP address of the machine to which this
+			datagram is being sent. Then the messages datagramPacket is put in queue.
 	*/
 	private InetSocketAddress 	gossipPartnerAddress;
 	private boolean 			isAlive;
@@ -65,13 +65,11 @@ public class GossipPartner
 
 	public void send(UDPMessage message)
 	{
-		//Creates the datagramSocket and datagramPacket sets the IP address of the machine to
-		//which this datagram is being sent. Then the messages datagramPacket is put in queue.
-		//DatagramSocket			socket;
+		//Creates the datagramPacket sets the IP address of the machine to which this
+		//datagram is being sent. Then the messages datagramPacket is put in queue.
 		DatagramPacket			dp;
 		try
 		{
-			//socket = (this.getGossipPartnerAddress());
 			dp = message.getDatagramPacket();
 			dp.setAddress(this.getGossipPartnerAddress().getAddress());
 			this.queue.enQueue(dp);
