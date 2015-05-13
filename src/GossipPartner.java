@@ -79,7 +79,7 @@ public class GossipPartner
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}//send
 
