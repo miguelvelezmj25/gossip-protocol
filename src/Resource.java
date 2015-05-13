@@ -108,7 +108,7 @@ public class Resource
 	{
 		String otherString;
 		otherString = searchString.toLowerCase().trim();
-		return description.contains(otherString) || mimeType.contains(otherString) || resourceID.toString().contains(otherString) || location.getAbsolutePath().contains(otherString);
+		return description.toLowerCase().contains(otherString) || mimeType.toLowerCase().contains(otherString) || resourceID.toString().toLowerCase().contains(otherString) || location.getAbsolutePath().toLowerCase().contains(otherString);
 	}
 	
 	public byte[] getBytesForPart(int part)
