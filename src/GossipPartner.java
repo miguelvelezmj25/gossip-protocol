@@ -72,9 +72,10 @@ public class GossipPartner
 		DatagramPacket			dp;
 		try
 		{
-		//	socket = new DatagramSocket(this.getGossipPartnerAddress());
+			//socket = (this.getGossipPartnerAddress());
 			dp = message.getDatagramPacket();
-			dp.setAddress(getGossipPartnerAddress().getAddress());
+			dp.setAddress(this.getGossipPartnerAddress().getAddress());
+			System.out.println(dp.getAddress());
 			this.queue.enQueue(message.getDatagramPacket());
 		}
 		catch(Exception e)
@@ -84,3 +85,4 @@ public class GossipPartner
 	}//send
 
 }//gossipPartner
+
