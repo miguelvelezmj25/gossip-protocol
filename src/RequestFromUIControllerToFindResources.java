@@ -110,7 +110,10 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 									") Description(" + resource.getDescription() + 
 									") MimeType(" + resource.getMimeType() +
 									") Length (" + resource.getLength() + ")");	
+			// TODO do I want to add the file name?
 						
+		
+			
 			// Add this resource to our history
 			RequestFromUIControllerToFindResources.communityResources.add(communityResourcesId, resource);
 			RequestFromUIControllerToFindResources.communityResourcesId++;
