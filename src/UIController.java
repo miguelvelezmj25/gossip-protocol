@@ -406,7 +406,7 @@ public class UIController
 					command = (UIControllerCommand) commandProcessor.getCommand(userCommand.toLowerCase());
 					if(command.getCommandName().equals("find") || command.getCommandName().equals("get"))
 					{
-						System.out.println("Please type what you would like to " + command.getCommandName() + ":");
+						System.out.print("Please type what you would like to " + command.getCommandName() + ":");
 						String message = "," + command.getCommandName() + "," + scan.nextLine();
 						command.sendToPeer(message);
 					}
