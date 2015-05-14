@@ -118,6 +118,11 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			RequestFromUIControllerToFindResources.communityResources.add(communityResourcesId, resource);
 			RequestFromUIControllerToFindResources.communityResourcesId++;
 			
+			// Put
+			PeerResource peerResource = new PeerResource(udpMessage.getID1(), response, delimiter);
+			
+			PeerResourceManager.getInstance().addResource(peerResource);
+			
 		}
 		
 	}
