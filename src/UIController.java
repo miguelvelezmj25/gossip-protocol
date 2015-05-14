@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -434,9 +435,12 @@ public class UIController
 	public class FileRebuilder implements Runnable
 	{
 		RandomAccessFile raf;
+		AtomicBoolean isComplete;
+		ID identity;
 		
-		public FileRebuilder()
+		public FileRebuilder(ID identity, String mimeType)
 		{
+			this.identity = identity;
 			
 		}
 
