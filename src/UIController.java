@@ -464,16 +464,23 @@ public class UIController
 			isComplete = new AtomicBoolean();
 			PeerResource rs;
 			rs = PeerResourceManager.getInstance().getResourceFromID(identity);
-			try 
+			if(rs != null)
 			{
-				raf = new RandomAccessFile("responses/" + makeValidFileName(rs.getDescription()),"rws");
-			} 
-			catch (FileNotFoundException e) 
-			{
-				e.printStackTrace();
+				try 
+				{
+					raf = new RandomAccessFile("responses/" + makeValidFileName(rs.getDescription()),"rws");
+				} 
+				catch (FileNotFoundException e) 
+				{
+					e.printStackTrace();
+				}
+				written = 0;
+				length = rs.getLength();
 			}
-			written = 0;
-			length = rs.getLength();
+			else
+			{
+				throw new IllegalArgumentException("File not in PeerResourceManager");
+			}
 		}
 
 		public synchronized void rebuild(int start, int end, byte[] data)
