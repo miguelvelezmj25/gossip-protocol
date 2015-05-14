@@ -1,62 +1,62 @@
-~text/plain~resource/A Modest Proposal.txt~Ireland, Eating Children, Jonathan Swift
-~text/plain~resource/A Translation of The Koran.txt~religion, translation, Mohammed, Islam
-~text/plain~resource/A Vindication of the Rights of Woman.txt~A Vindication of the rights of women, Mary Wollstonecraft, feminism
+~text/plain~resource/A Modest Proposal.txt~Ireland, Eating Children, Jonathan Swift, A Modest Proposal
+~text/plain~resource/A Translation of The Koran.txt~religion, translation, Mohammed, Islam, A Translation of The Koran
+~text/plain~resource/A Vindication of the Rights of Woman.txt~A Vindication of the rights of women, Mary Wollstonecraft, feminism, A Vindication of the Rights of Woman
 ~text/plain~resource/Adventures of Huckleberry Finn.txt~Adventures of Huckleberry Finn, America, Mark Twain, Samuel Clemens
 ~text/plain~resource/Alice's Adventures in Wonderland.txt~Alice's Adventures in Wonderland, Lewis Carroll
 ~text/plain~resource/Anna Karenina.txt~Anna Karenina, Russia, Leo Tolstoy
 ~text/plain~resource/Beowulf.txt~Beowulf, Bee Wolf, Old English
 ~text/plain~resource/Dhammapada.txt~Dhammapada, India
-~text/plain~resource/Dictionary of the Vulgar Tongue.txt~swear words, Francis Grose
+~text/plain~resource/Dictionary of the Vulgar Tongue.txt~swear words, Francis Grose, Dictionary of the Vulgar Tongue
 ~text/plain~resource/Discourses on the Method.txt~Discourse on the Method, Rene Descartes, science
-~text/plain~resource/Disputation of Doctor Martin Luther on the Power and Efficacy of Indulgences.txt~Lutheranism, religion
-~text/plain~resource/dog.txt~bark bark woof woof
-~text/plain~resource/Don Quixote.txt~Miguel de Cervantes Saavedra
-~text/plain~resource/Emma.txt~Jane Austen, feminism
-~text/plain~resource/Frankenstein, or, The Modern Prometheus.txt~Monster, Mary Wollstonecraft Shelley, horror
-~text/plain~resource/Grimms' Fairy Tales.txt~Brothers Grimm
-~text/plain~resource/Hebraic Literature.txt~Hebrew, Jew, Judaism
-~image/jpeg~resource/home-cat.jpg~home cat
-~text/plain~resource/Jane Eyre.txt~Charloette Bronte
-~text/plain~resource/Kitab-i-Aqdas.txt~Bahaullah, religion, bahai
-~text/plain~resource/Little Women.txt~Louisa May Alcott
-~text/plain~resource/Love and Freindship.txt~Jane Austen, friendship
-~text/plain~resource/Metamorphosis.txt~Franz Kafka
-~text/plain~resource/Myths and Legends of China.txt~Mythology
-~text/plain~resource/Myths of Babylonia and Assyria.txt~Mythology
-~text/plain~resource/Narrative of the Life of Frederick Douglass, an American Slave.txt~Slavery
-~text/plain~resource/Novum Organum.txt~Sir Francis Bacon, science
-~text/plain~resource/Oliver Twist.txt~Charles Dickens
-~text/plain~resource/On the Origin of Species.txt~Charles Darwin, science, evolution
-~text/plain~resource/Opticks.txt~Optics, Isaac Newton, science
+~text/plain~resource/Disputation of Doctor Martin Luther on the Power and Efficacy of Indulgences.txt~Lutheranism, religion, Disputation of Doctor Martin Luther on the Power and Efficacy of Indulgences
+~text/plain~resource/dog.txt~bark bark woof woof, dog
+~text/plain~resource/Don Quixote.txt~Miguel de Cervantes Saavedra, Don Quixote
+~text/plain~resource/Emma.txt~Jane Austen, feminism, Emma
+~text/plain~resource/Frankenstein, or, The Modern Prometheus.txt~Monster, Mary Wollstonecraft Shelley, horror, Frankenstein, or, The Modern Prometheus
+~text/plain~resource/Grimms' Fairy Tales.txt~Brothers Grimm, Grimms' Fairy Tales
+~text/plain~resource/Hebraic Literature.txt~Hebrew, Jew, Judaism, Hebraic Literature
+~image/jpeg~resource/home-cat.jpg~home cat, jpeg
+~text/plain~resource/Jane Eyre.txt~Charloette Bronte, Jane Eyre
+~text/plain~resource/Kitab-i-Aqdas.txt~Bahaullah, religion, bahai, Kitab-i-Aqdas
+~text/plain~resource/Little Women.txt~Louisa May Alcott, Little Women
+~text/plain~resource/Love and Freindship.txt~Jane Austen, friendship, Love and Freindship
+~text/plain~resource/Metamorphosis.txt~Franz Kafka, Metamorphosis
+~text/plain~resource/Myths and Legends of China.txt~Mythology, Myths and Legends of China
+~text/plain~resource/Myths of Babylonia and Assyria.txt~Mythology, Myths of Babylonia and Assyria
+~text/plain~resource/Narrative of the Life of Frederick Douglass, an American Slave.txt~Slavery, Narrative of the Life of Frederick Douglass, an American Slave
+~text/plain~resource/Novum Organum.txt~Sir Francis Bacon, science, Novum Organum
+~text/plain~resource/Oliver Twist.txt~Charles Dickens, Oliver Twist
+~text/plain~resource/On the Origin of Species.txt~Charles Darwin, science, evolution, On the Origin of Species
+~text/plain~resource/Opticks.txt~Optics, Isaac Newton, science, Opticks
 ~image/jpeg~resource/other-dog.jpg~the other dog
-~text/plain~resource/Pride and Prejudice.txt~Jane Austen
-~text/plain~resource/Principia Mathematica.txt~Isaac Newton, science
-~text/plain~resource/Relativity, The Special and General Theory.txt~Albert Einstein, science
-~text/plain~resource/The Adventures of Sherlock Holmes.txt~Arthur Conan Doyle
-~text/plain~resource/The Age of Reason.txt~Thomas Paine
-~text/plain~resource/The Analects.txt~Confuscius, China
-~text/plain~resource/The Black Man, the Father of Civilization.txt~James Morris Webb
-~text/plain~resource/The Book of Mormon.txt~Joseph Smith, Junior Jr.
-~text/plain~resource/The Communist Manifesto.txt~Karl Marx, Friedrich Engels, communism, socialism, socialist
-~text/plain~resource/The Complete Works of William Shakespeare.txt~Hamlet, plays, english
-~text/plain~resource/The Edda, Volume 1.txt~Norse Mythology
-~text/plain~resource/The Edda, Volume 2.txt~Norse Mythology
-~text/plain~resource/The Iliad.txt~Greek Mythology, Greek
-~text/plain~resource/The Importance of Being Earnest.txt~Oscar Wilde, comedy
-~text/plain~resource/The Improvement of Human Reason.txt~Ibn Tufail, Hai Ebn Yokdhan
-~text/plain~resource/The Jungle.txt~Upton Sinclair, meat packing
-~text/plain~resource/The King James Bible.txt~Religion, abraham
-~text/plain~resource/The Legends of the Jews, Volume 1.txt~ Jews, Judaism, Jewish
-~text/plain~resource/The Legends of the Jews, Volume 2.txt~ Jews, Judaism, Jewish
-~text/plain~resource/The Legends of the Jews, Volume 3.txt~ Jews, Judaism, Jewish
-~text/plain~resource/The Legends of the Jews, Volume 4.txt~ Jews, Judaism, Jewish
-~text/plain~resource/The Odyssey.txt~Homer, Greek Mythology
-~text/plain~resource/The Prince.txt~Nicollo Machiavelli
-~text/plain~resource/The Republic.txt~Plato
-~text/plain~resource/The Story of Burnt Njal.txt~Iceland
-~text/plain~resource/The Story of My Life.txt~Helen Keller
-~text/plain~resource/The Time Machine.txt~Herbert Gerber Wells
-~text/plain~resource/The Vedanta-Sutras.txt~Hinduism
-~text/plain~resource/The Yellow Wallpaper.txt~Charlotte Perkins Gilman
-~text/plain~resource/War and Peace.txt~Leo Tolstoy
-~text/plain~resource/Wuthering Heights.txt~Emily Bronte
+~text/plain~resource/Pride and Prejudice.txt~Jane Austen, Pride and Prejudice
+~text/plain~resource/Principia Mathematica.txt~Isaac Newton, science, Principia Mathematica
+~text/plain~resource/Relativity, The Special and General Theory.txt~Albert Einstein, science, Relativity, The Special and General Theory
+~text/plain~resource/The Adventures of Sherlock Holmes.txt~Arthur Conan Doyle, The Adventures of Sherlock Holmes
+~text/plain~resource/The Age of Reason.txt~Thomas Paine, The Age of Reason
+~text/plain~resource/The Analects.txt~Confuscius, China, The Analects
+~text/plain~resource/The Black Man, the Father of Civilization.txt~James Morris Webb, The Black Man, the Father of Civilization
+~text/plain~resource/The Book of Mormon.txt~The Book of Mormon, Joseph Smith, Junior Jr.
+~text/plain~resource/The Communist Manifesto.txt~The Communist Manifesto, Karl Marx, Friedrich Engels, communism, socialism, socialist
+~text/plain~resource/The Complete Works of William Shakespeare.txt~The Complete Works of William Shakespeare, Hamlet, plays, english
+~text/plain~resource/The Edda, Volume 1.txt~The Edda, Volume 1, Norse Mythology
+~text/plain~resource/The Edda, Volume 2.txt~The Edda, Volume 2, Norse Mythology
+~text/plain~resource/The Iliad.txt~The Iliad, Greek Mythology, Greek
+~text/plain~resource/The Importance of Being Earnest.txt~The Importance of Being Earnest, Oscar Wilde, comedy
+~text/plain~resource/The Improvement of Human Reason.txt~The Improvement of Human Reason, Ibn Tufail, Hai Ebn Yokdhan
+~text/plain~resource/The Jungle.txt~The Jungle, Upton Sinclair, meat packing
+~text/plain~resource/The King James Bible.txt~The King James Bible, Religion, abraham
+~text/plain~resource/The Legends of the Jews, Volume 1.txt~The Legends of the Jews, Volume 1, Jews, Judaism, Jewish
+~text/plain~resource/The Legends of the Jews, Volume 2.txt~The Legends of the Jews, Volume 2, Jews, Judaism, Jewish
+~text/plain~resource/The Legends of the Jews, Volume 3.txt~The Legends of the Jews, Volume 3, Jews, Judaism, Jewish
+~text/plain~resource/The Legends of the Jews, Volume 4.txt~The Legends of the Jews, Volume 4, Jews, Judaism, Jewish
+~text/plain~resource/The Odyssey.txt~The Odyssey, Homer, Greek Mythology
+~text/plain~resource/The Prince.txt~The Prince, Nicollo Machiavelli
+~text/plain~resource/The Republic.txt~The Republic, Plato
+~text/plain~resource/The Story of Burnt Njal.txt~The Story of Burnt Njal, Iceland
+~text/plain~resource/The Story of My Life.txt~The Story of My Life, Helen Keller
+~text/plain~resource/The Time Machine.txt~The Time Machine, Herbert Gerber Wells
+~text/plain~resource/The Vedanta-Sutras.txt~The Vedanta-Sutras, Hinduism
+~text/plain~resource/The Yellow Wallpaper.txt~The Yellow Wallpaper, Charlotte Perkins Gilman
+~text/plain~resource/War and Peace.txt~War and Peace, Leo Tolstoy
+~text/plain~resource/Wuthering Heights.txt~Wuthering Heights, Emily Bronte
