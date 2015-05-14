@@ -466,7 +466,7 @@ public class UIController
 			rs = PeerResourceManager.getInstance().getResourceFromID(identity);
 			try 
 			{
-				raf = new RandomAccessFile(makeValidFileName(rs.getDescription()),"rws");
+				raf = new RandomAccessFile("responses/" + makeValidFileName(rs.getDescription()),"rws");
 			} 
 			catch (FileNotFoundException e) 
 			{
