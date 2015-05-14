@@ -387,6 +387,7 @@ public class PeerController implements Runnable {
 			// Get the resource id			
 			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
 						
+			// Get the part numbers
 			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) 456);
 						
 			// Create a get request id
@@ -399,9 +400,7 @@ public class PeerController implements Runnable {
 			RequestManager.getInstance().insertRequest(getRequest);
 
 			// Start requesting parts
-			getRequest.startAsThread();
-			System.out.println("done");
-			
+			getRequest.startAsThread();			
 		}
 		// The UI send an invalid command, send error back
 		else
