@@ -51,13 +51,14 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	@Override
 	public void updateRequest(UDPMessage udpMessage) 
 	{
+			
 		// Send the datagram packet to the UI controller
 		// Check if null
 		if(udpMessage == null) 
 		{
 			throw new IllegalArgumentException("The UDP message that you provided is null");
 		}
-		
+				
 		// Get the request part
 		byte[] partRequested = new byte[PartNumbers.getLengthInBytes()];
 	
@@ -81,7 +82,10 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 			byte[] responseMessage = udpMessage.getMessage();
 			
 			// Get the bytes that we requested
-			byte[] bytesToSend = new byte[464];
+			byte[] bytesToSend = new byte[480];
+			
+			// Pass the resource id
+			System.arraycopy(udpMessage.getID1().getBytes(), 0, bytesToSend, 0, ID.getLengthInBytes());
 
 			// Get the starting byte
 			int startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
@@ -93,7 +97,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 			}
 			
 			// Put the 4 bytes of the starting byte at the beginning of the bytes to send
-			System.arraycopy(byteNumber, 0, bytesToSend, 0, PartNumbers.getLengthInBytes());
+			System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
 						
 			// Get the end byte
 			int endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
@@ -105,10 +109,10 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 			}
 			
 			// Put the 4 bytes of the end byte in spot 4 of the bytes to send
-			System.arraycopy(byteNumber, 0, bytesToSend, PartNumbers.getLengthInBytes(), PartNumbers.getLengthInBytes());
+			System.arraycopy(byteNumber, 0, bytesToSend, PartNumbers.getLengthInBytes() + ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
 						
 			// Copy the bytes to send
-			System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() << 1), 456);
+			System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() << 1) + ID.getLengthInBytes(), 456);
 			
 
 			// Create a new datagram
@@ -119,6 +123,9 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 			
 			// Set the port of the UIController
 			resourceBytes.setPort(this.getUIControllerAddress().getPort());
+			
+			
+			
 			
 			// Send the bytes as start, end, bytes
 			this.getQueue().enQueue(resourceBytes);

@@ -49,6 +49,9 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 	 * 
 	 * 	 	May 11, 2015
 	 * 			Was saving the wrong ID in the responses.
+	 * 
+ 	 * 	 	May 14, 2015
+	 * 			Saving the find response
 	 */
 	
 	private static ArrayList<CommunityResources> communityResources = new ArrayList<RequestFromUIControllerToFindResources.CommunityResources>();
@@ -118,8 +121,11 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			RequestFromUIControllerToFindResources.communityResources.add(communityResourcesId, resource);
 			RequestFromUIControllerToFindResources.communityResourcesId++;
 			
-			// Put
+			// Create a new resource from a find request and save it in the resourceManager
 			PeerResource peerResource = new PeerResource(udpMessage.getID1(), response, delimiter);
+			
+//			System.out.println(udpMessage.getID1());
+//			System.out.println(peerResource.getID());
 			
 			PeerResourceManager.getInstance().addResource(peerResource);
 			

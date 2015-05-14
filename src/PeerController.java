@@ -1,7 +1,9 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -122,11 +124,17 @@ public class PeerController implements Runnable {
 			this.resourceRequesters = new HashMap<ID, ResourceRequester>();
 			
 			// Testing
-			GossipPartners.getInstance().addPartner(new GossipPartner(
-														new InetSocketAddress(
+//			try {
+				GossipPartners.getInstance().addPartner(new GossipPartner(
+															new InetSocketAddress(
 																this.uiControllerAddress.getAddress(),
-																12345)
-															, this.outgoingPacketsQueue));
+//																	InetAddress.getByName("140.209.122.131"),
+																	12345)
+																, this.outgoingPacketsQueue));
+//			} catch (UnknownHostException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 
 		} 
 		catch (SocketException se) 
@@ -400,7 +408,10 @@ public class PeerController implements Runnable {
 		{
 			// Get the resource id			
 			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
-						
+			
+			System.out.println(resourceID);
+			
+			
 			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) 456);
 						
 			// Create and run the class that will request the resource
