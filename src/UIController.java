@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.RandomAccessFile;
 import java.net.*;
 import java.util.*;
 
@@ -17,8 +18,8 @@ public class UIController
 	private PeerController		ourPeerController;
 	private InetSocketAddress 	peerAddress;
 	private DatagramReceiver 	receiveFromPeer;
-	private Scanner				scanner;
 	private DatagramSender 		sendToPeer;
+	private ScannerHandler		scannerHandler;
 
 	/**
 	 * @param incomingPortNumber
@@ -34,6 +35,7 @@ public class UIController
 		this.peerAddress = new InetSocketAddress(portNumberPeerUI.get());
 		incomingPacketsFromPeerQueue = new IncomingPacketQueue();
 		outgoingPacketsToPeerQueue = new OutgoingPacketQueue();
+		this.scannerHandler = new ScannerHandler();
 		
 		try
 		{
@@ -85,29 +87,14 @@ public class UIController
 	public void start()
 	{
 		
-		UIControllerCommand command;
-		String				userCommand;
-		
 		ResourceManager.getInstance().loadResourcesFrom(new File("resource/ResourceList.txt"));
 		//Start Threads
 		receiveFromPeer.startAsThread();
 		sendToPeer.startAsThread();
-		//Check for uer input
-		scanner = new Scanner(System.in);
-
-		
-		
+		scannerHandler.startAsThread();
 		while(!done)
 		{
-			System.out.print("Type in a command: ");
-			if(scanner.hasNextLine())
-			{
-				userCommand = scanner.nextLine();
-				command = (UIControllerCommand) this.commandProcessor.getCommand(userCommand.toLowerCase());
 
-				// Command will run. If it is meant for a peer, its run method should handle the sending.
-				command.run();	
-			}
 			if(!incomingPacketsFromPeerQueue.isEmpty())
 			{
 				System.out.println(new String(incomingPacketsFromPeerQueue.deQueue().getData()));
@@ -115,7 +102,6 @@ public class UIController
 		}
 		//Finish everything
 		ourPeerController.setDoneFlag(true);
-		scanner.close();
 	}
 
 	/**
@@ -165,13 +151,12 @@ public class UIController
 			done = flag;
 		}
 		
-		public void sendToPeer()
+		public void sendToPeer(String message)
 		{
 			byte[] buffer;
 			
 			//Ask user what they would like to send
-			System.out.println("Please type what you would like to " + super.getCommandName() + ":");
-			String message = "," + super.getCommandName() + "," + scanner.nextLine();
+
 			
 			//Create DatagramPacket
 			buffer = message.getBytes();
@@ -359,7 +344,7 @@ public class UIController
 
 		public void run()
 		{
-				this.sendToPeer();
+				this.sendToPeer("");
 		}
 
 	}
@@ -376,7 +361,7 @@ public class UIController
 
 		public void run()
 		{
-			this.sendToPeer();
+			this.sendToPeer("");
 		}
 
 	}
@@ -394,9 +379,72 @@ public class UIController
 
 		public void run()
 		{
-			this.sendToPeer();
+			this.sendToPeer("");
 		}
 
+	}
+	
+	public class ScannerHandler implements Runnable
+	{
+		public ScannerHandler()
+		{
+			
+		}
+		
+		public void run()
+		{
+			String userCommand;
+			UIControllerCommand command;
+			Scanner scan = new Scanner(System.in);
+			while(!done)
+			{
+				System.out.print("Type in a command: ");
+				if(scan.hasNextLine())
+				{
+					userCommand = scan.nextLine();
+					command = (UIControllerCommand) commandProcessor.getCommand(userCommand.toLowerCase());
+					if(command.getCommandName().equals("find") || command.getCommandName().equals("get"))
+					{
+						System.out.println("Please type what you would like to " + command.getCommandName() + ":");
+						String message = "," + command.getCommandName() + "," + scan.nextLine();
+						command.sendToPeer(message);
+					}
+					else
+					{
+						command.run();	
+					}
+					
+				}
+			}
+			scan.close();
+		}
+		
+		public Thread startAsThread() 
+		{
+			Thread thread;
+			
+			thread = new Thread(this);
+			thread.start();
+			
+			return thread;
+		}
+	}
+	
+	
+	public class FileRebuilder implements Runnable
+	{
+		RandomAccessFile raf;
+		
+		public FileRebuilder()
+		{
+			
+		}
+
+		public void run() 
+		{
+			
+		}
+		
 	}
 }
 
