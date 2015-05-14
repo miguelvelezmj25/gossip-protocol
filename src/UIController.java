@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.*;
 import java.util.*;
@@ -12,16 +14,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class UIController
 {
 
-	private CommandProcessor 	commandProcessor;
-	private boolean 			done;
-	private IncomingPacketQueue incomingPacketsFromPeerQueue;
-	private OutgoingPacketQueue outgoingPacketsToPeerQueue;
-	private PeerController		ourPeerController;
-	private InetSocketAddress 	peerAddress;
-	private DatagramReceiver 	receiveFromPeer;
-	private DatagramSender 		sendToPeer;
-	private ScannerHandler		scannerHandler;
-
+	private CommandProcessor 			commandProcessor;
+	private boolean 					done;
+	private IncomingPacketQueue 		incomingPacketsFromPeerQueue;
+	private OutgoingPacketQueue 		outgoingPacketsToPeerQueue;
+	private PeerController				ourPeerController;
+	private InetSocketAddress 			peerAddress;
+	private DatagramReceiver 			receiveFromPeer;
+	private DatagramSender 				sendToPeer;
+	private ScannerHandler				scannerHandler;
+	private HashMap<ID,FileRebuilder>	fileRebuilders;
+	
 	/**
 	 * @param incomingPortNumber
 	 * @param outgoingPortNumber
@@ -80,6 +83,8 @@ public class UIController
 		this.commandProcessor.register(new CommandFind());
 		this.commandProcessor.register(new CommandGet());
 
+		
+		this.fileRebuilders = new HashMap<ID, FileRebuilder>();
 	}
 
 	/**
@@ -95,10 +100,23 @@ public class UIController
 		scannerHandler.startAsThread();
 		while(!done)
 		{
-
 			if(!incomingPacketsFromPeerQueue.isEmpty())
 			{
-				System.out.println(new String(incomingPacketsFromPeerQueue.deQueue().getData()));
+				byte[] data = incomingPacketsFromPeerQueue.deQueue().getData();
+				byte[] id = new byte[ID.getLengthInBytes()];
+				ID identity;
+				System.arraycopy(data, 0, id, 0, id.length);
+				identity = new ID(id);
+				
+				if(this.fileRebuilders.containsKey(identity))
+				{
+					this.fileRebuilders.get(identity);
+				}
+				else
+				{
+					this.fileRebuilders.put(identity, new FileRebuilder(identity));
+				}
+				
 			}
 		}
 		//Finish everything
@@ -406,7 +424,7 @@ public class UIController
 					command = (UIControllerCommand) commandProcessor.getCommand(userCommand.toLowerCase());
 					if(command.getCommandName().equals("find") || command.getCommandName().equals("get"))
 					{
-						System.out.print("Please type what you would like to " + command.getCommandName() + ":");
+						System.out.print("Please type what you would like to " + command.getCommandName() + ": ");
 						String message = "," + command.getCommandName() + "," + scan.nextLine();
 						command.sendToPeer(message);
 					}
@@ -432,23 +450,78 @@ public class UIController
 	}
 	
 	
-	public class FileRebuilder implements Runnable
+	public class FileRebuilder
 	{
 		RandomAccessFile raf;
 		AtomicBoolean isComplete;
 		ID identity;
+		int length;
+		int written;
 		
-		public FileRebuilder(ID identity, String mimeType)
+		public FileRebuilder(ID identity)
 		{
 			this.identity = identity;
-			
+			isComplete = new AtomicBoolean();
+			PeerResource rs;
+			rs = PeerResourceManager.getInstance().getResourceFromID(identity);
+			try 
+			{
+				raf = new RandomAccessFile(makeValidFileName(rs.getDescription()),"rws");
+			} 
+			catch (FileNotFoundException e) 
+			{
+				e.printStackTrace();
+			}
+			written = 0;
+			length = rs.getLength();
 		}
 
-		public void run() 
+		public synchronized void rebuild(int start, int end, byte[] data)
 		{
-			
+			if(!isComplete())
+			{
+				try 
+				{
+					raf.write(data,start, end - start);
+				} 
+				catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+				written = written + end - start;
+				
+				if(written == length)
+				{
+					setComplete(true);
+				}
+			}
 		}
 		
+		public void setComplete(boolean complete)
+		{
+			isComplete.set(complete);
+		}
+		
+		public boolean isComplete()
+		{
+			return isComplete.get();
+		}
+		
+		
+		public String makeValidFileName(String name)
+		{
+			char[] illegalCharacters = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
+			String result;
+			
+			result = name;
+			
+			for(int i = 0; i < illegalCharacters.length; i = i + 1)
+			{
+				result = result.replaceAll("" + illegalCharacters[i], "");
+			}
+			
+			return result;
+		}
 	}
 }
 
