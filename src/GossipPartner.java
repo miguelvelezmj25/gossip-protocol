@@ -72,6 +72,7 @@ public class GossipPartner
 		{
 			dp = message.getDatagramPacket();
 			dp.setAddress(this.getGossipPartnerAddress().getAddress());
+			dp.setPort(this.getGossipPartnerAddress().getPort());
 			this.queue.enQueue(dp);
 		}
 		catch(Exception e)
