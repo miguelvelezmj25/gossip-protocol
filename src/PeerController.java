@@ -98,7 +98,7 @@ public class PeerController implements Runnable {
 	private DatagramReceiver       			receiveFromUI;
 	private OutgoingPacketQueue 			outgoingPacketsQueue;
 	private DatagramReceiver        		receiveFromCommunity;
-	private HashMap<ID, ResourceRequester> 	resourceRequesters;
+//	private HashMap<ID, ResourceRequester> 	resourceRequesters;
 	private DatagramSender					sender;
 	private InetSocketAddress				uiControllerAddress;
 	
@@ -121,7 +121,7 @@ public class PeerController implements Runnable {
 			
 			this.uiControllerAddress = uiControllerAddress;
 			
-			this.resourceRequesters = new HashMap<ID, ResourceRequester>();
+//			this.resourceRequesters = new HashMap<ID, ResourceRequester>();
 			
 			// Testing
 //			try {
@@ -241,6 +241,7 @@ public class PeerController implements Runnable {
 			// Check if it is a find or a get
 			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
 			{
+				System.out.println("Got a response to get");
 				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
 				
 				// Update this request
@@ -251,6 +252,7 @@ public class PeerController implements Runnable {
 		// Check if the ID2 matches one of our specific resources that the community wants
 		else if(resource != null) 
 		{									
+			System.out.println("Somebody wants one of our files");
 			// Get the request part
 			byte[] partRequested = new byte[PartNumbers.getLengthInBytes()];
 		
@@ -408,19 +410,22 @@ public class PeerController implements Runnable {
 		{
 			// Get the resource id			
 			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
-			
-			System.out.println(resourceID);
-			
-			
+						
 			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) 456);
 						
-			// Create and run the class that will request the resource
-			ResourceRequester resourceRequester = new ResourceRequester(resourceID, partNumbers);
+			// Create a get request id
+			ID getId = ID.idFactory();
 			
-//			// Save the requester in our collection
-//			this.resourceRequesters.put(resourceID, resourceRequester);
+			// create a get request
+			RequestFromUIControllerToGetaResource getRequest = new RequestFromUIControllerToGetaResource(getId, resourceID, uiControllerAddress, outgoingPacketsQueue, partNumbers);
+			
+			// Save it in our request manager
+			RequestManager.getInstance().insertRequest(getRequest);
 
-			resourceRequester.startAsThread();
+			// Start requesting parts
+			getRequest.startAsThread();
+			System.out.println("done");
+			
 		}
 		// The UI send an invalid command, send error back
 		else
@@ -477,170 +482,170 @@ public class PeerController implements Runnable {
 		
 	
 	
-	private class ResourceRequester implements Runnable {
-		/**
-		 * 
-		 * Miguel Velez
-		 * May 13, 2015
-		 * 
-		 * This class is in charge of requesting parts of resource
-		 * 
-		 * Class variables:
-		 * 
-		 * 		ID resourceID
-		 * 			the resource id we want to get
-		 * 
-		 * 		PartNumbers partNumbers
-		 * 			the part numbers that we need to get
-		 * 
-		 * 		AtomicBoolean done
-		 * 			Check if we are done processing packets
-		 * 
-		 *  
-	 	 * Constructors:
-	 	 * 
-	 	 * 		public ResourceRequester(ID resourceID, int partNumbers) 
-	 	 * 			create a resource requester
-	 	 * 
-	 	 *  
-		 * Methods:
-		 * 	
-		 * 		public void run() 
-		 * 			request one part at a time
-		 * 
-		 *  	public Thread startAsThread()
-		 *  		start this class as a thread
-		 *  	
-		 *  	public boolean isStopped()
-		 *  		check if done requesting all parts
-		 *  
-		 *  	public void setDoneFlag(boolean flag)
-		 *  		set the done flag
-		 *    	 
-		 *          
-		 * Modification History:
-		 * 		May 13, 2015
-		 * 			Original version
-		 *  
-		 */
-
-		private ID 				resourceID;
-		private PartNumbers 	partNumbers;
-		private AtomicBoolean	done;
-		
-		public ResourceRequester(ID resourceID, int partNumbers) 
-		{
-			this.resourceID = resourceID;
-			this.partNumbers = new PartNumbers(partNumbers);
-			this.done = new AtomicBoolean(false);
-		}
-		
-		@Override
-		public void run() {		
-			
-			while(!this.isStopped()) 
-			{
-				// Get all the part numbers
-//			for(int i = 0; i < this.partNumbers.get(); i++)
-				for(int i = 0; i < 1; i++)
-				{
-					// Get a byte array from the part number
-					byte[] partNumber = new byte[4];
-					
-					for(int j = 0; j < PartNumbers.getLengthInBytes(); j++) {
-						partNumber[j] = (byte) (i >> ((PartNumbers.getLengthInBytes() - 1 - j) * 8));
-					}
-					
-					// Create a get request id
-					ID getId = ID.idFactory();
-					
-					// create a get request
-					RequestFromUIControllerToGetaResource getRequest = new RequestFromUIControllerToGetaResource(getId, uiControllerAddress, outgoingPacketsQueue, this.partNumbers);
-					
-					// Save it in our request manager
-					RequestManager.getInstance().insertRequest(getRequest);
-					
-					// Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber			
-					UDPMessage getMessage = new UDPMessage(getId, resourceID, new TimeToLive(), new String(ID.idFactory().getBytes()) + new String(partNumber)); 
-					
-					// Send to peers
-					GossipPartners.getInstance().send(getMessage);	
-					
-					
-					
-/////////////////// TODO delete testing
-////			System.out.println("id1: " + findMessage.getID1());
-////			System.out.println("id2: " + findMessage.getID2());
-////			System.out.println("tll: " + findMessage.getTimeToLive());
-//				System.out.println(new String(getMessage.getMessage()));
+//	private class ResourceRequester implements Runnable {
+//		/**
+//		 * 
+//		 * Miguel Velez
+//		 * May 13, 2015
+//		 * 
+//		 * This class is in charge of requesting parts of resource
+//		 * 
+//		 * Class variables:
+//		 * 
+//		 * 		ID resourceID
+//		 * 			the resource id we want to get
+//		 * 
+//		 * 		PartNumbers partNumbers
+//		 * 			the part numbers that we need to get
+//		 * 
+//		 * 		AtomicBoolean done
+//		 * 			Check if we are done processing packets
+//		 * 
+//		 *  
+//	 	 * Constructors:
+//	 	 * 
+//	 	 * 		public ResourceRequester(ID resourceID, int partNumbers) 
+//	 	 * 			create a resource requester
+//	 	 * 
+//	 	 *  
+//		 * Methods:
+//		 * 	
+//		 * 		public void run() 
+//		 * 			request one part at a time
+//		 * 
+//		 *  	public Thread startAsThread()
+//		 *  		start this class as a thread
+//		 *  	
+//		 *  	public boolean isStopped()
+//		 *  		check if done requesting all parts
+//		 *  
+//		 *  	public void setDoneFlag(boolean flag)
+//		 *  		set the done flag
+//		 *    	 
+//		 *          
+//		 * Modification History:
+//		 * 		May 13, 2015
+//		 * 			Original version
+//		 *  
+//		 */
 //
-//			DatagramPacket send = getMessage.getDatagramPacket();
-//				
-//			send.setPort(12345);
+//		private ID 				resourceID;
+//		private PartNumbers 	partNumbers;
+//		private AtomicBoolean	done;
+//		
+//		public ResourceRequester(ID resourceID, int partNumbers) 
+//		{
+//			this.resourceID = resourceID;
+//			this.partNumbers = new PartNumbers(partNumbers);
+//			this.done = new AtomicBoolean(false);
+//		}
+//		
+//		@Override
+//		public void run() {		
 //			
-//			try {
-//				send.setAddress(InetAddress.getLocalHost());
-////				send.setAddress(InetAddress.getByName("140.209.121.69"));
-//			} catch (UnknownHostException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			outgoingPacketsQueue.enQueue(send);
-///////////////////// TODO delete	testing
-					
-//					System.out.println("yield");
-//					try {
-//						wait();
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
+//			while(!this.isStopped()) 
+//			{
+//				// Get all the part numbers
+////			for(int i = 0; i < this.partNumbers.get(); i++)
+//				for(int i = 0; i < 1; i++)
+//				{
+//					// Get a byte array from the part number
+//					byte[] partNumber = new byte[4];
+//					
+//					for(int j = 0; j < PartNumbers.getLengthInBytes(); j++) {
+//						partNumber[j] = (byte) (i >> ((PartNumbers.getLengthInBytes() - 1 - j) * 8));
 //					}
 //					
-					try {
-						Thread.sleep(400);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+//					// Create a get request id
+//					ID getId = ID.idFactory();
 //					
-//					System.out.println("woke up");
+//					// create a get request
+//					RequestFromUIControllerToGetaResource getRequest = new RequestFromUIControllerToGetaResource(getId, uiControllerAddress, outgoingPacketsQueue, this.partNumbers);
+//					
+//					// Save it in our request manager
+//					RequestManager.getInstance().insertRequest(getRequest);
+//					
+//					// Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber			
+//					UDPMessage getMessage = new UDPMessage(getId, resourceID, new TimeToLive(), new String(ID.idFactory().getBytes()) + new String(partNumber)); 
+//					
+//					// Send to peers
+//					GossipPartners.getInstance().send(getMessage);	
 //					
 //					
-				}
-				
-				// stop this thread
-				this.done.set(true);
-				
-//				System.out.println("STOP REQUESTER");
-				
-			}
-
-			
-			
-		}
-		
-		public Thread startAsThread() {
-			// Start this class a a thread
-			Thread thread;
-			
-			thread = new Thread(this);
-			
-			// Execute the run method
-			thread.start();
-			
-			return thread;
-		}
-		
-		public boolean isStopped()
-		{
-			// Check iff the peer is done processing packets
-			return this.done.get();
-		}
-		
-		public void setDoneFlag(boolean flag)
-		{
-			// Setter for the done flag
-			this.done.set(flag);
-		}
-			
-	}
+//					
+///////////////////// TODO delete testing
+//////			System.out.println("id1: " + findMessage.getID1());
+//////			System.out.println("id2: " + findMessage.getID2());
+//////			System.out.println("tll: " + findMessage.getTimeToLive());
+////				System.out.println(new String(getMessage.getMessage()));
+////
+////			DatagramPacket send = getMessage.getDatagramPacket();
+////				
+////			send.setPort(12345);
+////			
+////			try {
+////				send.setAddress(InetAddress.getLocalHost());
+//////				send.setAddress(InetAddress.getByName("140.209.121.69"));
+////			} catch (UnknownHostException e) {
+////				e.printStackTrace();
+////			}
+////			
+////			outgoingPacketsQueue.enQueue(send);
+/////////////////////// TODO delete	testing
+//					
+////					System.out.println("yield");
+////					try {
+////						wait();
+////					} catch (InterruptedException e) {
+////						// TODO Auto-generated catch block
+////						e.printStackTrace();
+////					}
+////					
+//					try {
+//						Thread.sleep(400);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+////					
+////					System.out.println("woke up");
+////					
+////					
+//				}
+//				
+//				// stop this thread
+//				this.done.set(true);
+//				
+////				System.out.println("STOP REQUESTER");
+//				
+//			}
+//
+//			
+//			
+//		}
+//		
+//		public Thread startAsThread() {
+//			// Start this class a a thread
+//			Thread thread;
+//			
+//			thread = new Thread(this);
+//			
+//			// Execute the run method
+//			thread.start();
+//			
+//			return thread;
+//		}
+//		
+//		public boolean isStopped()
+//		{
+//			// Check iff the peer is done processing packets
+//			return this.done.get();
+//		}
+//		
+//		public void setDoneFlag(boolean flag)
+//		{
+//			// Setter for the done flag
+//			this.done.set(flag);
+//		}
+//			
+//	}
 }

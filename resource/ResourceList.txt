@@ -31,6 +31,7 @@
 ~image/jpeg~resource/other-dog.jpg~the other dog
 ~text/plain~resource/Pride and Prejudice.txt~Jane Austen, Pride and Prejudice
 ~text/plain~resource/Principia Mathematica.txt~Isaac Newton, science, Principia Mathematica
+~text/plain~resource/puppie.txt~Dog, animal, Puppie
 ~text/plain~resource/Relativity, The Special and General Theory.txt~Albert Einstein, science, Relativity, The Special and General Theory
 ~text/plain~resource/The Adventures of Sherlock Holmes.txt~Arthur Conan Doyle, The Adventures of Sherlock Holmes
 ~text/plain~resource/The Age of Reason.txt~Thomas Paine, The Age of Reason
