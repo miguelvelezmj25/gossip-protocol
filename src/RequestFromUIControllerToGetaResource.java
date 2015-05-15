@@ -112,7 +112,9 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				System.arraycopy(udpMessage.getID1().getBytes(), 0, bytesToSend, 0, ID.getLengthInBytes());
 				
 				// Get the starting byte
-				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (PartNumbers.getLengthInBytes() * 2));
+				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (8));
+				
+				System.out.println("start bytes: " + startByte);
 				
 				/*byte[] byteNumber = new byte[8];
 				
@@ -120,15 +122,15 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 					byteNumber[i] = (byte) (startByte >> ((8 - 1 - i) * 8));
 				}*/
 				
-				byte[] byteNumber = ByteBuffer.allocate(Long.BYTES).putLong(startByte).array();
+				byte[] byteNumber = ByteBuffer.allocate(8).putLong(startByte).array();
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
-				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() * 2));
+				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), 8);
 				
 				// Get the end byte
 				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (8));
 				
-//				System.out.println(endByte);
+				System.out.println("End bytes: " + endByte);
 				
 				/*byteNumber = new byte[8];
 				
@@ -136,7 +138,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 					byteNumber[i] = (byte) (endByte >> ((8 - 1 - i) * 8));
 				}*/
 				
-				byteNumber = ByteBuffer.allocate(Long.BYTES).putLong(endByte).array();
+				byteNumber = ByteBuffer.allocate(8).putLong(endByte).array();
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
 				System.arraycopy(byteNumber, 0, bytesToSend, (8) + ID.getLengthInBytes(), (8));
