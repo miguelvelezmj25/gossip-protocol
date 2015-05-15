@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -105,18 +106,28 @@ public class UIController
 				byte[] data = incomingPacketsFromPeerQueue.deQueue().getData();
 				byte[] id = new byte[ID.getLengthInBytes()];
 				ID identity;
+				byte[] start = new byte[4];
+				byte[] end = new byte[4];
+				byte[] other = new byte[data.length - id.length - start.length - end.length];
+				FileRebuilder fr;
+				
 				System.arraycopy(data, 0, id, 0, id.length);
+				System.arraycopy(data, id.length, start, 0, start.length);
+				System.arraycopy(data, id.length + start.length, end, 0, end.length);
+				System.arraycopy(data, id.length + start.length + end.length, other, 0, other.length);
+				
 				identity = new ID(id);
 				
 				if(this.fileRebuilders.containsKey(identity))
 				{
-					this.fileRebuilders.get(identity);
+					fr = this.fileRebuilders.get(identity);
 				}
 				else
 				{
-					this.fileRebuilders.put(identity, new FileRebuilder(identity));
+					fr = new FileRebuilder(identity);
+					this.fileRebuilders.put(identity, fr);
 				}
-				
+				fr.rebuild(start, end, other);
 			}
 		}
 		//Finish everything
@@ -483,6 +494,12 @@ public class UIController
 			}
 		}
 
+		public synchronized void rebuild(byte[] start, byte[] end, byte[] data) 
+		{
+			rebuild(ByteBuffer.wrap(start).getInt(), ByteBuffer.wrap(end).getInt(), data);
+			
+		}
+
 		public synchronized void rebuild(int start, int end, byte[] data)
 		{
 			if(!isComplete())
@@ -500,7 +517,9 @@ public class UIController
 				if(written == length)
 				{
 					setComplete(true);
+					System.out.println("building complete!");
 				}
+
 			}
 		}
 		
@@ -517,18 +536,21 @@ public class UIController
 		
 		public String makeValidFileName(String name)
 		{
-			char[] illegalCharacters = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
+			String[] illegalCharacters = { "/", "\n", "\r", "\t", "\0", "\f", "`", "?", "*", "\\", "<", ">", "|", "\"", ":" };
+		
 			String result;
 			
 			result = name;
 			
 			for(int i = 0; i < illegalCharacters.length; i = i + 1)
 			{
-				result = result.replaceAll("" + illegalCharacters[i], "");
+				result = result.replaceAll(illegalCharacters[i], "");
 			}
 			
 			return result;
 		}
+		
+		//TODO: figure out mime types
 	}
 }
 
