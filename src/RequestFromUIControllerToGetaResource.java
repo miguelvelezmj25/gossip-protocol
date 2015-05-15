@@ -114,11 +114,13 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Get the starting byte
 				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (PartNumbers.getLengthInBytes() * 2));
 				
-				byte[] byteNumber = new byte[8];
+				/*byte[] byteNumber = new byte[8];
 				
 				for(int i = 0; i < 8; i++) {
 					byteNumber[i] = (byte) (startByte >> ((8 - 1 - i) * 8));
-				}
+				}*/
+				
+				byte[] byteNumber = ByteBuffer.allocate(Long.BYTES).putLong(startByte).array();
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
 				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() * 2));
@@ -128,11 +130,13 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 //				System.out.println(endByte);
 				
-				byteNumber = new byte[8];
+				/*byteNumber = new byte[8];
 				
 				for(int i = 0; i < (8); i++) {
 					byteNumber[i] = (byte) (endByte >> ((8 - 1 - i) * 8));
-				}
+				}*/
+				
+				byteNumber = ByteBuffer.allocate(Long.BYTES).putLong(endByte).array();
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
 				System.arraycopy(byteNumber, 0, bytesToSend, (8) + ID.getLengthInBytes(), (8));
@@ -149,7 +153,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Set the port of the UIController
 				resourceBytes.setPort(this.getUIControllerAddress().getPort());
 								
-				System.out.println(new String(bytesToSend));
+				//System.out.println(new String(bytesToSend));
 				
 				// Send the bytes as start, end, bytes
 				this.getQueue().enQueue(resourceBytes);

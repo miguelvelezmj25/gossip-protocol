@@ -523,6 +523,7 @@ public class UIController
 				{
 					end = Math.min(end, length);
 					byte[] toWrite;
+					System.out.println("Start is: " + start + " and end is " + end + " and data.length is " + data.length);
 					toWrite = new byte[(int)(end - start)];
 					System.arraycopy(data, 0, toWrite, 0, toWrite.length);
 					
