@@ -21,3 +21,4 @@ hs_err_pid*
 # Miguel
 MiguelDriver.java
 .settings/org.eclipse.jdt.core.prefs
+/responses/
