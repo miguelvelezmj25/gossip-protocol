@@ -519,9 +519,9 @@ public class UIController
 		{
 			if(!isComplete())
 			{
-				System.out.println("start is: " + start + " and end is " + end);
 				try 
 				{
+					end = Math.min(end, length);
 					byte[] toWrite;
 					toWrite = new byte[end - start];
 					System.arraycopy(data, 0, toWrite, 0, toWrite.length);
