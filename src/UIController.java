@@ -443,7 +443,7 @@ public class UIController
 					if(command.getCommandName().equals("find") || command.getCommandName().equals("get"))
 					{
 						System.out.print("Please type what you would like to " + command.getCommandName() + ": ");
-						String message = "," + command.getCommandName() + "," + scan.nextLine();
+						String message = '\f' + command.getCommandName() + '\f' + scan.nextLine();
 						command.sendToPeer(message);
 					}
 					else
@@ -536,6 +536,7 @@ public class UIController
 				{
 					setComplete(true);
 				}
+				System.out.println("Start is " + start + " end is " + end);
 			}
 
 		}
