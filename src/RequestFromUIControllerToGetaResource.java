@@ -1,8 +1,5 @@
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 public class RequestFromUIControllerToGetaResource extends RequestFromUIController implements Runnable
 {
