@@ -1,5 +1,6 @@
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 
 public class RequestFromUIControllerToGetaResource extends RequestFromUIController implements Runnable
 {
@@ -57,6 +58,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 		
 		this.resourceID = resourceId;
 		this.responses = new boolean[numberOfParts];
+//		System.out.println(this.responses.length);
 	}
 
 	@Override
@@ -72,22 +74,31 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 		// Get the request part
 		byte[] partRequested = new byte[PartNumbers.getLengthInBytes()];
 	
-		System.arraycopy(udpMessage.getMessage(), ID.getLengthInBytes(), partRequested, 0, partRequested.length);
+		System.arraycopy(udpMessage.getMessage(), ID.getLengthInBytes(), partRequested, 0, PartNumbers.getLengthInBytes());
 				
+//		System.out.println(partRequested[0] + " - " + partRequested[1] + " - " + partRequested[2] + " - " + partRequested[3]);
+		
 		// Get the integer representation of the part
-		int partNumberRequested = 0;
+		int partNumberRequested = ByteBuffer.wrap(partRequested).getInt();//0;
 	
-		// Get an int from a byte array
-		for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
-			partNumberRequested = partNumberRequested | ((partRequested[i] & 0xFF) << ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
-		}
+//		// Get an int from a byte array
+//		for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
+//			partNumberRequested = partNumberRequested | ((partRequested[i] & 0xFF) << ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
+//		}
+
+//		System.out.println("Part requested: " + partNumberRequested);
+//		
+//		System.out.println("Before synchronize");
 		
 		// Synchronize the responses array 
 		synchronized(this.responses) 
 		{
+//			System.out.println("Have we seen this part: " + partNumberRequested + " - " + this.responses[partNumberRequested]);
 			// Check if we have seen this response before
 			if(!this.responses[partNumberRequested]) 
 			{
+//				System.out.println("Part not seen before");
+				
 				// Add a response with the part number
 				this.responses[partNumberRequested] = new Boolean(true);
 				
@@ -137,9 +148,9 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				resourceBytes.setPort(this.getUIControllerAddress().getPort());
 								
 				// Send the bytes as start, end, bytes
-//				this.getQueue().enQueue(resourceBytes);
+				this.getQueue().enQueue(resourceBytes);
 				
-				System.out.println("Sent to ui part:" + partNumberRequested);
+//				System.out.println("Sent to ui part:" + partNumberRequested);
 				
 				// Notify to get a new part
 				this.responses.notify();
@@ -161,17 +172,38 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Get a byte array from the part number
 				byte[] partNumber = new byte[4];
 				
-				for(int j = 0; j < PartNumbers.getLengthInBytes(); j++) {
-					partNumber[j] = (byte) (i >> ((PartNumbers.getLengthInBytes() - 1 - j) * 8));
+//				for(int j = 0; j < PartNumbers.getLengthInBytes(); j++) {
+//					partNumber[j] = (byte) (i >> ((PartNumbers.getLengthInBytes() - 1 - j) * 8));
+//				}
+				
+				int temp = i;
+//				
+//				System.out.println("\n" + i);
+								
+				for(int j = PartNumbers.getLengthInBytes() - 1; j >= 0; j--) {
+				
+					partNumber[j] = (byte) (temp & 0xFF);
+						temp = temp >>> 8;
+//					System.out.println(">>>> "+ (int)partNumber[j]);
 				}
-									
+//				partNumber = ByteBuffer.allocate(4).putInt(i).array();
+				
+//				System.out.println(i+":"+ByteBuffer.wrap(partNumber).getInt());
+				
+				byte[] message = new byte[ID.getLengthInBytes() + PartNumbers.getLengthInBytes()];
+				
+//				new String(ID.idFactory().getBytes()) + new String(partNumber)
+//				
+				System.arraycopy(ID.idFactory().getBytes(), 0, message, 0, ID.getLengthInBytes());
+				System.arraycopy(partNumber, 0, message, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
+				
 				// Create a UDP message with format RequestID, ResourceID, TTL, RandomID, partNumber			
-				UDPMessage getMessage = new UDPMessage(this.getID(), this.resourceID, new TimeToLive(), new String(ID.idFactory().getBytes()) + new String(partNumber)); 
+				UDPMessage getMessage = new UDPMessage(this.getID(), this.resourceID, new TimeToLive(), message); 
 				
 				// Send to peers
 				GossipPartners.getInstance().send(getMessage);	
 								
-				System.out.println("Requested part: " + i);
+//				System.out.println("Requested part: " + i);
 
 				// While we have not receive the part number that we requested
 				while(!this.responses[i])

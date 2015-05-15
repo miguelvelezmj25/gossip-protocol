@@ -2,6 +2,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PeerController implements Runnable {
@@ -218,9 +219,10 @@ public class PeerController implements Runnable {
 			// Check if it is a find or a get
 			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
 			{
-				System.out.println("Got a response to get");
+//				System.out.println("Got a response to get");
 				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
 				
+//				System.out.println("Update response");
 				// Update this request
 				getRequest.updateRequest(communityMessage);
 			}
@@ -232,27 +234,42 @@ public class PeerController implements Runnable {
 			// Get the request part
 			byte[] partRequested = new byte[PartNumbers.getLengthInBytes()];
 		
-			System.arraycopy(communityMessage.getMessage(), ID.getLengthInBytes(), partRequested, 0, partRequested.length);
+			System.arraycopy(communityMessage.getMessage(), ID.getLengthInBytes(), partRequested, 0, PartNumbers.getLengthInBytes());
 			
 			// Get the integer representation of the part
 			int partNumberRequested = 0;
 		
-			// Get an int from a byte array
-			for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
-				partNumberRequested = partNumberRequested | ((partRequested[i] & 0xFF) << ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
-			}
+//			// Get an int from a byte array
+//			for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
+//				partNumberRequested = partNumberRequested | ((partRequested[i] & 0xFF) << ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
+//			}
+//			
+//			System.out.println("We are sending out a part");
+//			
+//			System.out.println(partRequested[0] + " - " + partRequested[1] + " - " + partRequested[2] + " - " + partRequested[3]);
+//			
+//			System.out.println(ByteBuffer.wrap(partRequested).getInt());
+			
+			partNumberRequested = ByteBuffer.wrap(partRequested).getInt();
+			
+			byte[] buffer = new byte[ID.getLengthInBytes() + PartNumbers.getLengthInBytes() + resource.getBytesForPart(partNumberRequested).length];
+			
+			
+			System.arraycopy(ID.idFactory().getBytes(), 0, buffer, 0, ID.getLengthInBytes());
+			System.arraycopy(partRequested, 0, buffer, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
+			System.arraycopy(resource.getBytesForPart(partNumberRequested), 0, buffer, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), resource.getBytesForPart(partNumberRequested).length);
 			
 			// Get a random ID
-			StringBuilder resourceResponse = new StringBuilder(new String(ID.idFactory().getBytes()));
-			
-			// Attach part requested
-			resourceResponse.append(new String(partRequested));
-						
-			// Attache the bytes of the resource
-			resourceResponse.append(new String(resource.getBytesForPart(partNumberRequested)));
-			
+//			StringBuilder resourceResponse = new StringBuilder(new String(ID.idFactory().getBytes()));
+//			
+//			// Attach part requested
+//			resourceResponse.append(new String(partRequested));
+//						
+//			// Attache the bytes of the resource
+//			resourceResponse.append(new String(resource.getBytesForPart(partNumberRequested)));
+//			
 			// Create a message with format resourceID, requestID, TTL, randomId, part number, bytes. 
-			UDPMessage resourceMessage = new UDPMessage(communityMessage.getID2(), communityMessage.getID1(), new TimeToLive(), resourceResponse.toString());
+			UDPMessage resourceMessage = new UDPMessage(communityMessage.getID2(), communityMessage.getID1(), new TimeToLive(), buffer);
 			
 			// Send to my peers
 			GossipPartners.getInstance().send(resourceMessage);
@@ -388,8 +405,10 @@ public class PeerController implements Runnable {
 			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
 						
 			// Get the part numbers
-			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) 456);
+			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes()));
 						
+//			System.out.println(partNumbers);
+			
 			// Create a get request id
 			ID getId = ID.idFactory();
 			
