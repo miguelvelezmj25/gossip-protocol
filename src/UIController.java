@@ -132,6 +132,13 @@ public class UIController
 		}
 		//Finish everything
 		ourPeerController.setDoneFlag(true);
+		
+		Iterator<FileRebuilder> itr = fileRebuilders.values().iterator();
+		
+		while(itr.hasNext())
+		{
+			itr.next().setComplete(true);
+		}
 	}
 
 	/**
@@ -468,20 +475,28 @@ public class UIController
 		ID identity;
 		int length;
 		int written;
+		String mimeType;
 		
 		public FileRebuilder(ID identity)
 		{
 			this.identity = identity;
 			isComplete = new AtomicBoolean();
 			PeerResource rs;
+			String filePath;
+			File file;
 			rs = PeerResourceManager.getInstance().getResourceFromID(identity);
 			if(rs != null)
 			{
 				try 
 				{
-					raf = new RandomAccessFile("responses/" + makeValidFileName(rs.getDescription()),"rws");
+					this.mimeType = rs.getMimeType();
+					filePath = "responses/" + makeValidFileName(rs.getDescription());
+					System.out.println(filePath);
+					file = new File(filePath);
+					file.createNewFile();
+					raf = new RandomAccessFile(file,"rws");
 				} 
-				catch (FileNotFoundException e) 
+				catch (IOException e) 
 				{
 					e.printStackTrace();
 				}
@@ -504,28 +519,43 @@ public class UIController
 		{
 			if(!isComplete())
 			{
+				System.out.println("start is: " + start + " and end is " + end);
 				try 
 				{
-					raf.write(data,start, end - start);
+					byte[] toWrite;
+					toWrite = new byte[end - start];
+					System.arraycopy(data, 0, toWrite, 0, toWrite.length);
+					
+					raf.write(toWrite);
 				} 
 				catch (IOException e) 
 				{
 					e.printStackTrace();
 				}
-				written = written + end - start;
-				
-				if(written == length)
+				if(end >= length)
 				{
 					setComplete(true);
-					System.out.println("building complete!");
 				}
-
 			}
+
 		}
 		
 		public void setComplete(boolean complete)
 		{
+			if(!isComplete())
+			{
+				try 
+				{
+					raf.close();
+				} 
+				catch (IOException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			isComplete.set(complete);
+
 		}
 		
 		public boolean isComplete()
@@ -536,7 +566,7 @@ public class UIController
 		
 		public String makeValidFileName(String name)
 		{
-			String[] illegalCharacters = { "/", "\n", "\r", "\t", "\0", "\f", "`", "?", "*", "\\", "<", ">", "|", "\"", ":" };
+			char[] illegalCharacters = { ' ', ',', '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
 		
 			String result;
 			
@@ -544,12 +574,22 @@ public class UIController
 			
 			for(int i = 0; i < illegalCharacters.length; i = i + 1)
 			{
-				result = result.replaceAll(illegalCharacters[i], "");
+				for(int j = 0; j < result.length(); j = j + 1)
+				{
+					if(result.charAt(j) == illegalCharacters[i])
+					{
+						result = result.substring(0, j) + result.substring(j + 1, result.length());
+					}
+				}
 			}
-			
+			result = result + getMimeExt();
 			return result;
 		}
 		
+		public String getMimeExt()
+		{
+			return ".txt";
+		}
 		//TODO: figure out mime types
 	}
 }

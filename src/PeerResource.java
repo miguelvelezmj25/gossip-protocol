@@ -38,7 +38,7 @@ public class PeerResource
 		loc2 = data.indexOf(delimiter, loc + 1);
 		mimeType = data.substring(1, loc);
 		length = Integer.parseInt(data.substring(loc + 1, loc2));
-		description = data.substring(loc2 + 1);
+		description = data.substring(loc2 + 1).trim();
 	}
 	
 	/**

@@ -42,7 +42,7 @@ public class Resource
 		loc2 = data.indexOf(delimiter, loc + 1);
 		mimeType = data.substring(1, loc);
 		location = new File(data.substring(loc + 1, loc2));
-		description = data.substring(loc2 + 1);
+		description = data.substring(loc2 + 1).trim();
 		try 
 		{
 			fileData = Files.readAllBytes(location.toPath());
