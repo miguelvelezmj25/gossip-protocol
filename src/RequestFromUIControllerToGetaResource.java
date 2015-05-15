@@ -27,6 +27,12 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	 * 	 	
 	 * 		public void updateRequest(UDPMessage udpMessage);
 	 *			update the request
+	 *
+	 * 		public void run() 
+	 * 			Process packets from the UI and community
+	 *  
+	 *  	public Thread startAsThread() 
+	 *  		Start this class as a thread
 	 * 
 	 *      
 	 * Modification History:
@@ -36,6 +42,9 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	 * 
 	 * 		May 13, 2015
 	 * 			Implemented getting a part number and sending to UI.
+	 * 
+ 	 * 		May 14, 2015
+	 * 			Using a thread to synchronize the sending and receiving.
 	 *  
 	 */
 		
@@ -45,18 +54,17 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	public RequestFromUIControllerToGetaResource(ID id, ID resourceId, InetSocketAddress uiController, OutgoingPacketQueue outgoingPacket, int numberOfParts) 
 	{
 		// Create a request to find resources from peers
+		
 		// Call the super constructor
 		super(id, uiController, outgoingPacket);
 		
 		this.resourceID = resourceId;
 		this.responses = new boolean[numberOfParts];
-			
 	}
 
 	@Override
 	public void updateRequest(UDPMessage udpMessage) 
 	{
-			
 		// Send the datagram packet to the UI controller
 		// Check if null
 		if(udpMessage == null) 
@@ -77,7 +85,8 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 			partNumberRequested = partNumberRequested | ((partRequested[i] & 0xFF) << ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 		}
 		
-		synchronized (this.responses) 
+		// Synchronize the responses array 
+		synchronized(this.responses) 
 		{
 			// Check if we have seen this response before
 			if(!this.responses[partNumberRequested]) 
@@ -103,7 +112,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 					byteNumber[i] = (byte) (startByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
-				// Put the 4 bytes of the starting byte at the beginning of the bytes to send
+				// Put the 4 bytes of the starting byte at the 16 slot to send
 				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
 				
 				// Get the end byte
@@ -115,13 +124,12 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 					byteNumber[i] = (byte) (endByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
-				// Put the 4 bytes of the end byte in spot 4 of the bytes to send
+				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
 				System.arraycopy(byteNumber, 0, bytesToSend, PartNumbers.getLengthInBytes() + ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
 				
 				// Copy the bytes to send
 				System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() << 1) + ID.getLengthInBytes(), 456);
-				
-				
+								
 				// Create a new datagram
 				DatagramPacket resourceBytes = new DatagramPacket(bytesToSend, bytesToSend.length);
 				
@@ -141,8 +149,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 			}
 			
 		}
-		
-		
+			
 	}
 
 	@Override
@@ -150,6 +157,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	{
 		for (int i = 0; i < this.responses.length; i++)
 	    {
+			// Synchronize the responses array
 			synchronized(this.responses)
 			{
 							
@@ -164,35 +172,21 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				UDPMessage getMessage = new UDPMessage(this.getID(), this.resourceID, new TimeToLive(), new String(ID.idFactory().getBytes()) + new String(partNumber)); 
 				
 				// Send to peers
-//				GossipPartners.getInstance().send(getMessage);	
-				
-				DatagramPacket send = getMessage.getDatagramPacket();
-				
-				send.setPort(12345);
-				
-				try {
-					send.setAddress(InetAddress.getLocalHost());
-		//			send.setAddress(InetAddress.getByName("140.209.121.69"));
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				}
-				
-				this.getQueue().enQueue(send);
-				
+				GossipPartners.getInstance().send(getMessage);	
+								
 				System.out.println("Requested part: " + i);
 
+				// While we have not receive the part number that we requested
 				while(!this.responses[i])
 				{
-//					System.out.println("While we dont have a response");
 					try 
 					{
-//						System.out.println("Waiting");
+						// Wait
 						this.responses.wait(); 
-//						System.out.println("Waited");
 					} 
 					catch (InterruptedException ei) 
 					{
-//						System.out.println("Exception while waiting");
+
 					}			
 					
 				}
