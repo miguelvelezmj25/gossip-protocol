@@ -68,7 +68,10 @@ public class GossipPartners
 			Iterator<GossipPartner> ie;
 			ie = gossipPartners.iterator();
 
+			System.out.println(udpMessage.getTimeToLive().get());
 			message = new UDPMessage(udpMessage.getID1(),udpMessage.getID2(),new TimeToLive(udpMessage.getTimeToLive().get()-1), udpMessage.getMessage());
+			System.out.println(message.getTimeToLive().get());
+
 			while(ie.hasNext())
 			{
 				ie.next().send(message);
