@@ -112,28 +112,28 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				System.arraycopy(udpMessage.getID1().getBytes(), 0, bytesToSend, 0, ID.getLengthInBytes());
 				
 				// Get the starting byte
-				int startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
+				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
 				
-				byte[] byteNumber = new byte[PartNumbers.getLengthInBytes()];
+				byte[] byteNumber = new byte[PartNumbers.getLengthInBytes() << 1];
 				
 				for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
 					byteNumber[i] = (byte) (startByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
-				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
+				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() << 1));
 				
 				// Get the end byte
-				int endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
+				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
 				
-				byteNumber = new byte[PartNumbers.getLengthInBytes()];
+				byteNumber = new byte[(PartNumbers.getLengthInBytes() << 1)];
 				
 				for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
 					byteNumber[i] = (byte) (endByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
-				System.arraycopy(byteNumber, 0, bytesToSend, PartNumbers.getLengthInBytes() + ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
+				System.arraycopy(byteNumber, 0, bytesToSend, (PartNumbers.getLengthInBytes() << 1) + ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() << 1));
 				
 				// Copy the bytes to send
 				System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() << 1) + ID.getLengthInBytes(), 456);
