@@ -511,7 +511,7 @@ public class UIController
 
 		public synchronized void rebuild(byte[] start, byte[] end, byte[] data) 
 		{
-			rebuild(ByteBuffer.wrap(start).getInt(), ByteBuffer.wrap(end).getInt(), data);
+			rebuild(ByteBuffer.wrap(start).getLong(), ByteBuffer.wrap(end).getLong(), data);
 			
 		}
 
@@ -523,7 +523,6 @@ public class UIController
 				{
 					end = Math.min(end, length);
 					byte[] toWrite;
-					System.out.println("Start is: " + start + " and end is " + end + " and data.length is " + data.length);
 					toWrite = new byte[(int)(end - start)];
 					System.arraycopy(data, 0, toWrite, 0, toWrite.length);
 					
@@ -537,7 +536,6 @@ public class UIController
 				{
 					setComplete(true);
 				}
-				System.out.println("Start is " + start + " end is " + end);
 			}
 
 		}
