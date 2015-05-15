@@ -68,6 +68,7 @@ public class GossipPartner
 		//Creates the datagramPacket sets the IP address of the machine to which this
 		//datagram is being sent. Then the messages datagramPacket is put in queue.
 		DatagramPacket			dp;
+		System.out.println(this.getGossipPartnerAddress().getAddress());
 		try
 		{
 			dp = message.getDatagramPacket();
