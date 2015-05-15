@@ -443,7 +443,7 @@ public class UIController
 					if(command.getCommandName().equals("find") || command.getCommandName().equals("get"))
 					{
 						System.out.print("Please type what you would like to " + command.getCommandName() + ": ");
-						String message = '\f' + command.getCommandName() + '\f' + scan.nextLine();
+						String message = '~' + command.getCommandName() + '~' + scan.nextLine();
 						command.sendToPeer(message);
 					}
 					else
