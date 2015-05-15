@@ -116,27 +116,27 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				byte[] byteNumber = new byte[PartNumbers.getLengthInBytes() << 1];
 				
-				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
+				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 2); i++) {
 					byteNumber[i] = (byte) (startByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
-				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() << 1));
+				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() * 2));
 				
 				// Get the end byte
 				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes());
 				
-				byteNumber = new byte[(PartNumbers.getLengthInBytes() << 1)];
+				byteNumber = new byte[(PartNumbers.getLengthInBytes() * 2)];
 				
 				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
 					byteNumber[i] = (byte) (endByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
-				System.arraycopy(byteNumber, 0, bytesToSend, (PartNumbers.getLengthInBytes() << 1) + ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() << 1));
+				System.arraycopy(byteNumber, 0, bytesToSend, (PartNumbers.getLengthInBytes() *  2) + ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() * 2));
 				
 				// Copy the bytes to send
-				System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() << 1) + ID.getLengthInBytes(), 456);
+				System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() * 2) + ID.getLengthInBytes(), 456);
 								
 				// Create a new datagram
 				DatagramPacket resourceBytes = new DatagramPacket(bytesToSend, bytesToSend.length);
