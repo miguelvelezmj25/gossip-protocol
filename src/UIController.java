@@ -106,8 +106,8 @@ public class UIController
 				byte[] data = incomingPacketsFromPeerQueue.deQueue().getData();
 				byte[] id = new byte[ID.getLengthInBytes()];
 				ID identity;
-				byte[] start = new byte[4];
-				byte[] end = new byte[4];
+				byte[] start = new byte[8];
+				byte[] end = new byte[8];
 				byte[] other = new byte[data.length - id.length - start.length - end.length];
 				FileRebuilder fr;
 				
@@ -473,7 +473,7 @@ public class UIController
 		RandomAccessFile raf;
 		AtomicBoolean isComplete;
 		ID identity;
-		int length;
+		long length;
 		int written;
 		String mimeType;
 		String filePath;
@@ -515,7 +515,7 @@ public class UIController
 			
 		}
 
-		public synchronized void rebuild(int start, int end, byte[] data)
+		public synchronized void rebuild(long start, long end, byte[] data)
 		{
 			if(!isComplete())
 			{
@@ -523,7 +523,7 @@ public class UIController
 				{
 					end = Math.min(end, length);
 					byte[] toWrite;
-					toWrite = new byte[end - start];
+					toWrite = new byte[(int)(end - start)];
 					System.arraycopy(data, 0, toWrite, 0, toWrite.length);
 					
 					raf.write(toWrite);

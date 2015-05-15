@@ -8,7 +8,7 @@
 public class PeerResource 
 {
 	private String 	description;
-	private int 	length;
+	private long 	length;
 	private String 	mimeType;
 	private ID 		resourceID;
 	private byte[] 	fileData;
@@ -37,7 +37,7 @@ public class PeerResource
 		loc = data.indexOf(delimiter,1);
 		loc2 = data.indexOf(delimiter, loc + 1);
 		mimeType = data.substring(1, loc);
-		length = Integer.parseInt(data.substring(loc + 1, loc2));
+		length = Long.parseLong(data.substring(loc + 1, loc2));
 		description = data.substring(loc2 + 1).trim();
 	}
 	
@@ -54,7 +54,7 @@ public class PeerResource
 	 * Returns the file this resource represents.
 	 * @return the file this resource represents.
 	 */
-	public int getLength()
+	public long getLength()
 	{
 		return this.length;
 	}
