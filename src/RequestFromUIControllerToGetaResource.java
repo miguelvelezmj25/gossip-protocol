@@ -112,7 +112,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				System.arraycopy(udpMessage.getID1().getBytes(), 0, bytesToSend, 0, ID.getLengthInBytes());
 				
 				// Get the starting byte
-				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (8));
+				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (4));
 				
 				System.out.println("start bytes: " + startByte);
 				
@@ -126,7 +126,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), 8);
 				
 				// Get the end byte
-				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (8));
+				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (4));
 				
 				System.out.println("End bytes: " + endByte);
 				
