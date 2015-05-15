@@ -114,10 +114,10 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Get the starting byte
 				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (PartNumbers.getLengthInBytes() * 2));
 				
-				byte[] byteNumber = new byte[PartNumbers.getLengthInBytes() << 1];
+				byte[] byteNumber = new byte[8];
 				
-				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
-					byteNumber[i] = (byte) (startByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
+				for(int i = 0; i < 8; i++) {
+					byteNumber[i] = (byte) (startByte >> (8 - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
