@@ -124,21 +124,21 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() * 2));
 				
 				// Get the end byte
-				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (PartNumbers.getLengthInBytes() * 2));
+				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (8));
 				
 				System.out.println(endByte);
 				
-				byteNumber = new byte[(PartNumbers.getLengthInBytes() * 2)];
+				byteNumber = new byte[8];
 				
-				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
-					byteNumber[i] = (byte) (endByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
+				for(int i = 0; i < (8); i++) {
+					byteNumber[i] = (byte) (endByte >> ((8 - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
-				System.arraycopy(byteNumber, 0, bytesToSend, (PartNumbers.getLengthInBytes() *  2) + ID.getLengthInBytes(), (PartNumbers.getLengthInBytes() * 2));
+				System.arraycopy(byteNumber, 0, bytesToSend, (8) + ID.getLengthInBytes(), (8));
 				
 				// Copy the bytes to send
-				System.arraycopy(responseMessage, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), bytesToSend, (PartNumbers.getLengthInBytes() * 2) + ID.getLengthInBytes(), 456);
+				System.arraycopy(responseMessage, ID.getLengthInBytes() + 4, bytesToSend, (16) + ID.getLengthInBytes(), 456);
 								
 				// Create a new datagram
 				DatagramPacket resourceBytes = new DatagramPacket(bytesToSend, bytesToSend.length);
