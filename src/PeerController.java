@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.net.*;
 
 public class PeerController implements Runnable {
 	/**
@@ -113,17 +114,17 @@ public class PeerController implements Runnable {
 			this.uiControllerAddress = uiControllerAddress;
 						
 			// Testing
-//			try {
+			try {
 				GossipPartners.getInstance().addPartner(new GossipPartner(
 															new InetSocketAddress(
-																this.uiControllerAddress.getAddress(),
-//																	InetAddress.getByName("140.209.122.131"),
+//																this.uiControllerAddress.getAddress(),
+																	InetAddress.getByName("140.209.121.104"),
 																	12345)
 																, this.outgoingPacketsQueue));
-//			} catch (UnknownHostException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} 
 		catch (SocketException se) 
@@ -272,28 +273,7 @@ public class PeerController implements Runnable {
 			UDPMessage resourceMessage = new UDPMessage(communityMessage.getID2(), communityMessage.getID1(), new TimeToLive(), buffer);
 			
 			// Send to my peers
-			GossipPartners.getInstance().send(resourceMessage);
-			
-/////////////////// TODO delete testing
-////		System.out.println("id1: " + findMessage.getID1());
-////		System.out.println("id2: " + findMessage.getID2());
-////		System.out.println("tll: " + findMessage.getTimeToLive());
-////		System.out.println(new String(getMessage.getMessage()));
-//
-//			DatagramPacket send = resourceMessage.getDatagramPacket();
-//				
-//			send.setPort(12345);
-//			
-//			try {
-//				send.setAddress(InetAddress.getLocalHost());
-//	//			send.setAddress(InetAddress.getByName("140.209.121.69"));
-//			} catch (UnknownHostException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			outgoingPacketsQueue.enQueue(send);
-///////////////////// TODO delete	testing
-			
+			GossipPartners.getInstance().send(resourceMessage);		
 		}
 		// Check if the text criteria matches something we might have
 		else if(ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage())).length != 0)
@@ -377,26 +357,6 @@ public class PeerController implements Runnable {
 									
 			// Send to the peer controllers
 			GossipPartners.getInstance().send(findMessage);
-			
-/////////////////// TODO delete testing
-////			System.out.println("id1: " + findMessage.getID1());
-////			System.out.println("id2: " + findMessage.getID2());
-////			System.out.println("tll: " + findMessage.getTimeToLive());
-////			System.out.println(new String(findMessage.getMessage()));
-//
-//			DatagramPacket send = findMessage.getDatagramPacket();
-//				
-//			send.setPort(12345);
-//			
-//			try {
-//				send.setAddress(InetAddress.getLocalHost());
-////				send.setAddress(InetAddress.getByName("140.209.121.69"));
-//			} catch (UnknownHostException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			this.outgoingPacketsQueue.enQueue(send);
-///////////////////// TODO delete	testing
 		}
 		// Check if it is a get request
 		else if(uiCommand.indexOf(delimiter + "get") == 0) 
@@ -405,8 +365,10 @@ public class PeerController implements Runnable {
 			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
 						
 			// Get the part numbers
-			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes()));
+//			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes()));
 						
+			int partNumbers = (int) Math.ceil(PeerResourceManager.getInstance().getResourceFromID(resourceID).getLength() / (double)  (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes()));
+			
 //			System.out.println(partNumbers);
 			
 			// Create a get request id
