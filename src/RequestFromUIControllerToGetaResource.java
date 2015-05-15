@@ -117,7 +117,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				byte[] byteNumber = new byte[8];
 				
 				for(int i = 0; i < 8; i++) {
-					byteNumber[i] = (byte) (startByte >> (8 - 1 - i) * 8));
+					byteNumber[i] = (byte) (startByte >> ((8 - 1 - i) * 8));
 				}
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
