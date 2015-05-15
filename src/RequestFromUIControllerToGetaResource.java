@@ -116,7 +116,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				byte[] byteNumber = new byte[PartNumbers.getLengthInBytes() << 1];
 				
-				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 2); i++) {
+				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
 					byteNumber[i] = (byte) (startByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
@@ -125,7 +125,9 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				// Get the end byte
 				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (PartNumbers.getLengthInBytes() * 2));
-								
+				
+				System.out.println(endByte);
+				
 				byteNumber = new byte[(PartNumbers.getLengthInBytes() * 2)];
 				
 				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
