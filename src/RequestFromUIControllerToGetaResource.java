@@ -116,7 +116,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				byte[] byteNumber = new byte[PartNumbers.getLengthInBytes() << 1];
 				
-				for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
+				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
 					byteNumber[i] = (byte) (startByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
@@ -128,7 +128,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				byteNumber = new byte[(PartNumbers.getLengthInBytes() << 1)];
 				
-				for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
+				for(int i = 0; i < (PartNumbers.getLengthInBytes() << 1); i++) {
 					byteNumber[i] = (byte) (endByte >> ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
 				}
 				
