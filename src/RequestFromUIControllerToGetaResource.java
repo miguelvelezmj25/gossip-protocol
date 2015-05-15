@@ -114,33 +114,40 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Get the starting byte
 				long startByte = partNumberRequested * (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (4));
 				
-				System.out.println("start bytes: " + startByte);
+//				System.out.println("start bytes: " + startByte);
 				
 				
 				byte[] byteNumber = ByteBuffer.allocate(8).putLong(startByte).array();
 				
-				System.out.println(byteNumber[0] + " - " + byteNumber[1] + " - " + byteNumber[2] + " - " + byteNumber[3] + " - " + byteNumber[4] + " - " + byteNumber[5] + " - " + byteNumber[6] + " - " + byteNumber[7]);
-				
+//				System.out.println(byteNumber[0] + " - " + byteNumber[1] + " - " + byteNumber[2] + " - " + byteNumber[3] + " - " + byteNumber[4] + " - " + byteNumber[5] + " - " + byteNumber[6] + " - " + byteNumber[7]);
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
 				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), 8);
 				
+				
+				
+				
 				// Get the end byte
 				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (4));
 				
-				System.out.println("End bytes: " + endByte);
+//				System.out.println("End bytes: " + endByte);
 				
 				byteNumber = ByteBuffer.allocate(8).putLong(endByte).array();
 				
-				System.out.println(byteNumber[0] + " - " + byteNumber[1] + " - " + byteNumber[2] + " - " + byteNumber[3] + " - " + byteNumber[4] + " - " + byteNumber[5] + " - " + byteNumber[6] + " - " + byteNumber[7]);
-				
+//				System.out.println(byteNumber[0] + " - " + byteNumber[1] + " - " + byteNumber[2] + " - " + byteNumber[3] + " - " + byteNumber[4] + " - " + byteNumber[5] + " - " + byteNumber[6] + " - " + byteNumber[7]);
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
 				System.arraycopy(byteNumber, 0, bytesToSend, (8) + ID.getLengthInBytes(), (8));
 				
+				
+				
 				// Copy the bytes to send
 				System.arraycopy(responseMessage, ID.getLengthInBytes() + 4, bytesToSend, (16) + ID.getLengthInBytes(), 456);
-								
+				
+				
+//				System.out.println("Sending bytes to UI: " + bytesToSend.length);
+				
+				
 				// Create a new datagram
 				DatagramPacket resourceBytes = new DatagramPacket(bytesToSend, bytesToSend.length);
 				
@@ -150,6 +157,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Set the port of the UIController
 				resourceBytes.setPort(this.getUIControllerAddress().getPort());
 								
+				resourceBytes.setData(bytesToSend);
 				//System.out.println(new String(bytesToSend));
 				
 				// Send the bytes as start, end, bytes
