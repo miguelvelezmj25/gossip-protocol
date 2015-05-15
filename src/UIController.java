@@ -476,13 +476,13 @@ public class UIController
 		int length;
 		int written;
 		String mimeType;
+		String filePath;
 		
 		public FileRebuilder(ID identity)
 		{
 			this.identity = identity;
 			isComplete = new AtomicBoolean();
 			PeerResource rs;
-			String filePath;
 			File file;
 			rs = PeerResourceManager.getInstance().getResourceFromID(identity);
 			if(rs != null)
@@ -547,6 +547,7 @@ public class UIController
 				try 
 				{
 					raf.close();
+					System.out.println("File " + filePath + " is done rebuilding!");
 				} 
 				catch (IOException e) 
 				{
