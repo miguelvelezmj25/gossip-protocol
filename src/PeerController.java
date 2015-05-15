@@ -308,11 +308,11 @@ public class PeerController implements Runnable {
 				StringBuilder resourceInfo = new StringBuilder(new String(ID.idFactory().getBytes()));
 								
 				// Add mimeType, length, and description
-				resourceInfo.append(",");
+				resourceInfo.append('\f');
 				resourceInfo.append(ourResource.getMimeType());
-				resourceInfo.append(",");
+				resourceInfo.append('\f');
 				resourceInfo.append(ourResource.getSizeInBytes());
-				resourceInfo.append(",");
+				resourceInfo.append('\f');
 				resourceInfo.append(ourResource.getDescription());
 						
 				// Create a message with format resourceID, peerID, TTL, description
