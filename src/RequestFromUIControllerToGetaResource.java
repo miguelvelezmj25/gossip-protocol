@@ -116,13 +116,11 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				System.out.println("start bytes: " + startByte);
 				
-				/*byte[] byteNumber = new byte[8];
-				
-				for(int i = 0; i < 8; i++) {
-					byteNumber[i] = (byte) (startByte >> ((8 - 1 - i) * 8));
-				}*/
 				
 				byte[] byteNumber = ByteBuffer.allocate(8).putLong(startByte).array();
+				
+				System.out.println(byteNumber[0] + " - " + byteNumber[1] + " - " + byteNumber[2] + " - " + byteNumber[3] + " - " + byteNumber[4] + " - " + byteNumber[5] + " - " + byteNumber[6] + " - " + byteNumber[7]);
+				
 				
 				// Put the 4 bytes of the starting byte at the 16 slot to send
 				System.arraycopy(byteNumber, 0, bytesToSend, ID.getLengthInBytes(), 8);
@@ -132,13 +130,10 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				System.out.println("End bytes: " + endByte);
 				
-				/*byteNumber = new byte[8];
-				
-				for(int i = 0; i < (8); i++) {
-					byteNumber[i] = (byte) (endByte >> ((8 - 1 - i) * 8));
-				}*/
-				
 				byteNumber = ByteBuffer.allocate(8).putLong(endByte).array();
+				
+				System.out.println(byteNumber[0] + " - " + byteNumber[1] + " - " + byteNumber[2] + " - " + byteNumber[3] + " - " + byteNumber[4] + " - " + byteNumber[5] + " - " + byteNumber[6] + " - " + byteNumber[7]);
+				
 				
 				// Put the 4 bytes of the end byte in spot 20 of the bytes to send
 				System.arraycopy(byteNumber, 0, bytesToSend, (8) + ID.getLengthInBytes(), (8));
