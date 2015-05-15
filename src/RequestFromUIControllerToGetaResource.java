@@ -126,7 +126,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Get the end byte
 				long endByte = startByte + (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - (8));
 				
-				System.out.println(endByte);
+//				System.out.println(endByte);
 				
 				byteNumber = new byte[8];
 				
@@ -149,6 +149,8 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Set the port of the UIController
 				resourceBytes.setPort(this.getUIControllerAddress().getPort());
 								
+				System.out.println(new String(bytesToSend));
+				
 				// Send the bytes as start, end, bytes
 				this.getQueue().enQueue(resourceBytes);
 				
