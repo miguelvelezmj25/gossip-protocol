@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.*;
@@ -25,7 +27,7 @@ public class UIController
 	private DatagramSender 				sendToPeer;
 	private ScannerHandler				scannerHandler;
 	private HashMap<ID,FileRebuilder>	fileRebuilders;
-	
+	private MimeExtensions				mimeExtensions;
 	/**
 	 * @param incomingPortNumber
 	 * @param outgoingPortNumber
@@ -83,8 +85,9 @@ public class UIController
 		this.commandProcessor.register(new CommandSend());
 		this.commandProcessor.register(new CommandFind());
 		this.commandProcessor.register(new CommandGet());
-
 		
+		
+		this.mimeExtensions = new MimeExtensions(new File("resource/MimeTypes.txt"));
 		this.fileRebuilders = new HashMap<ID, FileRebuilder>();
 	}
 
@@ -585,17 +588,51 @@ public class UIController
 					}
 				}
 			}
-			result = result + getMimeExt();
+			result = result + mimeExtensions.getExtension(mimeType);
 			return result;
 		}
 		
-		public String getMimeExt()
-		{
-			return ".txt";
-		}
 		//TODO: figure out mime types
+	}
+	
+	public class MimeExtensions
+	{
+		private HashMap<String, String> mimeTypes;
+		public MimeExtensions(File file)
+		{
+			String extension;
+			String type;
+			BufferedReader bf;
+			String line;
+			
+			mimeTypes = new HashMap<String,String>();
+			try
+			{
+				bf = new BufferedReader(new FileReader(file));
+				line = bf.readLine();
+				while(line != null)
+				{
+					extension = line.substring(0, line.indexOf('\t'));
+					type = line.substring(line.indexOf('\t') + 1);
+					mimeTypes.put(type, extension);
+					line = bf.readLine();
+				}
+			}
+			catch(FileNotFoundException fnfe)
+			{
+				System.out.println(fnfe.getMessage());
+			}
+			catch(IOException ioe)
+			{
+				System.out.println(ioe.getMessage());
+			}
+		}
+		
+		public String getExtension(String type)
+		{
+			return mimeTypes.get(type);
+		}
 	}
 }
 
 
-// TODO implement start, stop, get, find, join, leave
