@@ -519,9 +519,11 @@ public class UIController
 		{
 			if(!isComplete())
 			{
+
 				try 
 				{
 					end = Math.min(end, length);
+					System.out.println("Getting packet starting at " + start + " and ending at " + end);
 					byte[] toWrite;
 					toWrite = new byte[(int)(end - start)];
 					System.arraycopy(data, 0, toWrite, 0, toWrite.length);
