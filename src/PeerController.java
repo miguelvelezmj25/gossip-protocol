@@ -85,6 +85,9 @@ public class PeerController implements Runnable {
 	 * 	 	May 14, 2015
 	 * 			Implemented sending and receiving a part
 	 * 
+	 * 	 	May 16, 2015
+	 * 			Sending the correct information to UI, and gossips
+	 * 
 	 */
 	
 	private AtomicBoolean					done;
@@ -113,16 +116,19 @@ public class PeerController implements Runnable {
 			
 			this.uiControllerAddress = uiControllerAddress;
 						
-			// Testing
 			try {
 				GossipPartners.getInstance().addPartner(new GossipPartner(
 															new InetSocketAddress(
-//																this.uiControllerAddress.getAddress(),
 																	InetAddress.getByName("140.209.121.104"),
-																	12345)
-																, this.outgoingPacketsQueue));
+																	12345),
+																	this.outgoingPacketsQueue));
+				
+				GossipPartners.getInstance().addPartner(new GossipPartner(
+															new InetSocketAddress(
+																	this.uiControllerAddress.getAddress(),
+																	12345), 
+																	this.outgoingPacketsQueue));
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -220,10 +226,8 @@ public class PeerController implements Runnable {
 			// Check if it is a find or a get
 			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
 			{
-//				System.out.println("Got a response to get");
 				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
-				
-//				System.out.println("Update response");
+			
 				// Update this request
 				getRequest.updateRequest(communityMessage);
 			}
@@ -240,35 +244,21 @@ public class PeerController implements Runnable {
 			// Get the integer representation of the part
 			int partNumberRequested = 0;
 		
-//			// Get an int from a byte array
-//			for(int i = 0; i < PartNumbers.getLengthInBytes(); i++) {
-//				partNumberRequested = partNumberRequested | ((partRequested[i] & 0xFF) << ((PartNumbers.getLengthInBytes() - 1 - i) * 8));
-//			}
-//			
-//			System.out.println("We are sending out a part");
-//			
-//			System.out.println(partRequested[0] + " - " + partRequested[1] + " - " + partRequested[2] + " - " + partRequested[3]);
-//			
-//			System.out.println(ByteBuffer.wrap(partRequested).getInt());
-			
+			// Convert from a array to int
 			partNumberRequested = ByteBuffer.wrap(partRequested).getInt();
 			
+			// Create an array to hold a random ID, a part number, and the bytes to send
 			byte[] buffer = new byte[ID.getLengthInBytes() + PartNumbers.getLengthInBytes() + resource.getBytesForPart(partNumberRequested).length];
 			
-			
+			// Copy the random id
 			System.arraycopy(ID.idFactory().getBytes(), 0, buffer, 0, ID.getLengthInBytes());
-			System.arraycopy(partRequested, 0, buffer, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
-			System.arraycopy(resource.getBytesForPart(partNumberRequested), 0, buffer, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), resource.getBytesForPart(partNumberRequested).length);
 			
-			// Get a random ID
-//			StringBuilder resourceResponse = new StringBuilder(new String(ID.idFactory().getBytes()));
-//			
-//			// Attach part requested
-//			resourceResponse.append(new String(partRequested));
-//						
-//			// Attache the bytes of the resource
-//			resourceResponse.append(new String(resource.getBytesForPart(partNumberRequested)));
-//			
+			// Copy the part requested after the ID
+			System.arraycopy(partRequested, 0, buffer, ID.getLengthInBytes(), PartNumbers.getLengthInBytes());
+			
+			// Copy the bytes requested after the part number
+			System.arraycopy(resource.getBytesForPart(partNumberRequested), 0, buffer, ID.getLengthInBytes() + PartNumbers.getLengthInBytes(), resource.getBytesForPart(partNumberRequested).length);
+				
 			// Create a message with format resourceID, requestID, TTL, randomId, part number, bytes. 
 			UDPMessage resourceMessage = new UDPMessage(communityMessage.getID2(), communityMessage.getID1(), new TimeToLive(), buffer);
 			
@@ -300,31 +290,10 @@ public class PeerController implements Runnable {
 				
 				// Send to my peers
 				GossipPartners.getInstance().send(resourceMessage);	
-				
-//////////////////////////////////////// TODO delete testing
-////				System.out.println("id1: " + resourceMessage.getID1().getBytes().length);
-////				System.out.println("id2: " + resourceMessage.getID2().getBytes().length);
-////				System.out.println("tll: " + resourceMessage.getTimeToLive());
-////				System.out.println("message of the file we just sent: " + new String(resourceMessage.getMessage()));
-//	
-//				DatagramPacket send = resourceMessage.getDatagramPacket();
-//					
-//				send.setPort(12345);
-//				
-//				try {
-//					send.setAddress(InetAddress.getLocalHost());
-////					send.setAddress(InetAddress.getByName("140.209.121.69"));
-//				} catch (UnknownHostException e) {
-//					e.printStackTrace();
-//				}
-//				
-//				this.outgoingPacketsQueue.enQueue(send);
-//////////////////////////////////////// TODO delete	testing
-				
 			}
 		}
 		else {
-			System.out.println("Testing that the peer is listening to the community: " + new String(communityMessage.getMessage()).trim());
+			System.out.println("Testing that the peer is listening to the community: " + communityPacket.getAddress());
 		}
 	}
 
@@ -364,12 +333,8 @@ public class PeerController implements Runnable {
 			// Get the resource id			
 			ID resourceID = RequestFromUIControllerToFindResources.getResource(Integer.parseInt(uiCommand.substring(5)));
 						
-			// Get the part numbers
-//			int partNumbers = (int) Math.ceil(ResourceManager.getInstance().getResourceFromID(resourceID).getSizeInBytes() / (double) (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes()));
-						
+			// Get the part numbers from the resource that we want		
 			int partNumbers = (int) Math.ceil(PeerResourceManager.getInstance().getResourceFromID(resourceID).getLength() / (double)  (UDPMessage.getMaximumPacketSizeInBytes() - ID.getLengthInBytes() - PartNumbers.getLengthInBytes()));
-			
-//			System.out.println(partNumbers);
 			
 			// Create a get request id
 			ID getId = ID.idFactory();
@@ -387,25 +352,6 @@ public class PeerController implements Runnable {
 		else
 		{
 			System.out.println("UIController, you sent a bad request to the PeerController");
-			
-			// TODO leave this here in case we want to test later sending to UI
-//			String message = "UIController, you sent a bad request to the PeerController"; 
-//			byte[] buffer = new byte[message.getBytes().length];
-//			
-//			// Create a packet to send the error message
-//			DatagramPacket errorPacket = new DatagramPacket(buffer, buffer.length);
-//						
-//			// Set the address
-//			errorPacket.setAddress(this.uiControllerAddress.getAddress());;
-//				
-//			// Set the listening port of the UI
-//			errorPacket.setPort(this.uiControllerAddress.getPort());
-//			
-//			// Set the data
-//			errorPacket.setData(message.getBytes());
-//			
-//			// Enqueue the packet in the outgoing queue
-//			outgoingPacketsQueue.enQueue(errorPacket);
 		}
 		
 	}
