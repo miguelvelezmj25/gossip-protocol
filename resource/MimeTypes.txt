@@ -144,6 +144,7 @@
 .jam	audio/x-jam
 .jav	text/plain
 .java	text/plain
+.java	text/java
 .jcm	application/x-java-commerce
 .jfif	image/jpeg
 .jfif	image/pjpeg

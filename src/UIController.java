@@ -493,7 +493,15 @@ public class UIController
 				try 
 				{
 					this.mimeType = rs.getMimeType();
-					filePath = "responses/" + makeValidFileName(rs.getDescription());
+					if(rs.getDescription().equals(""))
+					{
+						filePath = "responses/" + makeValidFileName(identity.toString());
+					}
+					else
+					{
+						filePath = "responses/" + makeValidFileName(rs.getDescription());
+					}
+					
 					System.out.println(filePath);
 					file = new File(filePath);
 					file.createNewFile();
@@ -604,7 +612,7 @@ public class UIController
 			String type;
 			BufferedReader bf;
 			String line;
-			
+			System.out.println("Registering Mime Types...");
 			mimeTypes = new HashMap<String,String>();
 			try
 			{

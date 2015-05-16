@@ -33,7 +33,7 @@ public class ResourceManager
 		Resource resource;
 		BufferedReader bf;
 		String line;
-		
+		System.out.println("Registering resources...");
 		try
 		{
 			bf = new BufferedReader(new FileReader(file));
