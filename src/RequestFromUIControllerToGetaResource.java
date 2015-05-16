@@ -60,7 +60,9 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 		super(id, uiController, outgoingPacket);
 		
 		this.resourceID = resourceId;
-		this.responses = new boolean[numberOfParts];
+		
+		// Part numbers start at 1. So create a longer array
+		this.responses = new boolean[numberOfParts + 1];
 	}
 
 	@Override
@@ -82,7 +84,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 						
 		// Get the integer representation of the part
 		int partNumberRequested = ByteBuffer.wrap(partRequested).getInt();
-			
+		
 		// Synchronize the responses array 
 		synchronized(this.responses) 
 		{
@@ -92,6 +94,8 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Add a response with the part number
 				this.responses[partNumberRequested] = true;
 				
+				// Decrease the part number since we start parts at 0
+				partNumberRequested -= 1;
 				
 				// Get the bytes that we requested. We are sending ID(16), start(8), end(8), bytes(456) 
 				byte[] bytesToSend = new byte[488];
@@ -135,6 +139,10 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Notify to get a new part
 				this.responses.notify();
 			}
+			else
+			{
+//				System.out.println("we have seen this part befre: " + partNumberRequested);
+			}
 			
 		}
 			
@@ -143,7 +151,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 	@Override
 	public void run() 
 	{
-		for (int i = 0; i < this.responses.length; i++)
+		for (int i = 1; i < this.responses.length; i++)
 	    {
 			// Synchronize the responses array
 			synchronized(this.responses)
@@ -179,6 +187,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 //				System.out.println("Requested part: " + i);
 
 				// While we have not receive the part number that we requested
+				
 				while(!this.responses[i])
 				{
 					try 

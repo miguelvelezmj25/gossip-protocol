@@ -123,11 +123,11 @@ public class PeerController implements Runnable {
 																	12345),
 																	this.outgoingPacketsQueue));
 				
-				GossipPartners.getInstance().addPartner(new GossipPartner(
-															new InetSocketAddress(
-																	this.uiControllerAddress.getAddress(),
-																	12345), 
-																	this.outgoingPacketsQueue));
+//				GossipPartners.getInstance().addPartner(new GossipPartner(
+//															new InetSocketAddress(
+//																	this.uiControllerAddress.getAddress(),
+//																	12345), 
+//																	this.outgoingPacketsQueue));
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
@@ -216,6 +216,8 @@ public class PeerController implements Runnable {
 			// Check if it is a find
 			if(request.getClass() == RequestFromUIControllerToFindResources.class)  
 			{
+				System.out.println("I got a response to my find");
+				
 				// Get the find request
 				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) request;  		
 				
@@ -226,6 +228,8 @@ public class PeerController implements Runnable {
 			// Check if it is a find or a get
 			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
 			{
+				System.out.println("I got a response to my get");
+				
 				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
 			
 				// Update this request
@@ -235,7 +239,7 @@ public class PeerController implements Runnable {
 		}
 		// Check if the ID2 matches one of our specific resources that the community wants
 		else if(resource != null) 
-		{									
+		{		
 			// Get the request part
 			byte[] partRequested = new byte[PartNumbers.getLengthInBytes()];
 		
@@ -246,7 +250,12 @@ public class PeerController implements Runnable {
 		
 			// Convert from a array to int
 			partNumberRequested = ByteBuffer.wrap(partRequested).getInt();
+			System.out.println("Somebody is asking part: " + partNumberRequested);
 			
+			// Decrement part number since we are starting at 0
+			partNumberRequested -= 1;
+			
+
 			// Create an array to hold a random ID, a part number, and the bytes to send
 			byte[] buffer = new byte[ID.getLengthInBytes() + PartNumbers.getLengthInBytes() + resource.getBytesForPart(partNumberRequested).length];
 			
@@ -271,6 +280,8 @@ public class PeerController implements Runnable {
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
 			
+			System.out.println("Somebody found: " + resources.length + " files from us");
+
 			// Process each resource
 			for(Resource ourResource : resources)
 			{
@@ -293,7 +304,7 @@ public class PeerController implements Runnable {
 			}
 		}
 		else {
-			System.out.println("Testing that the peer is listening to the community: " + communityPacket.getAddress());
+			System.out.println("Testing that the peer is listening to the community: " + new String(communityPacket.getData()) + "\n");
 		}
 	}
 
