@@ -94,7 +94,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				
 				
 				// Get the bytes that we requested. We are sending ID(16), start(8), end(8), bytes(456) 
-				byte[] bytesToSend = new byte[488]; // TODO check if we can use formulas
+				byte[] bytesToSend = new byte[488];
 								
 				// Pass the resource id(16) at the beginning of the packet that we are going to send
 				System.arraycopy(udpMessage.getID1().getBytes(), 0, bytesToSend, 0, ID.getLengthInBytes());
