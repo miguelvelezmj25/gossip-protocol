@@ -27,12 +27,12 @@ public class CommandProcessor
 				Removes the white space from the data and converts it to lower case
 	*/
 	private Map<String,Command>		commandRegistry;
-	private Command 				noSuchCommand;
-	private Command 				nothingEnteredCommand;
+	private Command 			noSuchCommand;
+	private Command 			nothingEnteredCommand;
 
 	public CommandProcessor(Command noSuchCommand, Command nothingEnteredCommand)
 	{
-		this.noSuchCommand			= noSuchCommand;
+		this.noSuchCommand		= noSuchCommand;
 		this.nothingEnteredCommand 	= nothingEnteredCommand;
 		this.commandRegistry 		= new HashMap<String, Command>();
 	}//CommandProcessor
