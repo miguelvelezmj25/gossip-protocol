@@ -20,7 +20,6 @@ public class UDPMessage
 				a TimeToLive object which stores the time the message stays alive
  			message
  				a byte[] that contains the text message
-
  		Constructors:
  			UDPMessage(ID id1, ID id2, TimeToLive timeToLive, String message)
 				Calls the other constructor while converting the string to a byte[]
@@ -64,10 +63,10 @@ public class UDPMessage
 	public UDPMessage(ID id1, ID id2, TimeToLive timeToLive, byte[] message)
 	{
 		//This constructor sets the parameters it is passed
-		this.id1 = id1;
-		this.id2 = id2;
+		this.id1 		= id1;
+		this.id2 		= id2;
 		this.timeToLive = timeToLive;
-		this.message = message;
+		this.message 	= message;
 	}//UDPMessage
 
 	public UDPMessage(DatagramPacket datagramPacket)
@@ -77,7 +76,7 @@ public class UDPMessage
 		//If it does not then it calles the InvalidPacketFormatException class.
 		byte[]		data;
 		byte[]		ttl;
-		int		messageLength;
+		int			messageLength;
 
 		data = datagramPacket.getData();
 
@@ -85,14 +84,14 @@ public class UDPMessage
 		{
 			id1 = new ID(datagramPacket, 0);
 			id2 = new ID(datagramPacket, ID.getLengthInBytes());
+			ttl = new byte[TimeToLive.getLengthInBytes()];
 
-			ttl= new byte[TimeToLive.getLengthInBytes()];
 			System.arraycopy(data,ID.getLengthInBytes()*2,ttl,0,ttl.length);
-			timeToLive = new TimeToLive(ttl);
 
-			messageLength = datagramPacket.getLength() - ID.getLengthInBytes()*2 - timeToLive.getBytes().length;
+			timeToLive 		= new TimeToLive(ttl);
+			messageLength 	= datagramPacket.getLength() - ID.getLengthInBytes()*2 - timeToLive.getBytes().length;
+			message 		= new byte[messageLength];
 
-			message = new byte[messageLength];
 			System.arraycopy(data, ID.getLengthInBytes()*2 + timeToLive.getBytes().length, message, 0, messageLength);
 		}
 		else
@@ -119,8 +118,8 @@ public class UDPMessage
 		int			size;
 		byte[]		buffer;
 
-		size = (ID.getLengthInBytes() *2) + TimeToLive.getLengthInBytes() + payload.length;
-		buffer = new byte[size];
+		size	= (ID.getLengthInBytes() *2) + TimeToLive.getLengthInBytes() + payload.length;
+		buffer 	= new byte[size];
 
 		System.arraycopy(id1.getBytes(), 0, buffer, 0, ID.getLengthInBytes());
 		System.arraycopy(id2.getBytes(), 0, buffer, ID.getLengthInBytes(), ID.getLengthInBytes());
