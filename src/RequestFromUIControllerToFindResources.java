@@ -120,10 +120,7 @@ public class RequestFromUIControllerToFindResources extends RequestFromUIControl
 			
 			// Create a new resource from a find request and save it in the resourceManager
 			PeerResource peerResource = new PeerResource(udpMessage.getID1(), response, delimiter);
-			
-//			System.out.println(udpMessage.getID1());
-//			System.out.println(peerResource.getID());
-			
+						
 			PeerResourceManager.getInstance().addResource(peerResource);
 			
 		}

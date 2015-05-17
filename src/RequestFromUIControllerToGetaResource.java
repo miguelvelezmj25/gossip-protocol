@@ -184,8 +184,6 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 				// Send to peers
 				GossipPartners.getInstance().send(requestPartFromResourceMessage);	
 								
-//				System.out.println("Requested part: " + i);
-
 				// While we have not receive the part number that we requested
 				
 				while(!this.responses[i])
@@ -198,7 +196,6 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 						
 						// If we waited 4 seconds and did not get a part
 						if(!this.responses[i]) {
-//							System.out.println("did not get part" + i);
 							// Decrement the loop counter to request the part again and break from
 							// the waiting
 							i--;
