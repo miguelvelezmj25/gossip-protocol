@@ -8,7 +8,7 @@ public class UDPMessage
 {
 	/*
  		Courtney Karppi
- 		CISC 370
+ 		CISC 370 
  		May 11, 2015
 
  		Class Variables:
