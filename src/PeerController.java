@@ -88,6 +88,9 @@ public class PeerController implements Runnable {
 	 * 	 	May 16, 2015
 	 * 			Sending the correct information to UI, and gossips
 	 * 
+	 *  	May 17, 2015
+	 * 			Adding gossip partners
+	 * 
 	 */
 	
 	private AtomicBoolean					done;
@@ -201,8 +204,6 @@ public class PeerController implements Runnable {
 			// Check if it is a find
 			if(request.getClass() == RequestFromUIControllerToFindResources.class)  
 			{
-//				System.out.println("I got a response to my find");
-				
 				// Get the find request
 				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) request;  		
 				
@@ -212,9 +213,8 @@ public class PeerController implements Runnable {
 			
 			// Check if it is a find or a get
 			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
-			{
-//				System.out.println("I got a response to my get");
-				
+			{		
+				// Get the get request
 				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
 			
 				// Update this request
@@ -235,7 +235,6 @@ public class PeerController implements Runnable {
 		
 			// Convert from a array to int
 			partNumberRequested = ByteBuffer.wrap(partRequested).getInt();
-//			System.out.println("Somebody is asking part: " + partNumberRequested);
 			
 			// Decrement part number since we are starting at 0
 			partNumberRequested -= 1;
@@ -265,8 +264,6 @@ public class PeerController implements Runnable {
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
 			
-//			System.out.println("Somebody found: " + resources.length + " files from us");
-
 			// Process each resource
 			for(Resource ourResource : resources)
 			{
@@ -344,6 +341,7 @@ public class PeerController implements Runnable {
 			// Start requesting parts
 			getRequest.startAsThread();			
 		}
+		// Check if it is a add partner request
 		else if(uiCommand.indexOf(delimiter + "add") == 0)
 		{
 			try {
