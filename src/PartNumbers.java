@@ -8,37 +8,34 @@ public class PartNumbers
 	Class Variables:
 		numberOfParts
 			An int containing the total number of parts
-		numberOfPartsMissing
-			An int containg the total number of missing parts
+		partsRecieved
+			A boolean[] that is set to false whenever the object is created
 	Constructors:
 		PartNumbers(int numberOfParts)
 			sets the instance variable numberOfParts
 	Methods:
 		public int get()
 			Returns the instance variable numberOfParts
-		public static byte[] getBytes(int size)
-
+		public boolean[] getBytes(int size)
+			After each part number is recieved, you then call this to change it to true(received)
 		public static int getLengthInBytes()
 			Returns 4
 		public int numberOfMissingParts()
-
+			Counts the number of parts missing and returns this number
 	*/
 	private int 		numberOfParts;
-//	private int 		numberOfPartsMissing;
-// everything in the boolean[] is set to false whenever the object is created
-
 	private boolean[]	partsReceived;
 
 	public PartNumbers(int numberOfParts)
 	{
 		if(numberOfParts>0)
 		{
-			this.numberOfParts = numberOfParts;
+			this.numberOfParts 	= numberOfParts;
 		}
 		partsReceived = new boolean[numberOfParts];
 		for(int i=0; i<numberOfParts; i++)
 		{
-			partsReceived[i] = false;
+			partsReceived[i] 	= false;
 		}
 	}//constructor
 
@@ -48,11 +45,9 @@ public class PartNumbers
 		return this.numberOfParts;
 	}//get
 
-
-//after each part number is recieved, you then call this to change it to true(received)
 	public boolean[] getBytes(int numberReceived)
 	{
-		//
+		//After each part number is recieved, you then call this to change it to true(received)
 		this.partsReceived[numberReceived] = true;
 		return this.partsReceived;
 	}//getBytes()
@@ -65,7 +60,9 @@ public class PartNumbers
 
 	public int numberOfMissingParts()
 	{
-		int missingParts;
+		//Counts the number of parts missing and returns this number
+		int 	missingParts;
+
 		missingParts = 0;
 		for(int i=0; i<get(); i++)
 		{
