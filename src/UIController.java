@@ -96,6 +96,7 @@ public class UIController
 	 */
 	public void start()
 	{
+		System.out.println("UIController starting. Remember to add the IPs of your partners!");
 		
 		ResourceManager.getInstance().loadResourcesFrom(new File("resource/ResourceList.txt"));
 		//Start Threads
