@@ -350,6 +350,7 @@ public class PeerController implements Runnable {
 																	InetAddress.getByName(uiCommand.substring(5)),
 																	12345),
 																	this.outgoingPacketsQueue));
+				System.out.println("Successfully Added!");
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}			
