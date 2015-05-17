@@ -85,7 +85,7 @@ public class UIController
 		this.commandProcessor.register(new CommandSend());
 		this.commandProcessor.register(new CommandFind());
 		this.commandProcessor.register(new CommandGet());
-		
+		this.commandProcessor.register(new CommandAdd());
 		
 		this.mimeExtensions = new MimeExtensions(new File("resource/MimeTypes.txt"));
 		this.fileRebuilders = new HashMap<ID, FileRebuilder>();
@@ -388,7 +388,19 @@ public class UIController
 		}
 
 	}
-	
+	public class CommandAdd extends UIControllerCommand
+	{
+		public CommandAdd()
+		{
+			super("add", "add a gossip partner");
+			
+		}
+		
+		public void run()
+		{
+			this.sendToPeer("");
+		}
+	}
 	public class CommandFind extends UIControllerCommand
 	{
 		/**
@@ -443,7 +455,7 @@ public class UIController
 				{
 					userCommand = scan.nextLine();
 					command = (UIControllerCommand) commandProcessor.getCommand(userCommand.toLowerCase());
-					if(command.getCommandName().equals("find") || command.getCommandName().equals("get"))
+					if(command.getCommandName().equals("find") || command.getCommandName().equals("get") || command.getCommandName().equals("add"))
 					{
 						System.out.print("Please type what you would like to " + command.getCommandName() + ": ");
 						String message = '~' + command.getCommandName() + '~' + scan.nextLine();

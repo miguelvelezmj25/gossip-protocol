@@ -115,22 +115,7 @@ public class PeerController implements Runnable {
 			this.sender = new DatagramSender(new DatagramSocket(), this.outgoingPacketsQueue, 512);			
 			
 			this.uiControllerAddress = uiControllerAddress;
-						
-			try {
-				GossipPartners.getInstance().addPartner(new GossipPartner(
-															new InetSocketAddress(
-																	InetAddress.getByName("140.209.121.104"),
-																	12345),
-																	this.outgoingPacketsQueue));
-				
-//				GossipPartners.getInstance().addPartner(new GossipPartner(
-//															new InetSocketAddress(
-//																	this.uiControllerAddress.getAddress(),
-//																	12345), 
-//																	this.outgoingPacketsQueue));
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
+
 
 		} 
 		catch (SocketException se) 
@@ -203,7 +188,7 @@ public class PeerController implements Runnable {
 		UDPMessage communityMessage = new UDPMessage(communityPacket);
 		
 		// Pass the message to my peers
-//		GossipPartners.getInstance().send(communityMessage); // TODO uncomment
+		GossipPartners.getInstance().send(communityMessage); // TODO uncomment
 						
 		// Check if the ID2 matches is one of our responses
 		RequestFromUIController request = RequestManager.getInstance().getRequest(communityMessage.getID2()); 
@@ -216,7 +201,7 @@ public class PeerController implements Runnable {
 			// Check if it is a find
 			if(request.getClass() == RequestFromUIControllerToFindResources.class)  
 			{
-				System.out.println("I got a response to my find");
+//				System.out.println("I got a response to my find");
 				
 				// Get the find request
 				RequestFromUIControllerToFindResources findRequest = (RequestFromUIControllerToFindResources) request;  		
@@ -228,7 +213,7 @@ public class PeerController implements Runnable {
 			// Check if it is a find or a get
 			else if(request.getClass() == RequestFromUIControllerToGetaResource.class) 	
 			{
-				System.out.println("I got a response to my get");
+//				System.out.println("I got a response to my get");
 				
 				RequestFromUIControllerToGetaResource getRequest = (RequestFromUIControllerToGetaResource) request; 			
 			
@@ -250,7 +235,7 @@ public class PeerController implements Runnable {
 		
 			// Convert from a array to int
 			partNumberRequested = ByteBuffer.wrap(partRequested).getInt();
-			System.out.println("Somebody is asking part: " + partNumberRequested);
+//			System.out.println("Somebody is asking part: " + partNumberRequested);
 			
 			// Decrement part number since we are starting at 0
 			partNumberRequested -= 1;
@@ -280,7 +265,7 @@ public class PeerController implements Runnable {
 			// Get all the resources that match the criteria
 			Resource[] resources = ResourceManager.getInstance().getResourcesThatMatch(new String(communityMessage.getMessage()));
 			
-			System.out.println("Somebody found: " + resources.length + " files from us");
+//			System.out.println("Somebody found: " + resources.length + " files from us");
 
 			// Process each resource
 			for(Resource ourResource : resources)
@@ -304,7 +289,7 @@ public class PeerController implements Runnable {
 			}
 		}
 		else {
-			System.out.println("Testing that the peer is listening to the community: " + new String(communityPacket.getData()) + "\n");
+//			System.out.println("Testing that the peer is listening to the community: " + new String(communityPacket.getData()) + "\n");
 		}
 	}
 
@@ -358,6 +343,18 @@ public class PeerController implements Runnable {
 
 			// Start requesting parts
 			getRequest.startAsThread();			
+		}
+		else if(uiCommand.indexOf(delimiter + "add") == 0)
+		{
+			try {
+				GossipPartners.getInstance().addPartner(new GossipPartner(
+															new InetSocketAddress(
+																	InetAddress.getByName(uiCommand.substring(5)),
+																	12345),
+																	this.outgoingPacketsQueue));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}			
 		}
 		// The UI send an invalid command, send error back
 		else

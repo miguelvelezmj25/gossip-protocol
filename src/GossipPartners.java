@@ -58,7 +58,7 @@ public class GossipPartners
 	{
 		//Sends the message to all the gossipPartners if the TTL is not zero
 		UDPMessage	message;
-		System.out.println("");
+//		System.out.println("");
 		if(udpMessage.getTimeToLive().get() <= 1)
 		{
 			//doesn't send
@@ -68,9 +68,9 @@ public class GossipPartners
 			Iterator<GossipPartner> ie;
 			ie = gossipPartners.iterator();
 
-			System.out.println(udpMessage.getTimeToLive().get());
+//			System.out.println(udpMessage.getTimeToLive().get());
 			message = new UDPMessage(udpMessage.getID1(),udpMessage.getID2(),new TimeToLive(udpMessage.getTimeToLive().get()-1), udpMessage.getMessage());
-			System.out.println(message.getTimeToLive().get());
+//			System.out.println(message.getTimeToLive().get());
 
 			while(ie.hasNext())
 			{
