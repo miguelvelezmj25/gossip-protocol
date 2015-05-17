@@ -24,8 +24,8 @@ public class GossipPartners
 		public void send(UDPMessage udpMessage)
 			Sends the message to all the gossipPartners if the TTL is not zero
 	*/
-	private static GossipPartners instance;
-	private Collection<GossipPartner> gossipPartners;
+	private static GossipPartners 		instance;
+	private Collection<GossipPartner> 	gossipPartners;
 
 	private GossipPartners()
 	{
@@ -58,19 +58,17 @@ public class GossipPartners
 	{
 		//Sends the message to all the gossipPartners if the TTL is not zero
 		UDPMessage	message;
-//		System.out.println("");
+
 		if(udpMessage.getTimeToLive().get() <= 1)
 		{
-			//doesn't send
+			//doesn't send the message
 		}
 		else
 		{
 			Iterator<GossipPartner> ie;
-			ie = gossipPartners.iterator();
 
-//			System.out.println(udpMessage.getTimeToLive().get());
+			ie 		= gossipPartners.iterator();
 			message = new UDPMessage(udpMessage.getID1(),udpMessage.getID2(),new TimeToLive(udpMessage.getTimeToLive().get()-1), udpMessage.getMessage());
-//			System.out.println(message.getTimeToLive().get());
 
 			while(ie.hasNext())
 			{
