@@ -191,6 +191,7 @@ public class PeerController implements Runnable {
 		UDPMessage communityMessage = new UDPMessage(communityPacket);
 		
 		// Pass the message to my peers
+		GossipPartners.getInstance().send(communityMessage); 
 						
 		// Check if the ID2 matches is one of our responses
 		RequestFromUIController request = RequestManager.getInstance().getRequest(communityMessage.getID2()); 
