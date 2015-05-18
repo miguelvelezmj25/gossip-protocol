@@ -198,6 +198,7 @@ public class RequestFromUIControllerToGetaResource extends RequestFromUIControll
 						if(!this.responses[i]) {
 							// Decrement the loop counter to request the part again and break from
 							// the waiting
+							System.out.println("We did not get packet " + i);
 							i--;
 							break;
 						}

@@ -390,7 +390,6 @@
 .xmz	xgl/movie
 .xpix	application/x-vnd.ls-xpix
 .xpm	image/x-xpixmap
-.x-png	image/png
 .xsr	video/x-amt-showrun
 .xwd	image/x-xwd
 .xyz	chemical/x-pdb

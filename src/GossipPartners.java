@@ -29,7 +29,7 @@ public class GossipPartners
 
 	private GossipPartners()
 	{
-		gossipPartners = new Vector<GossipPartner>();
+		gossipPartners = new ArrayList<GossipPartner>();
 	}//constructor
 
 	public static GossipPartners getInstance()
