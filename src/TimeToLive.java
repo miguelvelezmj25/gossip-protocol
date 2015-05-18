@@ -59,7 +59,7 @@ public class TimeToLive
 
 	public TimeToLive()
 	{
-		this(4);
+		this(5);
 	}
 	
 	public TimeToLive(int timeToLive) 

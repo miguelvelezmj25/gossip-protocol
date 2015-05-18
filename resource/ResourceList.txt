@@ -61,3 +61,4 @@
 ~text/plain~resource/The Yellow Wallpaper.txt~The Yellow Wallpaper, Charlotte Perkins Gilman
 ~text/plain~resource/War and Peace.txt~War and Peace, Leo Tolstoy
 ~text/plain~resource/Wuthering Heights.txt~Wuthering Heights, Emily Bronte
+~text/plain~resource/MimeTypes.txt~A List of Mime Types
