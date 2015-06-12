@@ -1,6 +1,6 @@
 # gossip-protocol
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mijecu25/dsa/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/miguelvelezmj25/gossip-protocol/master/LICENSE)
 
 Gossip Protocol that sends UDP datagram packets
 
