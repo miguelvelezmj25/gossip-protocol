@@ -4,9 +4,7 @@
 
 Gossip Protocol that sends UDP datagram packets
 
-================
-
-###License
+## License
 
 The MIT License (MIT)
 
